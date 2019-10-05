@@ -62,7 +62,8 @@ export function authenticateSystemAdmin(payload) {
                     type: STORE_USER,
                     payload: {
                         session_details: result.data,
-                        RoleType: SYSTEM_ADMIN
+                        RoleType: SYSTEM_ADMIN,
+                        isSessionActive: true,
                     }
                 });
                 dispatch({
