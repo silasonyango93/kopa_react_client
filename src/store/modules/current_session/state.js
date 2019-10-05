@@ -1,4 +1,5 @@
 export const initialState = {
   session_details: {},
-  isLoginSuccessful: false
+  isLoginSuccessful: false,
+    RoleType: ''
 };

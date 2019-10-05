@@ -1,21 +1,28 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { authenticateUser } from "../../store/modules/current_session/actions";
-
+import {authenticateSystemAdmin, authenticateUser} from "../../store/modules/current_session/actions";
+import { FormGroup, Label, Input } from "reactstrap";
 class Login extends Component {
   state = {
     attemptedEmail: "",
-    attemptedPassword: ""
+    attemptedPassword: "",
+    isAdmin: false,
+    isCompanyOwner: false,
+    isStaff: true
   };
 
   handleSubmit = event => {
     event.preventDefault();
     const payload = {
-      attemptedEmail: this.state.attemptedEmail,
-      attemptedPassword: this.state.attemptedPassword
+      AttemptedEmail: this.state.attemptedEmail,
+      AttemptedPassword: this.state.attemptedPassword
     };
-    this.props.authenticateUser(payload);
+
+    if(this.state.isAdmin) {
+        this.props.authenticateSystemAdmin(payload);
+    }
+
   };
 
   handleChange = event => {
@@ -25,6 +32,36 @@ class Login extends Component {
       ...newState
     });
   };
+
+    handleAdminRadioClicked = () => {
+       if(this.state.isCompanyOwner)
+       {
+         this.setState({isCompanyOwner: false});
+       } else if(this.state.isStaff) {
+         this.setState({isStaff: false});
+       }
+        this.setState({isAdmin: true});
+    };
+
+    handleCompanyOwnerRadioClicked = () => {
+        if(this.state.isAdmin)
+        {
+            this.setState({isAdmin: false});
+        } else if(this.state.isStaff) {
+            this.setState({isStaff: false});
+        }
+        this.setState({isCompanyOwner: true});
+    };
+
+    handleStaffRadioClicked = () => {
+        if(this.state.isAdmin)
+        {
+            this.setState({isAdmin: false});
+        } else if(this.state.isCompanyOwner) {
+            this.setState({isCompanyOwner: false});
+        }
+        this.setState({isStaff: true});
+    };
 
   render() {
     return (
@@ -79,6 +116,39 @@ class Login extends Component {
                   </form>
                 </div>
               </div>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="radio"
+                    name="radio1"
+                    checked={this.state.isAdmin}
+                    onClick={this.handleAdminRadioClicked}
+                  />{" "}
+                  As Admin
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="radio"
+                    name="radio1"
+                    checked={this.state.isCompanyOwner}
+                    onClick={this.handleCompanyOwnerRadioClicked}
+                  />{" "}
+                  As Company Owner
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input
+                    type="radio"
+                    name="radio1"
+                    checked={this.state.isStaff}
+                    onClick={this.handleStaffRadioClicked}
+                  />{" "}
+                  As Staff
+                </Label>
+              </FormGroup>
             </div>
           </div>
         </div>
@@ -88,11 +158,13 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  authenticateUser: PropTypes.func.isRequired
+  authenticateUser: PropTypes.func.isRequired,
+    authenticateSystemAdmin: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = dispatch => ({
-  authenticateUser: payload => dispatch(authenticateUser(payload))
+  authenticateUser: payload => dispatch(authenticateUser(payload)),
+    authenticateSystemAdmin : payload => dispatch(authenticateSystemAdmin(payload))
 });
 
 export default connect(
