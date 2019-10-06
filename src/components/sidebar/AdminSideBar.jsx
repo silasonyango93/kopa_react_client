@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import classNames from "classnames";
+import PropTypes from "prop-types";
 import { Route, withRouter } from "react-router-dom";
 import { FaCogs, FaCog, FaSearch, FaList } from "react-icons/fa";
+import {
+  REGISTER_COMPANIES_FORM,
+  REGISTER_COMPANIES_OWNERS_FORM
+} from "../../views/admin_home/AdminHomeConstants";
 
-class Sidebar extends Component {
+class AdminSideBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,6 +51,12 @@ class Sidebar extends Component {
         style={{ marginLeft: "-20px" }}
         role="navigation"
       >
+        <button
+          className="navbar-toggle"
+          type="button"
+          data-toggle="colapse"
+          data-target=".navbar-colapse"
+        />
         <div className="sidebar-nav navbar-collapse collapse">
           <ul className="nav in" id="side-menu">
             <li>
@@ -216,10 +227,24 @@ class Sidebar extends Component {
                 href=""
                 onClick={e => {
                   e.preventDefault();
-                  this.props.history.push("/");
+                  this.props.handleSideBarClicked(REGISTER_COMPANIES_FORM);
                 }}
               >
-                <i className="fa fa-dashboard fa-fw" /> &nbsp;Dashboard
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;Companies
+              </a>
+            </li>
+
+            <li className="list-class">
+              <a
+                href=""
+                onClick={e => {
+                  e.preventDefault();
+                  this.props.handleSideBarClicked(
+                    REGISTER_COMPANIES_OWNERS_FORM
+                  );
+                }}
+              >
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;Company Owners
               </a>
             </li>
 
@@ -450,4 +475,8 @@ class Sidebar extends Component {
   }
 }
 
-export default withRouter(Sidebar);
+AdminSideBar.propTypes = {
+  handleSideBarClicked: PropTypes.func.isRequired
+};
+
+export default withRouter(AdminSideBar);
