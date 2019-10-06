@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Columns, Container } from "react-bulma-components";
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import RegisterCompanies from "./register_companies/RegisterCompanies";
 import "./AdminHome.scss";
@@ -8,12 +10,26 @@ import {
   REGISTER_COMPANIES_OWNERS_FORM
 } from "./AdminHomeConstants";
 import RegisterCompanyOwners from "./register_company_owners/RegisterCompanyOwners";
+import {reducer as admin_home} from "../../store/modules/admin_home";
+import {reducer as current_session} from "../../store/modules/current_session";
 
 class AdminHome extends Component {
   state = {
     displayRegisterCompaniesForm: true,
     displayRegisterCompanyOwnersForm: false
   };
+
+    componentDidMount() {
+        if(!this.props.isSessionActive) {
+            this.props.history.push('/');
+        }
+    }
+
+  componentDidUpdate() {
+    if(!this.props.isSessionActive) {
+        this.props.history.push('/');
+    }
+  }
 
   handleSideBarClicked = formToDisplay => {
     if (formToDisplay === REGISTER_COMPANIES_FORM) {
@@ -59,4 +75,13 @@ class AdminHome extends Component {
   }
 }
 
-export default AdminHome;
+AdminHome.propTypes = {
+    isSessionActive: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+    isSessionActive: state.current_session.isSessionActive,
+});
+
+export default connect(mapStateToProps, null)(AdminHome);
+
