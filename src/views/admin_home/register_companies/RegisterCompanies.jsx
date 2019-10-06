@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import { FormGroup, Input, Label } from "reactstrap";
+import { createOwnershipGroup } from "../../../store/modules/admin_home/actions";
 
 class RegisterCompanies extends Component {
   state = {
@@ -8,14 +11,11 @@ class RegisterCompanies extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    /*const payload = {
-            AttemptedEmail: this.state.attemptedEmail,
-            AttemptedPassword: this.state.attemptedPassword
-        };
+    const payload = {
+      CompanyName: this.state.companyName
+    };
 
-        if(this.state.isAdmin) {
-            this.props.authenticateSystemAdmin(payload);
-        }*/
+    this.props.createOwnershipGroup(payload);
   };
 
   handleChange = event => {
@@ -46,7 +46,7 @@ class RegisterCompanies extends Component {
                     <fieldset>
                       <div className="form-group">
                         <input
-                          name="attemptedEmail"
+                          name="companyName"
                           className="form-control"
                           placeholder="Company Name"
                           value={this.state.companyName}
@@ -74,4 +74,16 @@ class RegisterCompanies extends Component {
   }
 }
 
-export default RegisterCompanies;
+RegisterCompanies.propTypes = {
+    createOwnershipGroup: PropTypes.func.isRequired
+};
+
+const mapDispatchToProps = dispatch => ({
+    createOwnershipGroup: payload =>
+    dispatch(createOwnershipGroup(payload))
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(RegisterCompanies);
