@@ -76,7 +76,7 @@ class AdminHome extends Component {
 }
 
 AdminHome.propTypes = {
-    isSessionActive: PropTypes.func.isRequired
+    isSessionActive: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
