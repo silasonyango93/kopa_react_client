@@ -11,5 +11,6 @@ export const ACTION_HANDLERS = {
     [TERMINATE_CURRENT_SESSION]: state =>
         Object.assign({}, state, {
             isSessionActive: false,
+            isLoginSuccessful: false,
         })
 };
