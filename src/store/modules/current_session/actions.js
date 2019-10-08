@@ -1,19 +1,16 @@
 import {
-  STORE_USER,
-  BEGIN_USER_AUTHENTIFICATION,
-  USER_LOGIN_SUCCESS,
-  ATTEMPTED_USER_LOGIN_FAILED
+    STORE_USER,
+    BEGIN_USER_AUTHENTIFICATION,
+    USER_LOGIN_SUCCESS,
+    ATTEMPTED_USER_LOGIN_FAILED, TERMINATE_CURRENT_SESSION
 } from "./actionTypes";
 import { apiPost } from "../../../services/api_connector/ApiConnector";
 import {SYSTEM_ADMIN} from "../../../config/constants/Constants";
 
-export function storeUser(displayIncomeFields) {
+export function terminateCurrentSession() {
   return async dispatch => {
     dispatch({
-      type: STORE_USER,
-      payload: {
-        displayIncomeFields
-      }
+      type: TERMINATE_CURRENT_SESSION
     });
   };
 }

@@ -13,6 +13,12 @@ import {
 import RegisterCompanyOwners from "./register_company_owners/RegisterCompanyOwners";
 import { reducer as admin_home } from "../../store/modules/admin_home";
 import { reducer as current_session } from "../../store/modules/current_session";
+import {DEBOUNCE, IDLE_TIMEOUT} from "../../config/constants/Constants";
+import {
+    authenticateSystemAdmin,
+    authenticateUser,
+    terminateCurrentSession
+} from "../../store/modules/current_session/actions";
 
 class AdminHome extends Component {
   constructor(props) {
@@ -51,6 +57,7 @@ class AdminHome extends Component {
   };
 
   onIdle = e => {
+    this.props.terminateCurrentSession();
     this.props.history.push("/");
   };
 
@@ -63,8 +70,8 @@ class AdminHome extends Component {
           }}
           element={document}
           onIdle={this.onIdle}
-          debounce={250}
-          timeout={1000 * 60}
+          debounce={DEBOUNCE}
+          timeout={IDLE_TIMEOUT}
         />
         <Columns>
           <Columns.Column size="one-fifth">
@@ -98,10 +105,15 @@ AdminHome.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isSessionActive: state.current_session.isSessionActive
+  isSessionActive: state.current_session.isSessionActive,
+    terminateCurrentSession: PropTypes.func.isRequired,
+});
+
+const mapDispatchToProps = dispatch => ({
+    terminateCurrentSession: () => dispatch(terminateCurrentSession())
 });
 
 export default connect(
   mapStateToProps,
-  null
+    mapDispatchToProps
 )(AdminHome);

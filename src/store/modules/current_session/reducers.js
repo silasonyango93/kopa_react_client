@@ -1,4 +1,4 @@
-import { STORE_USER } from "./actionTypes";
+import {TERMINATE_CURRENT_SESSION, STORE_USER} from "./actionTypes";
 
 export const ACTION_HANDLERS = {
   [STORE_USER]: (state, action) =>
@@ -7,5 +7,9 @@ export const ACTION_HANDLERS = {
       session_details: action.payload.session_details,
         RoleType: action.payload.RoleType,
         isSessionActive: action.payload.isSessionActive,
-    })
+    }),
+    [TERMINATE_CURRENT_SESSION]: state =>
+        Object.assign({}, state, {
+            isSessionActive: false,
+        })
 };

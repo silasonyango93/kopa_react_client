@@ -13,11 +13,12 @@ class Login extends Component {
   };
 
     componentDidUpdate(prevProps) {
-        if (this.props.isLoginSuccessful !== prevProps.isLoginSuccessful) {
-            if(this.props.isLoginSuccessful) {
+        if (this.props.isSessionActive !== prevProps.isSessionActive) {
+            if(this.props.isSessionActive) {
               this.props.history.push('/admin_home');
             }
         }
+
     }
 
   handleSubmit = event => {
@@ -168,11 +169,11 @@ class Login extends Component {
 Login.propTypes = {
   authenticateUser: PropTypes.func.isRequired,
     authenticateSystemAdmin: PropTypes.func.isRequired,
-    isLoginSuccessful: PropTypes.bool.isRequired
+    isSessionActive: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-    isLoginSuccessful: state.current_session.isLoginSuccessful,
+    isSessionActive: state.current_session.isSessionActive,
 });
 
 const mapDispatchToProps = dispatch => ({
