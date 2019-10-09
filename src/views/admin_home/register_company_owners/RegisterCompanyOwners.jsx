@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import Select from "react-select";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import { FormGroup, Input, Label } from "reactstrap";
+import { registerCompanyOwner } from "../../../store/modules/admin_home/actions";
 
 class RegisterCompanyOwners extends Component {
   state = {
@@ -11,7 +14,6 @@ class RegisterCompanyOwners extends Component {
     phoneNumber: "",
     email: "",
     password: "",
-    companyName: "",
     SelectedGenderId: "",
     genderCategories: [
       { label: "Male", value: "1" },
@@ -21,14 +23,18 @@ class RegisterCompanyOwners extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    /*const payload = {
-            AttemptedEmail: this.state.attemptedEmail,
-            AttemptedPassword: this.state.attemptedPassword
-        };
+    const payload = {
+      OwnerFirstName: this.state.firstName,
+      OwnerMiddleName: this.state.middleName,
+      OwnerSurname: this.state.surname,
+      OwnerNationalId: this.state.nationalId,
+      OwnerPhoneNumber: this.state.phoneNumber,
+      OwnerEmail: this.state.email,
+      GenderId: this.state.SelectedGenderId.value,
+      Password: this.state.password
+    };
 
-        if(this.state.isAdmin) {
-            this.props.authenticateSystemAdmin(payload);
-        }*/
+    this.props.registerCompanyOwner(payload);
   };
 
   handleChange = event => {
@@ -146,18 +152,6 @@ class RegisterCompanyOwners extends Component {
                           required={true}
                         />
                       </div>
-                      <div className="form-group">
-                        <input
-                          name="password"
-                          className="form-control"
-                          placeholder="Company Name"
-                          value={this.state.password}
-                          type="text"
-                          onChange={this.handleChange}
-                          autoFocus
-                          required={true}
-                        />
-                      </div>
                       <button
                         type="submit"
                         className="btn btn-lg btn-success btn-block"
@@ -176,4 +170,15 @@ class RegisterCompanyOwners extends Component {
   }
 }
 
-export default RegisterCompanyOwners;
+RegisterCompanyOwners.propTypes = {
+  registerCompanyOwner: PropTypes.func.isRequired
+};
+
+const mapDispatchToProps = dispatch => ({
+  registerCompanyOwner: payload => dispatch(registerCompanyOwner(payload))
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(RegisterCompanyOwners);
