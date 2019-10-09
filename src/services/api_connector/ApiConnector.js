@@ -19,3 +19,16 @@ export function apiPost(payload, apiRoute) {
       });
   });
 }
+
+export function apiGetAll(apiRoute) {
+  return new Promise(function(resolve, reject) {
+    axios
+      .post(ip + apiRoute)
+      .then(response => {
+        resolve(response);
+      })
+      .catch(response => {
+        reject(response);
+      });
+  });
+}

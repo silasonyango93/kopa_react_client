@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Route, withRouter } from "react-router-dom";
 import { FaCogs, FaCog, FaSearch, FaList } from "react-icons/fa";
 import {
+  COMPANIES_OWNERS_RSHIP_FORM,
   REGISTER_COMPANIES_FORM,
   REGISTER_COMPANIES_OWNERS_FORM
 } from "../../views/admin_home/AdminHomeConstants";
@@ -245,6 +246,19 @@ class AdminSideBar extends Component {
                 }}
               >
                 <i className="fa fa-dashboard fa-fw" /> &nbsp;Company Owners
+              </a>
+            </li>
+
+            <li className="list-class">
+              <a
+                href=""
+                onClick={e => {
+                  e.preventDefault();
+                  this.props.handleSideBarClicked(COMPANIES_OWNERS_RSHIP_FORM);
+                }}
+              >
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;Assign Company
+                Owners
               </a>
             </li>
 
