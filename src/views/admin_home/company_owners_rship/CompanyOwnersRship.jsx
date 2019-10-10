@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import {
   getAllCompanies,
+  getAllCompanyOwners,
   registerCompanyOwner
 } from "../../../store/modules/admin_home/actions";
 
@@ -16,6 +17,7 @@ class CompanyOwnersRship extends Component {
 
   componentDidMount() {
     this.props.getAllCompanies();
+    this.props.getAllCompanyOwners();
   }
 
   componentDidUpdate(prevProps) {
@@ -23,7 +25,7 @@ class CompanyOwnersRship extends Component {
       this.props.allRegisteredCompanies !== prevProps.allRegisteredCompanies
     ) {
       let allRegisteredCompanies = this.props.allRegisteredCompanies;
-      allRegisteredCompanies = allRegisteredCompanies.map((item, index) => {
+      allRegisteredCompanies = allRegisteredCompanies.map(item => {
         return {
           label: item.CompanyName,
           value: item.CompanyId
@@ -135,15 +137,19 @@ class CompanyOwnersRship extends Component {
 
 CompanyOwnersRship.propTypes = {
   getAllCompanies: PropTypes.func.isRequired,
-  allRegisteredCompanies: PropTypes.arrayOf(PropTypes.object)
+  getAllCompanyOwners: PropTypes.func.isRequired,
+  allRegisteredCompanies: PropTypes.arrayOf(PropTypes.object),
+  allCompanyOwners: PropTypes.arrayOf(PropTypes.object)
 };
 
 const mapStateToProps = state => ({
-  allRegisteredCompanies: state.admin_home.allRegisteredCompanies
+  allRegisteredCompanies: state.admin_home.allRegisteredCompanies,
+  allCompanyOwners: state.admin_home.allCompanyOwners
 });
 
 const mapDispatchToProps = dispatch => ({
-  getAllCompanies: () => dispatch(getAllCompanies())
+  getAllCompanies: () => dispatch(getAllCompanies()),
+  getAllCompanyOwners: () => dispatch(getAllCompanyOwners())
 });
 
 export default connect(

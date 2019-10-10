@@ -1,4 +1,5 @@
 import {
+  FETCHING_COMPANY_OWNERS_SUCCEEDED,
   FETCHING_REGISTERED_COMPANIES_SUCCEEDED,
   SUBMIT_COMPANY_REGISTRATION_FORM
 } from "./actionTypes";
@@ -12,5 +13,9 @@ export const ACTION_HANDLERS = {
   [FETCHING_REGISTERED_COMPANIES_SUCCEEDED]: (state, action) =>
     Object.assign({}, state, {
       allRegisteredCompanies: action.payload.allRegisteredCompanies
+    }),
+  [FETCHING_COMPANY_OWNERS_SUCCEEDED]: (state, action) =>
+    Object.assign({}, state, {
+      allCompanyOwners: action.payload.allCompanyOwners
     })
 };

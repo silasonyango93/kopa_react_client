@@ -3,5 +3,6 @@ export const initialState = {
     data: {},
     isDataSubmissionSuccessful: false
   },
-  allRegisteredCompanies: []
+  allRegisteredCompanies: [],
+  allCompanyOwners: []
 };

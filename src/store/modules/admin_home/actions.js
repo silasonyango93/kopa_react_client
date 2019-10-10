@@ -7,12 +7,15 @@ import {
   COMPANY_OWNER_REGISTRATION_SUCCESSFUL,
   COMPANY_REGISTRATION_FORM_SUBMISSION_FAILED,
   COMPANY_REGISTRATION_FORM_SUBMISSION_SUCCESSFUL,
+  FETCHING_COMPANY_OWNERS_FAILED,
+  FETCHING_COMPANY_OWNERS_SUCCEEDED,
   FETCHING_REGISTERED_COMPANIES_FAILED,
   FETCHING_REGISTERED_COMPANIES_SUCCEEDED,
   OWNERSHIP_GROUP_CREATED,
   OWNERSHIP_GROUP_CREATION_FAILED,
   START_COMPANY_OWNER_REGISTRATION,
   START_COMPANY_REGISTRATION_FORM_SUBMISSION,
+  START_FETCHING_COMPANY_OWNERS,
   START_FETCHING_REGISTERED_COMPANIES,
   START_OWNERSHIP_GROUP_CREATION
 } from "./actionTypes";
@@ -107,7 +110,7 @@ export function registerCompanyOwner(payload) {
   };
 }
 
-export function getAllCompanies(payload) {
+export function getAllCompanies() {
   return async dispatch => {
     dispatch({
       type: START_FETCHING_REGISTERED_COMPANIES
@@ -133,6 +136,39 @@ export function getAllCompanies(payload) {
       function(err) {
         dispatch({
           type: FETCHING_REGISTERED_COMPANIES_FAILED
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function getAllCompanyOwners() {
+  return async dispatch => {
+    dispatch({
+      type: START_FETCHING_COMPANY_OWNERS
+    });
+    const apiRoute = "/get_all_company_owners";
+    const returnedPromise = apiGetAll(apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results) {
+          dispatch({
+            type: FETCHING_COMPANY_OWNERS_SUCCEEDED,
+            payload: {
+              allCompanyOwners: result.data.results
+            }
+          });
+        } else {
+          dispatch({
+            type: FETCHING_COMPANY_OWNERS_FAILED
+          });
+        }
+        console.log(result);
+      },
+      function(err) {
+        dispatch({
+          type: FETCHING_COMPANY_OWNERS_FAILED
         });
         console.log(err);
       }
