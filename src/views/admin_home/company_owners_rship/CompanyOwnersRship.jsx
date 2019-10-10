@@ -5,14 +5,16 @@ import PropTypes from "prop-types";
 import {
   getAllCompanies,
   getAllCompanyOwners,
-  registerCompanyOwner
+  registerCompanyOwner,
+  submitOwnersGroupsRshipForm
 } from "../../../store/modules/admin_home/actions";
 
 class CompanyOwnersRship extends Component {
   state = {
     SelectedCompanyId: "",
     SelectedOwnerIds: [],
-    AllCompanies: []
+    AllCompanies: [],
+    allCompanyOwners: []
   };
 
   componentDidMount() {
@@ -27,21 +29,40 @@ class CompanyOwnersRship extends Component {
       let allRegisteredCompanies = this.props.allRegisteredCompanies;
       allRegisteredCompanies = allRegisteredCompanies.map(item => {
         return {
-          label: item.CompanyName,
-          value: item.CompanyId
+          label: item.OwnershipGroupName,
+          value: item.CompanyOwnershipGroupId
         };
       });
       this.setState({ AllCompanies: allRegisteredCompanies });
+    }
+
+    if (this.props.allCompanyOwners !== prevProps.allCompanyOwners) {
+      let allCompanyOwners = this.props.allCompanyOwners;
+      allCompanyOwners = allCompanyOwners.map(item => {
+        return {
+          label:
+            item.OwnerFirstName +
+            " " +
+            item.OwnerMiddleName +
+            " " +
+            item.OwnerSurname,
+          value: item.CompanyOwnerId
+        };
+      });
+      this.setState({ allCompanyOwners: allCompanyOwners });
     }
   }
 
   handleSubmit = event => {
     event.preventDefault();
-    /*const payload = {
-            CompanyName: this.state.companyName
-        };
+    this.state.SelectedOwnerIds.forEach(item => {
+      const payload = {
+        CompanyOwnershipGroupId: this.state.SelectedCompanyId.value,
+        CompanyOwnerId: item.value
+      };
 
-        this.props.createOwnershipGroup(payload);*/
+      this.props.submitOwnersGroupsRshipForm(payload);
+    });
   };
 
   handleChange = event => {
@@ -102,19 +123,7 @@ class CompanyOwnersRship extends Component {
                               SelectedOwnerIds: value
                             })
                           }
-                          options={this.state.CompanyOwners}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          name="companyName"
-                          className="form-control"
-                          placeholder="Company Name"
-                          value={this.state.companyName}
-                          type="text"
-                          onChange={this.handleChange}
-                          autoFocus
-                          required={true}
+                          options={this.state.allCompanyOwners}
                         />
                       </div>
                       <button
@@ -138,6 +147,7 @@ class CompanyOwnersRship extends Component {
 CompanyOwnersRship.propTypes = {
   getAllCompanies: PropTypes.func.isRequired,
   getAllCompanyOwners: PropTypes.func.isRequired,
+  submitOwnersGroupsRshipForm: PropTypes.func.isRequired,
   allRegisteredCompanies: PropTypes.arrayOf(PropTypes.object),
   allCompanyOwners: PropTypes.arrayOf(PropTypes.object)
 };
@@ -149,7 +159,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getAllCompanies: () => dispatch(getAllCompanies()),
-  getAllCompanyOwners: () => dispatch(getAllCompanyOwners())
+  getAllCompanyOwners: () => dispatch(getAllCompanyOwners()),
+  submitOwnersGroupsRshipForm: payload =>
+    dispatch(submitOwnersGroupsRshipForm(payload))
 });
 
 export default connect(

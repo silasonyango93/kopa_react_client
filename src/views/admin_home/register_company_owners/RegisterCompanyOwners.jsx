@@ -152,6 +152,18 @@ class RegisterCompanyOwners extends Component {
                           required={true}
                         />
                       </div>
+                      <div className="form-group">
+                        <input
+                          name="password"
+                          className="form-control"
+                          placeholder="Password"
+                          value={this.state.password}
+                          type="password"
+                          onChange={this.handleChange}
+                          autoFocus
+                          required={true}
+                        />
+                      </div>
                       <button
                         type="submit"
                         className="btn btn-lg btn-success btn-block"

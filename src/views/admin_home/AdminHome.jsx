@@ -21,6 +21,7 @@ import {
   terminateCurrentSession
 } from "../../store/modules/current_session/actions";
 import CompanyOwnersRship from "./company_owners_rship/CompanyOwnersRship";
+import TopBar from "../../components/topbar/TopBar";
 
 class AdminHome extends Component {
   constructor(props) {
@@ -84,6 +85,7 @@ class AdminHome extends Component {
           debounce={DEBOUNCE}
           timeout={IDLE_TIMEOUT}
         />
+        <TopBar />
         <Columns>
           <Columns.Column size="one-fifth">
             <AdminSideBar handleSideBarClicked={this.handleSideBarClicked} />

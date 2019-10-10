@@ -17,7 +17,10 @@ import {
   START_COMPANY_REGISTRATION_FORM_SUBMISSION,
   START_FETCHING_COMPANY_OWNERS,
   START_FETCHING_REGISTERED_COMPANIES,
-  START_OWNERSHIP_GROUP_CREATION
+  START_OWNERSHIP_GROUP_CREATION,
+  START_SUBMITING_OWNERS_GROUPS_RSHIP_FORM,
+  SUBMITING_OWNERS_GROUPS_RSHIP_FORM_FAILED,
+  SUBMITING_OWNERS_GROUPS_RSHIP_FORM_SUCCEEDED
 } from "./actionTypes";
 import { STORE_USER } from "../current_session/actionTypes";
 
@@ -115,7 +118,7 @@ export function getAllCompanies() {
     dispatch({
       type: START_FETCHING_REGISTERED_COMPANIES
     });
-    const apiRoute = "/get_all_companies";
+    const apiRoute = "/get_all_company_ownership_groups";
     const returnedPromise = apiGetAll(apiRoute);
     returnedPromise.then(
       function(result) {
@@ -131,7 +134,6 @@ export function getAllCompanies() {
             type: FETCHING_REGISTERED_COMPANIES_FAILED
           });
         }
-        console.log(result);
       },
       function(err) {
         dispatch({
@@ -164,11 +166,39 @@ export function getAllCompanyOwners() {
             type: FETCHING_COMPANY_OWNERS_FAILED
           });
         }
-        console.log(result);
       },
       function(err) {
         dispatch({
           type: FETCHING_COMPANY_OWNERS_FAILED
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function submitOwnersGroupsRshipForm(payload) {
+  return async dispatch => {
+    dispatch({
+      type: START_SUBMITING_OWNERS_GROUPS_RSHIP_FORM
+    });
+    const apiRoute = "/add_ownership_groups_company_owners_rship";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results.success) {
+          dispatch({
+            type: SUBMITING_OWNERS_GROUPS_RSHIP_FORM_SUCCEEDED
+          });
+        } else {
+          dispatch({
+            type: SUBMITING_OWNERS_GROUPS_RSHIP_FORM_FAILED
+          });
+        }
+      },
+      function(err) {
+        dispatch({
+          type: SUBMITING_OWNERS_GROUPS_RSHIP_FORM_FAILED
         });
         console.log(err);
       }

@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import {authenticateSystemAdmin, authenticateUser} from "../../store/modules/current_session/actions";
+import {
+  authenticateCompanyOwner,
+  authenticateSystemAdmin,
+  authenticateUser
+} from "../../store/modules/current_session/actions";
 import { FormGroup, Label, Input } from "reactstrap";
 class Login extends Component {
   state = {
@@ -12,14 +16,15 @@ class Login extends Component {
     isStaff: true
   };
 
-    componentDidUpdate(prevProps) {
-        if (this.props.isSessionActive !== prevProps.isSessionActive) {
-            if(this.props.isSessionActive) {
-              this.props.history.push('/admin_home');
-            }
-        }
-
+  componentDidUpdate(prevProps) {
+    if (this.props.isSessionActive !== prevProps.isSessionActive) {
+      if (this.props.isSessionActive && this.state.isAdmin) {
+        this.props.history.push("/admin_home");
+      } else if (this.props.isSessionActive && this.state.isCompanyOwner) {
+        this.props.history.push("/admin_home");
+      }
     }
+  }
 
   handleSubmit = event => {
     event.preventDefault();
@@ -28,10 +33,11 @@ class Login extends Component {
       AttemptedPassword: this.state.attemptedPassword
     };
 
-    if(this.state.isAdmin) {
-        this.props.authenticateSystemAdmin(payload);
+    if (this.state.isAdmin) {
+      this.props.authenticateSystemAdmin(payload);
+    } else if (this.state.isCompanyOwner) {
+      this.props.authenticateCompanyOwner(payload);
     }
-
   };
 
   handleChange = event => {
@@ -42,35 +48,32 @@ class Login extends Component {
     });
   };
 
-    handleAdminRadioClicked = () => {
-       if(this.state.isCompanyOwner)
-       {
-         this.setState({isCompanyOwner: false});
-       } else if(this.state.isStaff) {
-         this.setState({isStaff: false});
-       }
-        this.setState({isAdmin: true});
-    };
+  handleAdminRadioClicked = () => {
+    if (this.state.isCompanyOwner) {
+      this.setState({ isCompanyOwner: false });
+    } else if (this.state.isStaff) {
+      this.setState({ isStaff: false });
+    }
+    this.setState({ isAdmin: true });
+  };
 
-    handleCompanyOwnerRadioClicked = () => {
-        if(this.state.isAdmin)
-        {
-            this.setState({isAdmin: false});
-        } else if(this.state.isStaff) {
-            this.setState({isStaff: false});
-        }
-        this.setState({isCompanyOwner: true});
-    };
+  handleCompanyOwnerRadioClicked = () => {
+    if (this.state.isAdmin) {
+      this.setState({ isAdmin: false });
+    } else if (this.state.isStaff) {
+      this.setState({ isStaff: false });
+    }
+    this.setState({ isCompanyOwner: true });
+  };
 
-    handleStaffRadioClicked = () => {
-        if(this.state.isAdmin)
-        {
-            this.setState({isAdmin: false});
-        } else if(this.state.isCompanyOwner) {
-            this.setState({isCompanyOwner: false});
-        }
-        this.setState({isStaff: true});
-    };
+  handleStaffRadioClicked = () => {
+    if (this.state.isAdmin) {
+      this.setState({ isAdmin: false });
+    } else if (this.state.isCompanyOwner) {
+      this.setState({ isCompanyOwner: false });
+    }
+    this.setState({ isStaff: true });
+  };
 
   render() {
     return (
@@ -168,20 +171,24 @@ class Login extends Component {
 
 Login.propTypes = {
   authenticateUser: PropTypes.func.isRequired,
-    authenticateSystemAdmin: PropTypes.func.isRequired,
-    isSessionActive: PropTypes.bool.isRequired
+  authenticateSystemAdmin: PropTypes.func.isRequired,
+  authenticateCompanyOwner: PropTypes.func.isRequired,
+  isSessionActive: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-    isSessionActive: state.current_session.isSessionActive,
+  isSessionActive: state.current_session.isSessionActive
 });
 
 const mapDispatchToProps = dispatch => ({
   authenticateUser: payload => dispatch(authenticateUser(payload)),
-    authenticateSystemAdmin : payload => dispatch(authenticateSystemAdmin(payload))
+  authenticateSystemAdmin: payload =>
+    dispatch(authenticateSystemAdmin(payload)),
+  authenticateCompanyOwner: payload =>
+    dispatch(authenticateCompanyOwner(payload))
 });
 
 export default connect(
-    mapStateToProps,
+  mapStateToProps,
   mapDispatchToProps
 )(Login);
