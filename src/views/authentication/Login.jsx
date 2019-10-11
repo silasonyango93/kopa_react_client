@@ -21,7 +21,7 @@ class Login extends Component {
       if (this.props.isSessionActive && this.state.isAdmin) {
         this.props.history.push("/admin_home");
       } else if (this.props.isSessionActive && this.state.isCompanyOwner) {
-        this.props.history.push("/admin_home");
+        this.props.history.push("/company_owner_home");
       }
     }
   }
