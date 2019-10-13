@@ -5,20 +5,26 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import "./CompanyOwnerHome.scss";
 import { DEBOUNCE, IDLE_TIMEOUT } from "../../config/constants/Constants";
-import {
-  terminateCurrentSession
-} from "../../store/modules/current_session/actions";
+import { terminateCurrentSession } from "../../store/modules/current_session/actions";
 import TopBar from "../../components/topbar/TopBar";
 import CompanyOwnerSideBar from "../../components/sidebar/CompanyOwnerSideBar";
 import RegisterCompanyBranches from "./register_company_branches/RegisterCompanyBranches";
-import {REGISTER_COMPANY_BRANCHES_FORM} from "./CompanyOwnerHomeConstants";
-import {getACompanysBranches, getCompanyOwnersCompanyDetails} from "../../store/modules/company_owner_home/actions";
+import {
+  REGISTER_COMPANY_BRANCHES_FORM,
+  REGISTER_SYSTEM_USERS_FORM
+} from "./CompanyOwnerHomeConstants";
+import {
+  getACompanysBranches,
+  getCompanyOwnersCompanyDetails
+} from "../../store/modules/company_owner_home/actions";
+import RegisterSystemUsers from "./register_system_users/RegisterSystemUsers";
 
 class CompanyOwnerHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayRegisterCompanyBranchesForm: true
+      displayRegisterCompanyBranchesForm: true,
+      displayRegisterSystemUsersForm: false
     };
     this.idleTimer = null;
   }
@@ -29,7 +35,7 @@ class CompanyOwnerHome extends Component {
     } else {
       const paload = {
         companyOwnerId: this.props.companyOwnerId
-      }
+      };
       this.props.getCompanyOwnersCompanyDetails(paload);
     }
   }
@@ -40,14 +46,28 @@ class CompanyOwnerHome extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.terminateCurrentSession();
+  }
+
   handleSideBarClicked = formToDisplay => {
     if (formToDisplay === REGISTER_COMPANY_BRANCHES_FORM) {
       const paload = {
         companyOwnerId: this.props.companyOwnerId
-      }
+      };
       this.props.getCompanyOwnersCompanyDetails(paload);
       this.setState({
-          displayRegisterCompanyBranchesForm: true
+        displayRegisterCompanyBranchesForm: true
+      });
+    } else if (formToDisplay === REGISTER_SYSTEM_USERS_FORM) {
+      const paload = {
+        column_name: "CompanyId",
+        search_value: this.props.CompanyId
+      };
+      this.props.getACompanysBranches(paload);
+      this.setState({
+        displayRegisterCompanyBranchesForm: false,
+        displayRegisterSystemUsersForm: true
       });
     }
   };
@@ -59,7 +79,7 @@ class CompanyOwnerHome extends Component {
 
   render() {
     return (
-      <div>
+      <div className="main-body">
         <IdleTimer
           ref={ref => {
             this.idleTimer = ref;
@@ -68,11 +88,13 @@ class CompanyOwnerHome extends Component {
           onIdle={this.onIdle}
           debounce={DEBOUNCE}
           timeout={IDLE_TIMEOUT}
-      />
+        />
         <TopBar />
         <Columns>
           <Columns.Column size="one-fifth">
-            <CompanyOwnerSideBar handleSideBarClicked={this.handleSideBarClicked} />
+            <CompanyOwnerSideBar
+              handleSideBarClicked={this.handleSideBarClicked}
+            />
           </Columns.Column>
 
           <Container>
@@ -82,6 +104,14 @@ class CompanyOwnerHome extends Component {
               }
             >
               <RegisterCompanyBranches />
+            </div>
+
+            <div
+              className={
+                this.state.displayRegisterSystemUsersForm ? "show" : "hide"
+              }
+            >
+              <RegisterSystemUsers />
             </div>
           </Container>
         </Columns>
@@ -100,13 +130,15 @@ CompanyOwnerHome.propTypes = {
 
 const mapStateToProps = state => ({
   companyOwnerId: state.current_session.session_details.CompanyOwnerId,
+  CompanyId: state.company_owner_home.companyOwnersCompanyDetails.CompanyId,
   isSessionActive: state.current_session.isSessionActive
 });
 
 const mapDispatchToProps = dispatch => ({
   terminateCurrentSession: () => dispatch(terminateCurrentSession()),
-  getACompanysBranches: (payload) => dispatch(getACompanysBranches(payload)),
-  getCompanyOwnersCompanyDetails: (payload) => dispatch(getCompanyOwnersCompanyDetails(payload))
+  getACompanysBranches: payload => dispatch(getACompanysBranches(payload)),
+  getCompanyOwnersCompanyDetails: payload =>
+    dispatch(getCompanyOwnersCompanyDetails(payload))
 });
 
 export default connect(

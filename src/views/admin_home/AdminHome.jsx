@@ -13,12 +13,13 @@ import {
 } from "./AdminHomeConstants";
 import RegisterCompanyOwners from "./register_company_owners/RegisterCompanyOwners";
 import { DEBOUNCE, IDLE_TIMEOUT } from "../../config/constants/Constants";
-import {
-  terminateCurrentSession
-} from "../../store/modules/current_session/actions";
+import { terminateCurrentSession } from "../../store/modules/current_session/actions";
 import CompanyOwnersRship from "./company_owners_rship/CompanyOwnersRship";
 import TopBar from "../../components/topbar/TopBar";
-import {getAllCompanies, getAllCompanyOwners} from "../../store/modules/admin_home/actions";
+import {
+  getAllCompanies,
+  getAllCompanyOwners
+} from "../../store/modules/admin_home/actions";
 
 class AdminHome extends Component {
   constructor(props) {
@@ -41,6 +42,10 @@ class AdminHome extends Component {
     if (!this.props.isSessionActive) {
       this.props.history.push("/");
     }
+  }
+
+  componentWillUnmount() {
+    this.props.terminateCurrentSession();
   }
 
   handleSideBarClicked = formToDisplay => {

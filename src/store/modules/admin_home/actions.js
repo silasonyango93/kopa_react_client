@@ -7,8 +7,10 @@ import {
   COMPANY_OWNER_REGISTRATION_SUCCESSFUL,
   COMPANY_REGISTRATION_FORM_SUBMISSION_FAILED,
   COMPANY_REGISTRATION_FORM_SUBMISSION_SUCCESSFUL,
+  FETCHING_COMPANY_OWNERS_EMPTY_RESULT_SET,
   FETCHING_COMPANY_OWNERS_FAILED,
   FETCHING_COMPANY_OWNERS_SUCCEEDED,
+  FETCHING_REGISTERED_COMPANIES_EMPTY_RESULT_SET,
   FETCHING_REGISTERED_COMPANIES_FAILED,
   FETCHING_REGISTERED_COMPANIES_SUCCEEDED,
   OWNERSHIP_GROUP_CREATED,
@@ -122,16 +124,16 @@ export function getAllCompanies() {
     const returnedPromise = apiGetAll(apiRoute);
     returnedPromise.then(
       function(result) {
-        if (result.data.results) {
+        if (result.data.results && result.data.results.length > 0) {
           dispatch({
             type: FETCHING_REGISTERED_COMPANIES_SUCCEEDED,
             payload: {
               allRegisteredCompanies: result.data.results
             }
           });
-        } else {
+        } else if (result.data.results && result.data.results.length === 0) {
           dispatch({
-            type: FETCHING_REGISTERED_COMPANIES_FAILED
+            type: FETCHING_REGISTERED_COMPANIES_EMPTY_RESULT_SET
           });
         }
       },
@@ -154,16 +156,16 @@ export function getAllCompanyOwners() {
     const returnedPromise = apiGetAll(apiRoute);
     returnedPromise.then(
       function(result) {
-        if (result.data.results) {
+        if (result.data.results && result.data.results.length > 0) {
           dispatch({
             type: FETCHING_COMPANY_OWNERS_SUCCEEDED,
             payload: {
               allCompanyOwners: result.data.results
             }
           });
-        } else {
+        } else if (result.data.results && result.data.results.length === 0) {
           dispatch({
-            type: FETCHING_COMPANY_OWNERS_FAILED
+            type: FETCHING_COMPANY_OWNERS_EMPTY_RESULT_SET
           });
         }
       },

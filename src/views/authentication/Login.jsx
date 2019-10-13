@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import {
   authenticateCompanyOwner,
   authenticateSystemAdmin,
+  authenticateSystemUser,
   authenticateUser
 } from "../../store/modules/current_session/actions";
 import { FormGroup, Label, Input } from "reactstrap";
@@ -170,7 +171,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  authenticateUser: PropTypes.func.isRequired,
+  authenticateSystemUser: PropTypes.func.isRequired,
   authenticateSystemAdmin: PropTypes.func.isRequired,
   authenticateCompanyOwner: PropTypes.func.isRequired,
   isSessionActive: PropTypes.bool.isRequired
@@ -181,7 +182,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  authenticateUser: payload => dispatch(authenticateUser(payload)),
+  authenticateSystemUser: payload => dispatch(authenticateSystemUser(payload)),
   authenticateSystemAdmin: payload =>
     dispatch(authenticateSystemAdmin(payload)),
   authenticateCompanyOwner: payload =>

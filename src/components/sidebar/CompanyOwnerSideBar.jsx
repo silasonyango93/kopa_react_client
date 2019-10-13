@@ -3,7 +3,10 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import { Route, withRouter } from "react-router-dom";
 import { FaCogs, FaCog, FaSearch, FaList } from "react-icons/fa";
-import {REGISTER_COMPANY_BRANCHES_FORM} from "../../views/company_owner_home/CompanyOwnerHomeConstants";
+import {
+  REGISTER_COMPANY_BRANCHES_FORM,
+  REGISTER_SYSTEM_USERS_FORM
+} from "../../views/company_owner_home/CompanyOwnerHomeConstants";
 
 class CompanyOwnerSideBar extends Component {
   constructor(props) {
@@ -71,16 +74,29 @@ class CompanyOwnerSideBar extends Component {
               </div>
             </li>
 
+            <li className="list-class">
+              <a
+                href=""
+                onClick={e => {
+                  e.preventDefault();
+                  this.props.handleSideBarClicked(
+                    REGISTER_COMPANY_BRANCHES_FORM
+                  );
+                }}
+              >
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;Company Branches
+              </a>
+            </li>
 
             <li className="list-class">
               <a
                 href=""
                 onClick={e => {
                   e.preventDefault();
-                  this.props.handleSideBarClicked(REGISTER_COMPANY_BRANCHES_FORM);
+                  this.props.handleSideBarClicked(REGISTER_SYSTEM_USERS_FORM);
                 }}
               >
-                <i className="fa fa-dashboard fa-fw" /> &nbsp;Company Branches
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;System Users
               </a>
             </li>
 

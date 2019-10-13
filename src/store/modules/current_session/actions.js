@@ -2,11 +2,11 @@ import {
   STORE_USER,
   BEGIN_USER_AUTHENTIFICATION,
   USER_LOGIN_SUCCESS,
-  ATTEMPTED_USER_LOGIN_FAILED,
   TERMINATE_CURRENT_SESSION,
   BEGIN_COMPANY_OWNER_AUTHENTICATION,
   COMPANY_OWNER_AUTHENTICATION_SUCCESSFUL,
-  COMPANY_OWNER_AUTHENTICATION_FAILED
+  WRONG_LOGIN_CREDENTIALS,
+  AN_ERROR_OCCURED_DURING_LOGIN
 } from "./actionTypes";
 import { apiPost } from "../../../services/api_connector/ApiConnector";
 import {
@@ -22,28 +22,36 @@ export function terminateCurrentSession() {
   };
 }
 
-export function authenticateUser(payload) {
+export function authenticateSystemUser(payload) {
   return async dispatch => {
     dispatch({
       type: BEGIN_USER_AUTHENTIFICATION
     });
-    const apiRoute = "/user_login";
+    const apiRoute = "/system_admin_login";
     const returnedPromise = apiPost(payload, apiRoute);
     returnedPromise.then(
       function(result) {
-        dispatch({
-          type: STORE_USER,
-          payload: {
-            session_details: result.data
-          }
-        });
-        dispatch({
-          type: USER_LOGIN_SUCCESS
-        });
+        if (!result.data.error) {
+          dispatch({
+            type: STORE_USER,
+            payload: {
+              session_details: result.data,
+              RoleType: SYSTEM_ADMIN,
+              isSessionActive: true
+            }
+          });
+          dispatch({
+            type: USER_LOGIN_SUCCESS
+          });
+        } else {
+          dispatch({
+            type: WRONG_LOGIN_CREDENTIALS
+          });
+        }
       },
       function(err) {
         dispatch({
-          type: ATTEMPTED_USER_LOGIN_FAILED
+          type: AN_ERROR_OCCURED_DURING_LOGIN
         });
         console.log(err);
       }
@@ -60,21 +68,27 @@ export function authenticateSystemAdmin(payload) {
     const returnedPromise = apiPost(payload, apiRoute);
     returnedPromise.then(
       function(result) {
-        dispatch({
-          type: STORE_USER,
-          payload: {
-            session_details: result.data,
-            RoleType: SYSTEM_ADMIN,
-            isSessionActive: true
-          }
-        });
-        dispatch({
-          type: USER_LOGIN_SUCCESS
-        });
+        if (!result.data.error) {
+          dispatch({
+            type: STORE_USER,
+            payload: {
+              session_details: result.data,
+              RoleType: SYSTEM_ADMIN,
+              isSessionActive: true
+            }
+          });
+          dispatch({
+            type: USER_LOGIN_SUCCESS
+          });
+        } else {
+          dispatch({
+            type: WRONG_LOGIN_CREDENTIALS
+          });
+        }
       },
       function(err) {
         dispatch({
-          type: ATTEMPTED_USER_LOGIN_FAILED
+          type: AN_ERROR_OCCURED_DURING_LOGIN
         });
         console.log(err);
       }
@@ -91,21 +105,27 @@ export function authenticateCompanyOwner(payload) {
     const returnedPromise = apiPost(payload, apiRoute);
     returnedPromise.then(
       function(result) {
-        dispatch({
-          type: COMPANY_OWNER_AUTHENTICATION_SUCCESSFUL
-        });
-        dispatch({
-          type: STORE_USER,
-          payload: {
-            session_details: result.data,
-            RoleType: COMPANY_OWNER,
-            isSessionActive: true
-          }
-        });
+        if (!result.data.error) {
+          dispatch({
+            type: COMPANY_OWNER_AUTHENTICATION_SUCCESSFUL
+          });
+          dispatch({
+            type: STORE_USER,
+            payload: {
+              session_details: result.data,
+              RoleType: COMPANY_OWNER,
+              isSessionActive: true
+            }
+          });
+        } else {
+          dispatch({
+            type: WRONG_LOGIN_CREDENTIALS
+          });
+        }
       },
       function(err) {
         dispatch({
-          type: COMPANY_OWNER_AUTHENTICATION_FAILED
+          type: AN_ERROR_OCCURED_DURING_LOGIN
         });
         console.log(err);
       }
