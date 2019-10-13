@@ -3,9 +3,6 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import {
-  getAllCompanies,
-  getAllCompanyOwners,
-  registerCompanyOwner,
   submitOwnersGroupsRshipForm
 } from "../../../store/modules/admin_home/actions";
 
@@ -16,11 +13,6 @@ class CompanyOwnersRship extends Component {
     AllCompanies: [],
     allCompanyOwners: []
   };
-
-  componentDidMount() {
-    this.props.getAllCompanies();
-    this.props.getAllCompanyOwners();
-  }
 
   componentDidUpdate(prevProps) {
     if (
@@ -145,11 +137,9 @@ class CompanyOwnersRship extends Component {
 }
 
 CompanyOwnersRship.propTypes = {
-  getAllCompanies: PropTypes.func.isRequired,
-  getAllCompanyOwners: PropTypes.func.isRequired,
   submitOwnersGroupsRshipForm: PropTypes.func.isRequired,
-  allRegisteredCompanies: PropTypes.arrayOf(PropTypes.object),
-  allCompanyOwners: PropTypes.arrayOf(PropTypes.object)
+  allRegisteredCompanies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  allCompanyOwners: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 const mapStateToProps = state => ({
@@ -158,13 +148,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getAllCompanies: () => dispatch(getAllCompanies()),
-  getAllCompanyOwners: () => dispatch(getAllCompanyOwners()),
   submitOwnersGroupsRshipForm: payload =>
     dispatch(submitOwnersGroupsRshipForm(payload))
 });
 
 export default connect(
-  mapStateToProps,
+    mapStateToProps,
   mapDispatchToProps
 )(CompanyOwnersRship);

@@ -12,6 +12,7 @@ import TopBar from "../../components/topbar/TopBar";
 import CompanyOwnerSideBar from "../../components/sidebar/CompanyOwnerSideBar";
 import RegisterCompanyBranches from "./register_company_branches/RegisterCompanyBranches";
 import {REGISTER_COMPANY_BRANCHES_FORM} from "./CompanyOwnerHomeConstants";
+import {getACompanysBranches, getCompanyOwnersCompanyDetails} from "../../store/modules/company_owner_home/actions";
 
 class CompanyOwnerHome extends Component {
   constructor(props) {
@@ -25,6 +26,11 @@ class CompanyOwnerHome extends Component {
   componentDidMount() {
     if (!this.props.isSessionActive) {
       this.props.history.push("/");
+    } else {
+      const paload = {
+        companyOwnerId: this.props.companyOwnerId
+      }
+      this.props.getCompanyOwnersCompanyDetails(paload);
     }
   }
 
@@ -36,6 +42,10 @@ class CompanyOwnerHome extends Component {
 
   handleSideBarClicked = formToDisplay => {
     if (formToDisplay === REGISTER_COMPANY_BRANCHES_FORM) {
+      const paload = {
+        companyOwnerId: this.props.companyOwnerId
+      }
+      this.props.getCompanyOwnersCompanyDetails(paload);
       this.setState({
           displayRegisterCompanyBranchesForm: true
       });
@@ -81,16 +91,22 @@ class CompanyOwnerHome extends Component {
 }
 
 CompanyOwnerHome.propTypes = {
-  isSessionActive: PropTypes.bool.isRequired
+  isSessionActive: PropTypes.bool.isRequired,
+  terminateCurrentSession: PropTypes.func.isRequired,
+  getCompanyOwnersCompanyDetails: PropTypes.func.isRequired,
+  companyOwnerId: PropTypes.string.isRequired,
+  getACompanysBranches: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  isSessionActive: state.current_session.isSessionActive,
-  terminateCurrentSession: PropTypes.func.isRequired
+  companyOwnerId: state.current_session.session_details.CompanyOwnerId,
+  isSessionActive: state.current_session.isSessionActive
 });
 
 const mapDispatchToProps = dispatch => ({
-  terminateCurrentSession: () => dispatch(terminateCurrentSession())
+  terminateCurrentSession: () => dispatch(terminateCurrentSession()),
+  getACompanysBranches: (payload) => dispatch(getACompanysBranches(payload)),
+  getCompanyOwnersCompanyDetails: (payload) => dispatch(getCompanyOwnersCompanyDetails(payload))
 });
 
 export default connect(

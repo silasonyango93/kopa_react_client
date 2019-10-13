@@ -12,16 +12,13 @@ import {
   REGISTER_COMPANIES_OWNERS_FORM
 } from "./AdminHomeConstants";
 import RegisterCompanyOwners from "./register_company_owners/RegisterCompanyOwners";
-import { reducer as admin_home } from "../../store/modules/admin_home";
-import { reducer as current_session } from "../../store/modules/current_session";
 import { DEBOUNCE, IDLE_TIMEOUT } from "../../config/constants/Constants";
 import {
-  authenticateSystemAdmin,
-  authenticateUser,
   terminateCurrentSession
 } from "../../store/modules/current_session/actions";
 import CompanyOwnersRship from "./company_owners_rship/CompanyOwnersRship";
 import TopBar from "../../components/topbar/TopBar";
+import {getAllCompanies, getAllCompanyOwners} from "../../store/modules/admin_home/actions";
 
 class AdminHome extends Component {
   constructor(props) {
@@ -60,6 +57,8 @@ class AdminHome extends Component {
         displayRegisterCompanyOwnersForm: true
       });
     } else if (formToDisplay === COMPANIES_OWNERS_RSHIP_FORM) {
+      this.props.getAllCompanies();
+      this.props.getAllCompanyOwners();
       this.setState({
         displayRegisterCompaniesForm: false,
         displayRegisterCompanyOwnersForm: false,
@@ -121,16 +120,20 @@ class AdminHome extends Component {
 }
 
 AdminHome.propTypes = {
-  isSessionActive: PropTypes.bool.isRequired
+  isSessionActive: PropTypes.bool.isRequired,
+  getAllCompanies: PropTypes.func.isRequired,
+  getAllCompanyOwners: PropTypes.func.isRequired,
+  terminateCurrentSession: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  isSessionActive: state.current_session.isSessionActive,
-  terminateCurrentSession: PropTypes.func.isRequired
+  isSessionActive: state.current_session.isSessionActive
 });
 
 const mapDispatchToProps = dispatch => ({
-  terminateCurrentSession: () => dispatch(terminateCurrentSession())
+  terminateCurrentSession: () => dispatch(terminateCurrentSession()),
+  getAllCompanies: () => dispatch(getAllCompanies()),
+  getAllCompanyOwners: () => dispatch(getAllCompanyOwners())
 });
 
 export default connect(
