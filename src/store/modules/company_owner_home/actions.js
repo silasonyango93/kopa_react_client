@@ -2,6 +2,8 @@ import { apiPost } from "../../../services/api_connector/ApiConnector";
 import {
   COMPANY_BRANCH_CREATED_SUCCESSFULLY,
   COMPANY_BRANCH_CREATION_FAILED,
+  EMPLOYMENT_CATEGORIES_REGISTRATION_FAILED,
+  EMPLOYMENT_CATEGORIES_REGISTRATION_SUCCESSFUL,
   FETCHING_COMPANY_OWNERS_COMPANY_DETAILS_EMPTY_RESULT_SET,
   FETCHING_COMPANY_OWNERS_COMPANY_DETAILS_FAILED,
   FETCHING_COMPANY_OWNERS_COMPANY_DETAILS_SUCCEEDED,
@@ -12,6 +14,7 @@ import {
   START_FETCHING_A_COMPANY_OWNERS_COMPANY_DETAILS,
   START_FETCHING_A_COMPANYS_BRANCHES,
   START_REGISTERING_A_SYSTEM_USER,
+  START_REGISTERING_EMPLOYMENT_CATEGORIES,
   SYSTEM_USER_REGISTRATION_FAILED,
   SYSTEM_USER_REGISTRATION_SUCCESSFUL
 } from "./actionTypes";
@@ -41,6 +44,36 @@ export function createCompanyBranch(payload) {
         });
         console.log(err);
       }
+    );
+  };
+}
+
+
+export function registerAnEmploymentCategory(payload) {
+  return async dispatch => {
+    dispatch({
+      type: START_REGISTERING_EMPLOYMENT_CATEGORIES
+    });
+    const apiRoute = "/add_employment_categories";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+        function(result) {
+          if (result.data.results.success) {
+            dispatch({
+              type: EMPLOYMENT_CATEGORIES_REGISTRATION_SUCCESSFUL
+            });
+          } else {
+            dispatch({
+              type: EMPLOYMENT_CATEGORIES_REGISTRATION_FAILED
+            });
+          }
+        },
+        function(err) {
+          dispatch({
+            type: EMPLOYMENT_CATEGORIES_REGISTRATION_FAILED
+          });
+          console.log(err);
+        }
     );
   };
 }

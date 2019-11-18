@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 import {
   authenticateCompanyOwner,
   authenticateSystemAdmin,
-  authenticateSystemUser,
-  authenticateUser
+  authenticateSystemUser, checkIfSystemAlreadyConfigured, initialGenderConfiguration, runInitialSystemConfiguration
 } from "../../store/modules/current_session/actions";
 import { FormGroup, Label, Input } from "reactstrap";
 class Login extends Component {
@@ -17,12 +16,26 @@ class Login extends Component {
     isStaff: true
   };
 
+  componentDidMount() {
+    this.props.checkIfSystemAlreadyConfigured();
+  }
+
   componentDidUpdate(prevProps) {
     if (this.props.isSessionActive !== prevProps.isSessionActive) {
       if (this.props.isSessionActive && this.state.isAdmin) {
         this.props.history.push("/admin_home");
       } else if (this.props.isSessionActive && this.state.isCompanyOwner) {
         this.props.history.push("/company_owner_home");
+      }
+    }
+    if (this.props.isCompanyAlreadyConfigured !== prevProps.isCompanyAlreadyConfigured) {
+      if (!this.props.isCompanyAlreadyConfigured) {
+        const payload = {
+          ConfigId: 1,
+          ConfigDescription: 'INITIAL_DATABASE_CONFIGURATION',
+          ConfigStatus: 1
+        };
+        this.props.runInitialSystemConfiguration(payload);
       }
     }
   }
@@ -174,11 +187,16 @@ Login.propTypes = {
   authenticateSystemUser: PropTypes.func.isRequired,
   authenticateSystemAdmin: PropTypes.func.isRequired,
   authenticateCompanyOwner: PropTypes.func.isRequired,
-  isSessionActive: PropTypes.bool.isRequired
+  isSessionActive: PropTypes.bool.isRequired,
+  isCompanyAlreadyConfigured: PropTypes.bool.isRequired,
+  checkIfSystemAlreadyConfigured: PropTypes.func.isRequired,
+  runInitialSystemConfiguration: PropTypes.func.isRequired,
+  initialGenderConfiguration: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  isSessionActive: state.current_session.isSessionActive
+  isSessionActive: state.current_session.isSessionActive,
+  isCompanyAlreadyConfigured: state.current_session.isCompanyAlreadyConfigured
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -186,7 +204,13 @@ const mapDispatchToProps = dispatch => ({
   authenticateSystemAdmin: payload =>
     dispatch(authenticateSystemAdmin(payload)),
   authenticateCompanyOwner: payload =>
-    dispatch(authenticateCompanyOwner(payload))
+    dispatch(authenticateCompanyOwner(payload)),
+  checkIfSystemAlreadyConfigured: () =>
+      dispatch(checkIfSystemAlreadyConfigured()),
+  runInitialSystemConfiguration: payload =>
+      dispatch(runInitialSystemConfiguration(payload)),
+  initialGenderConfiguration: payload =>
+      dispatch(initialGenderConfiguration(payload))
 });
 
 export default connect(

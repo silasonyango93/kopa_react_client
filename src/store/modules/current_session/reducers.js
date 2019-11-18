@@ -1,4 +1,4 @@
-import {TERMINATE_CURRENT_SESSION, STORE_USER} from "./actionTypes";
+import {TERMINATE_CURRENT_SESSION, STORE_USER, SYSTEM_NOT_CONFIGURED} from "./actionTypes";
 
 export const ACTION_HANDLERS = {
   [STORE_USER]: (state, action) =>
@@ -12,5 +12,10 @@ export const ACTION_HANDLERS = {
         Object.assign({}, state, {
             isSessionActive: false,
             isLoginSuccessful: false,
+        }),
+    [SYSTEM_NOT_CONFIGURED]: (state, action) =>
+        Object.assign({}, state, {
+            isCompanyAlreadyConfigured: action.payload.isCompanyAlreadyConfigured,
+            initialConfigurations: { genderConfiguration: false}
         })
 };

@@ -3,4 +3,8 @@ export const initialState = {
   isLoginSuccessful: false,
     RoleType: '',
     isSessionActive: false,
+  isCompanyAlreadyConfigured: true,
+  initialConfigurations: {
+    genderConfiguration: true
+  }
 };

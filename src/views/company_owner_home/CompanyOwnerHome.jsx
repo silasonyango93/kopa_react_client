@@ -10,7 +10,7 @@ import TopBar from "../../components/topbar/TopBar";
 import CompanyOwnerSideBar from "../../components/sidebar/CompanyOwnerSideBar";
 import RegisterCompanyBranches from "./register_company_branches/RegisterCompanyBranches";
 import {
-  REGISTER_COMPANY_BRANCHES_FORM,
+  REGISTER_COMPANY_BRANCHES_FORM, REGISTER_EMPLOYMENT_CATEGORIES_FORM,
   REGISTER_SYSTEM_USERS_FORM
 } from "./CompanyOwnerHomeConstants";
 import {
@@ -18,13 +18,15 @@ import {
   getCompanyOwnersCompanyDetails
 } from "../../store/modules/company_owner_home/actions";
 import RegisterSystemUsers from "./register_system_users/RegisterSystemUsers";
+import RegisterEmploymentCategories from "./register_employment_categories/RegisterEmploymentCategories";
 
 class CompanyOwnerHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
       displayRegisterCompanyBranchesForm: true,
-      displayRegisterSystemUsersForm: false
+      displayRegisterSystemUsersForm: false,
+      displayRegisterEmploymentCategories: false
     };
     this.idleTimer = null;
   }
@@ -57,7 +59,9 @@ class CompanyOwnerHome extends Component {
       };
       this.props.getCompanyOwnersCompanyDetails(paload);
       this.setState({
-        displayRegisterCompanyBranchesForm: true
+        displayRegisterCompanyBranchesForm: true,
+        displayRegisterSystemUsersForm: false,
+        displayRegisterEmploymentCategories: false
       });
     } else if (formToDisplay === REGISTER_SYSTEM_USERS_FORM) {
       const paload = {
@@ -67,7 +71,19 @@ class CompanyOwnerHome extends Component {
       this.props.getACompanysBranches(paload);
       this.setState({
         displayRegisterCompanyBranchesForm: false,
-        displayRegisterSystemUsersForm: true
+        displayRegisterSystemUsersForm: true,
+        displayRegisterEmploymentCategories: false
+      });
+    } else if (formToDisplay === REGISTER_EMPLOYMENT_CATEGORIES_FORM) {
+      const paload = {
+        column_name: "CompanyId",
+        search_value: this.props.CompanyId
+      };
+      this.props.getACompanysBranches(paload);
+      this.setState({
+        displayRegisterCompanyBranchesForm: false,
+        displayRegisterSystemUsersForm: false,
+        displayRegisterEmploymentCategories: true
       });
     }
   };
@@ -112,6 +128,14 @@ class CompanyOwnerHome extends Component {
               }
             >
               <RegisterSystemUsers />
+            </div>
+
+            <div
+                className={
+                  this.state.displayRegisterEmploymentCategories ? "show" : "hide"
+                }
+            >
+              <RegisterEmploymentCategories />
             </div>
           </Container>
         </Columns>
