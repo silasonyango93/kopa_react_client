@@ -4,7 +4,14 @@ import { connect } from "react-redux";
 import {
   authenticateCompanyOwner,
   authenticateSystemAdmin,
-  authenticateSystemUser, checkIfSystemAlreadyConfigured, initialGenderConfiguration, runInitialSystemConfiguration
+  authenticateSystemUser,
+  checkIfSystemAlreadyConfigured,
+  configureSystemCompany,
+  configureSystemEmploymentCategory,
+  configureSystemOwnershipGroup,
+  initialEmploymentCategoriesConfiguration,
+  initialGenderConfiguration,
+  runInitialSystemConfiguration
 } from "../../store/modules/current_session/actions";
 import { FormGroup, Label, Input } from "reactstrap";
 class Login extends Component {
@@ -21,6 +28,19 @@ class Login extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    const {
+      configureSystemOwnershipGroup,
+      initialConfigurations: {
+        isSystemOwnershipGroupConfigured,
+        isSystemCompanyConfigured,
+        isInitialEmploymentCategoryConfigured,
+        isMaleGenderConfigured,
+        isFemaleGenderConfigured
+      },
+      configureSystemCompany,
+      configureSystemEmploymentCategory,
+      initialGenderConfiguration
+    } = this.props;
     if (this.props.isSessionActive !== prevProps.isSessionActive) {
       if (this.props.isSessionActive && this.state.isAdmin) {
         this.props.history.push("/admin_home");
@@ -28,11 +48,81 @@ class Login extends Component {
         this.props.history.push("/company_owner_home");
       }
     }
-    if (this.props.isCompanyAlreadyConfigured !== prevProps.isCompanyAlreadyConfigured) {
+    if (
+      this.props.isCompanyAlreadyConfigured !==
+      prevProps.isCompanyAlreadyConfigured
+    ) {
       if (!this.props.isCompanyAlreadyConfigured) {
         const payload = {
+          CompanyOwnershipGroupId: 1,
+          OwnershipGroupName: "System Ownership Group"
+        };
+        configureSystemOwnershipGroup(payload);
+      }
+    }
+
+    if (
+      isSystemOwnershipGroupConfigured !==
+      prevProps.initialConfigurations.isSystemOwnershipGroupConfigured
+    ) {
+      if (isSystemOwnershipGroupConfigured) {
+        const payload = {
+          CompanyId: 1,
+          CompanyOwnershipGroupId: 1,
+          CompanyName: "System Company"
+        };
+        configureSystemCompany(payload);
+      }
+    }
+
+    if (
+      isSystemCompanyConfigured !==
+      prevProps.initialConfigurations.isSystemCompanyConfigured
+    ) {
+      if (isSystemCompanyConfigured) {
+        const payload = {
+          EmploymentCategoryId: 1,
+          CompanyId: 1,
+          CategoryDescription: "Unemployed"
+        };
+        configureSystemEmploymentCategory(payload);
+      }
+    }
+
+    if (
+      isInitialEmploymentCategoryConfigured !==
+      prevProps.initialConfigurations.isInitialEmploymentCategoryConfigured
+    ) {
+      if (isInitialEmploymentCategoryConfigured) {
+        const payload = {
+          GenderId: 1,
+          GenderDescription: "Male"
+        };
+        initialGenderConfiguration(payload);
+      }
+    }
+
+    if (
+      isMaleGenderConfigured !==
+      prevProps.initialConfigurations.isMaleGenderConfigured
+    ) {
+      if (isMaleGenderConfigured) {
+        const payload = {
+          GenderId: 2,
+          GenderDescription: "Female"
+        };
+        initialGenderConfiguration(payload);
+      }
+    }
+
+    if (
+      isFemaleGenderConfigured !==
+      prevProps.initialConfigurations.isFemaleGenderConfigured
+    ) {
+      if (isFemaleGenderConfigured) {
+        const payload = {
           ConfigId: 1,
-          ConfigDescription: 'INITIAL_DATABASE_CONFIGURATION',
+          ConfigDescription: 'INITIAL_DATABASE_CONFIGURATION_COMPLETE',
           ConfigStatus: 1
         };
         this.props.runInitialSystemConfiguration(payload);
@@ -191,12 +281,16 @@ Login.propTypes = {
   isCompanyAlreadyConfigured: PropTypes.bool.isRequired,
   checkIfSystemAlreadyConfigured: PropTypes.func.isRequired,
   runInitialSystemConfiguration: PropTypes.func.isRequired,
-  initialGenderConfiguration: PropTypes.func.isRequired,
+  configureSystemOwnershipGroup: PropTypes.func.isRequired,
+  configureSystemCompany: PropTypes.func.isRequired,
+  configureSystemEmploymentCategory: PropTypes.func.isRequired,
+  initialConfigurations: PropTypes.shape().isRequired
 };
 
 const mapStateToProps = state => ({
   isSessionActive: state.current_session.isSessionActive,
-  isCompanyAlreadyConfigured: state.current_session.isCompanyAlreadyConfigured
+  isCompanyAlreadyConfigured: state.current_session.isCompanyAlreadyConfigured,
+  initialConfigurations: state.current_session.initialConfigurations
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -206,11 +300,16 @@ const mapDispatchToProps = dispatch => ({
   authenticateCompanyOwner: payload =>
     dispatch(authenticateCompanyOwner(payload)),
   checkIfSystemAlreadyConfigured: () =>
-      dispatch(checkIfSystemAlreadyConfigured()),
+    dispatch(checkIfSystemAlreadyConfigured()),
   runInitialSystemConfiguration: payload =>
-      dispatch(runInitialSystemConfiguration(payload)),
+    dispatch(runInitialSystemConfiguration(payload)),
+  configureSystemOwnershipGroup: payload =>
+    dispatch(configureSystemOwnershipGroup(payload)),
+  configureSystemCompany: payload => dispatch(configureSystemCompany(payload)),
+  configureSystemEmploymentCategory: payload =>
+    dispatch(configureSystemEmploymentCategory(payload)),
   initialGenderConfiguration: payload =>
-      dispatch(initialGenderConfiguration(payload))
+    dispatch(initialGenderConfiguration(payload))
 });
 
 export default connect(

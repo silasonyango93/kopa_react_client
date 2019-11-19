@@ -15,19 +15,32 @@ import {
   INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL,
   INITIAL_SYSTEM_CONFIGURATION_FAILED,
   ERROR_OCCURED_DURING_SYSTEM_CONFIGURATION,
+  START_INITIAL_EMPLOYMENT_CATEGORIES_CONFIGURATION,
+  INITIAL_EMPLOYMENT_CATEGORIES_CONFIGURATION_SUCCESSFUL,
+  INITIAL_EMPLOYMENT_CATEGORIES_CONFIGURATION_FAILED,
+  ERROR_OCCURED_DURING_EMPLOYMENT_CATEGORIES_CONFIGURATION,
+  START_INITIAL_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION,
+  INITIAL_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION_SUCCESSFUL,
+  INITIAL_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION_FAILED,
+  ERROR_OCCURED_DURING_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION,
+  START_INITIAL_SYSTEM_COMPANY_CONFIGURATION,
+  INITIAL_SYSTEM_COMPANY_CONFIGURATION_SUCCESSFUL,
+  INITIAL_SYSTEM_COMPANY_CONFIGURATION_FAILED,
+  ERROR_OCCURED_DURING_SYSTEM_COMPANY_CONFIGURATION,
   START_INITIAL_GENDER_CONFIGURATION,
-  INITIAL_GENDER_CONFIGURATION_SUCCESSFUL,
-  INITIAL_GENDER_CONFIGURATION_FAILED, ERROR_OCCURED_DURING_GENDER_CONFIGURATION
+  INITIAL_GENDER_CONFIGURATION_FAILED,
+  ERROR_OCCURED_DURING_GENDER_CONFIGURATION,
+  MALE_GENDER_CONFIGURATION_SUCCESSFUL,
+  FEMALE_GENDER_CONFIGURATION_SUCCESSFUL
 } from "./actionTypes";
-import {apiGetAll, apiPost} from "../../../services/api_connector/ApiConnector";
+import {
+  apiGetAll,
+  apiPost
+} from "../../../services/api_connector/ApiConnector";
 import {
   COMPANY_OWNER,
   SYSTEM_ADMIN
 } from "../../../config/constants/Constants";
-import {
-  START_SUBMITING_OWNERS_GROUPS_RSHIP_FORM, SUBMITING_OWNERS_GROUPS_RSHIP_FORM_FAILED,
-  SUBMITING_OWNERS_GROUPS_RSHIP_FORM_SUCCEEDED
-} from "../admin_home/actionTypes";
 
 export function terminateCurrentSession() {
   return async dispatch => {
@@ -148,7 +161,6 @@ export function authenticateCompanyOwner(payload) {
   };
 }
 
-
 export function checkIfSystemAlreadyConfigured() {
   return async dispatch => {
     dispatch({
@@ -157,33 +169,32 @@ export function checkIfSystemAlreadyConfigured() {
     const apiRoute = "/get_all_configuration";
     const returnedPromise = apiGetAll(apiRoute);
     returnedPromise.then(
-        function(result) {
-          if (result.data.results.length === 0) {
-            dispatch({
-              type: SYSTEM_NOT_CONFIGURED,
-              payload: {
-                isCompanyAlreadyConfigured: false
-              }
-            });
-          } else if (result.data.results.length > 0) {
-            dispatch({
-              type: SYSTEM_ALREADY_CONFIGURED,
-              payload: {
-                isCompanyAlreadyConfigured: true
-              }
-            });
-          }
-        },
-        function(err) {
+      function(result) {
+        if (result.data.results.length === 0) {
           dispatch({
-            type: ERROR_OCCURED_DURING_SYSTEM_CONFIG_CHECK
+            type: SYSTEM_NOT_CONFIGURED,
+            payload: {
+              isCompanyAlreadyConfigured: false
+            }
           });
-          console.log(err);
+        } else if (result.data.results.length > 0) {
+          dispatch({
+            type: SYSTEM_ALREADY_CONFIGURED,
+            payload: {
+              isCompanyAlreadyConfigured: true
+            }
+          });
         }
+      },
+      function(err) {
+        dispatch({
+          type: ERROR_OCCURED_DURING_SYSTEM_CONFIG_CHECK
+        });
+        console.log(err);
+      }
     );
   };
 }
-
 
 export function runInitialSystemConfiguration(payload) {
   return async dispatch => {
@@ -193,23 +204,110 @@ export function runInitialSystemConfiguration(payload) {
     const apiRoute = "/add_configuration";
     const returnedPromise = apiPost(payload, apiRoute);
     returnedPromise.then(
-        function(result) {
-          if (result.data.results.success) {
-            dispatch({
-              type: INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL
-            });
-          } else {
-            dispatch({
-              type: INITIAL_SYSTEM_CONFIGURATION_FAILED
-            });
-          }
-        },
-        function(err) {
+      function(result) {
+        if (result.data.results.success) {
           dispatch({
-            type: ERROR_OCCURED_DURING_SYSTEM_CONFIGURATION
+            type: INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL
           });
-          console.log(err);
+        } else {
+          dispatch({
+            type: INITIAL_SYSTEM_CONFIGURATION_FAILED
+          });
         }
+      },
+      function(err) {
+        dispatch({
+          type: ERROR_OCCURED_DURING_SYSTEM_CONFIGURATION
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function configureSystemOwnershipGroup(payload) {
+  return async dispatch => {
+    dispatch({
+      type: START_INITIAL_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION
+    });
+    const apiRoute = "/add_company_ownership_groups";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results.success) {
+          dispatch({
+            type: INITIAL_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION_SUCCESSFUL
+          });
+        } else {
+          dispatch({
+            type: INITIAL_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION_FAILED
+          });
+        }
+      },
+      function(err) {
+        dispatch({
+          type: ERROR_OCCURED_DURING_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function configureSystemCompany(payload) {
+  return async dispatch => {
+    dispatch({
+      type: START_INITIAL_SYSTEM_COMPANY_CONFIGURATION
+    });
+    const apiRoute = "/add_companies";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results.success) {
+          dispatch({
+            type: INITIAL_SYSTEM_COMPANY_CONFIGURATION_SUCCESSFUL
+          });
+        } else {
+          dispatch({
+            type: INITIAL_SYSTEM_COMPANY_CONFIGURATION_FAILED
+          });
+        }
+      },
+      function(err) {
+        dispatch({
+          type: ERROR_OCCURED_DURING_SYSTEM_COMPANY_CONFIGURATION
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function configureSystemEmploymentCategory(payload) {
+  return async dispatch => {
+    dispatch({
+      type: START_INITIAL_EMPLOYMENT_CATEGORIES_CONFIGURATION
+    });
+    const apiRoute = "/add_employment_categories";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results.success) {
+          dispatch({
+            type: INITIAL_EMPLOYMENT_CATEGORIES_CONFIGURATION_SUCCESSFUL
+          });
+        } else {
+          dispatch({
+            type: INITIAL_EMPLOYMENT_CATEGORIES_CONFIGURATION_FAILED
+          });
+        }
+      },
+      function(err) {
+        dispatch({
+          type: ERROR_OCCURED_DURING_EMPLOYMENT_CATEGORIES_CONFIGURATION
+        });
+        console.log(err);
+      }
     );
   };
 }
@@ -222,24 +320,29 @@ export function initialGenderConfiguration(payload) {
     const apiRoute = "/add_gender";
     const returnedPromise = apiPost(payload, apiRoute);
     returnedPromise.then(
-        function(result) {
-          if (result.data.results.success) {
+      function(result) {
+        if (result.data.results.success) {
+          if (payload.GenderId === 1) {
             dispatch({
-              type: INITIAL_GENDER_CONFIGURATION_SUCCESSFUL
+              type: MALE_GENDER_CONFIGURATION_SUCCESSFUL
             });
-          } else {
+          } else if (payload.GenderId === 2) {
             dispatch({
-              type: INITIAL_GENDER_CONFIGURATION_FAILED
+              type: FEMALE_GENDER_CONFIGURATION_SUCCESSFUL
             });
           }
-        },
-        function(err) {
+        } else {
           dispatch({
-            type: ERROR_OCCURED_DURING_GENDER_CONFIGURATION
+            type: INITIAL_GENDER_CONFIGURATION_FAILED
           });
-          console.log(err);
         }
+      },
+      function(err) {
+        dispatch({
+          type: ERROR_OCCURED_DURING_GENDER_CONFIGURATION
+        });
+        console.log(err);
+      }
     );
   };
 }
-
