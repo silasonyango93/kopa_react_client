@@ -19,7 +19,7 @@ spec:
         app: kopa-react-client
     spec:
       containers:
-        - name: kopa--react-client
+        - name: kopa-react-client
           imagePullPolicy: Always
           image: silasonyango93/kopa-react-client:latest
           ports:
