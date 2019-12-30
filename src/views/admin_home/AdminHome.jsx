@@ -56,6 +56,7 @@ class AdminHome extends Component {
         displayRegisterCompanyOwnersForm: false
       });
     } else if (formToDisplay === REGISTER_COMPANIES_OWNERS_FORM) {
+      this.props.getAllCompanies();
       this.setState({
         displayRegisterCompaniesForm: false,
         displayCompaniesOwnersRshipForm: false,

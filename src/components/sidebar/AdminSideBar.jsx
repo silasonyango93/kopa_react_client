@@ -249,18 +249,18 @@ class AdminSideBar extends Component {
               </a>
             </li>
 
-            <li className="list-class">
-              <a
-                href=""
-                onClick={e => {
-                  e.preventDefault();
-                  this.props.handleSideBarClicked(COMPANIES_OWNERS_RSHIP_FORM);
-                }}
-              >
-                <i className="fa fa-dashboard fa-fw" /> &nbsp;Assign Company
-                Owners
-              </a>
-            </li>
+            {/*<li className="list-class">*/}
+            {/*  <a*/}
+            {/*    href=""*/}
+            {/*    onClick={e => {*/}
+            {/*      e.preventDefault();*/}
+            {/*      this.props.handleSideBarClicked(COMPANIES_OWNERS_RSHIP_FORM);*/}
+            {/*    }}*/}
+            {/*  >*/}
+            {/*    <i className="fa fa-dashboard fa-fw" /> &nbsp;Assign Company*/}
+            {/*    Owners*/}
+            {/*  </a>*/}
+            {/*</li>*/}
 
             <li
               className={classNames({

@@ -4,5 +4,7 @@ export const initialState = {
     isDataSubmissionSuccessful: false
   },
   allRegisteredCompanies: [],
-  allCompanyOwners: []
+  allCompanyOwners: [],
+  isCompanyOwnerSuccessfullyRegistered: false,
+  currentCompanyOwnerDbRecordId: ""
 };

@@ -14,7 +14,7 @@ import {
   FETCHING_REGISTERED_COMPANIES_FAILED,
   FETCHING_REGISTERED_COMPANIES_SUCCEEDED,
   OWNERSHIP_GROUP_CREATED,
-  OWNERSHIP_GROUP_CREATION_FAILED,
+  OWNERSHIP_GROUP_CREATION_FAILED, RESET_COMPANY_OWNER_REGISTRATION,
   START_COMPANY_OWNER_REGISTRATION,
   START_COMPANY_REGISTRATION_FORM_SUBMISSION,
   START_FETCHING_COMPANY_OWNERS,
@@ -97,7 +97,10 @@ export function registerCompanyOwner(payload) {
       function(result) {
         if (result.data.results.success) {
           dispatch({
-            type: COMPANY_OWNER_REGISTRATION_SUCCESSFUL
+            type: COMPANY_OWNER_REGISTRATION_SUCCESSFUL,
+            payload: {
+              recordId: result.data.results.recordId
+            }
           });
         } else {
           dispatch({
@@ -205,5 +208,17 @@ export function submitOwnersGroupsRshipForm(payload) {
         console.log(err);
       }
     );
+  };
+}
+
+
+
+
+export function resetCurrentCompanyOwnerRegistration() {
+  return async dispatch => {
+    dispatch({
+      type: RESET_COMPANY_OWNER_REGISTRATION
+    });
+
   };
 }

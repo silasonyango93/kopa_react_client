@@ -3,10 +3,16 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { FormGroup, Input, Label } from "reactstrap";
-import { registerCompanyOwner } from "../../../store/modules/admin_home/actions";
+import {
+  registerCompanyOwner,
+  resetCurrentCompanyOwnerRegistration,
+  submitOwnersGroupsRshipForm
+} from "../../../store/modules/admin_home/actions";
 
 class RegisterCompanyOwners extends Component {
   state = {
+    AllCompanies: [],
+    SelectedCompanyId: "",
     firstName: "",
     middleName: "",
     surname: "",
@@ -20,6 +26,38 @@ class RegisterCompanyOwners extends Component {
       { label: "Female", value: "2" }
     ]
   };
+
+
+  componentDidUpdate(prevProps) {
+    if (
+        this.props.allRegisteredCompanies !== prevProps.allRegisteredCompanies
+    ) {
+      let allRegisteredCompanies = this.props.allRegisteredCompanies;
+      allRegisteredCompanies = allRegisteredCompanies.map(item => {
+        return {
+          label: item.OwnershipGroupName,
+          value: item.CompanyOwnershipGroupId
+        };
+      });
+      this.setState({ AllCompanies: allRegisteredCompanies });
+    }
+
+    if (
+        this.props.isCompanyOwnerSuccessfullyRegistered !== prevProps.isCompanyOwnerSuccessfullyRegistered
+    ) {
+
+      if(this.props.isCompanyOwnerSuccessfullyRegistered) {
+        const payload = {
+          CompanyOwnershipGroupId: this.state.SelectedCompanyId.value,
+          CompanyOwnerId: this.props.currentCompanyOwnerDbRecordId
+        };
+
+        this.props.submitOwnersGroupsRshipForm(payload);
+        this.props.resetCurrentCompanyOwnerRegistration();
+      }
+
+    }
+  }
 
   handleSubmit = event => {
     event.preventDefault();
@@ -58,11 +96,29 @@ class RegisterCompanyOwners extends Component {
                 <div className="panel-body">
                   <form
                     action=""
+                    autoComplete="off"
                     method="POST"
                     onSubmit={this.handleSubmit}
                     encType="multipart/form-data"
                   >
                     <fieldset>
+                      <div className="form-group">
+                        <Select
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            placeholder="Company"
+                            name="SelectedCompanyId"
+                            closeMenuOnSelect={true}
+                            value={this.state.SelectedCompanyId}
+                            onChange={value =>
+                                this.setState({
+                                  ...this.state,
+                                  SelectedCompanyId: value
+                                })
+                            }
+                            options={this.state.AllCompanies}
+                        />
+                      </div>
                       <div className="form-group">
                         <input
                           name="firstName"
@@ -120,6 +176,7 @@ class RegisterCompanyOwners extends Component {
                         <input
                           name="nationalId"
                           className="form-control"
+                          autoComplete="off"
                           placeholder="National ID"
                           value={this.state.nationalId}
                           type="text"
@@ -156,6 +213,7 @@ class RegisterCompanyOwners extends Component {
                         <input
                           name="password"
                           className="form-control"
+                          autoComplete="off"
                           placeholder="Password"
                           value={this.state.password}
                           type="password"
@@ -183,14 +241,28 @@ class RegisterCompanyOwners extends Component {
 }
 
 RegisterCompanyOwners.propTypes = {
-  registerCompanyOwner: PropTypes.func.isRequired
+  registerCompanyOwner: PropTypes.func.isRequired,
+  allRegisteredCompanies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isCompanyOwnerSuccessfullyRegistered: PropTypes.bool.isRequired,
+  currentCompanyOwnerDbRecordId: PropTypes.string.isRequired,
+  submitOwnersGroupsRshipForm: PropTypes.func.isRequired,
+  resetCurrentCompanyOwnerRegistration: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = state => ({
+  allRegisteredCompanies: state.admin_home.allRegisteredCompanies,
+  isCompanyOwnerSuccessfullyRegistered: state.admin_home.isCompanyOwnerSuccessfullyRegistered,
+  currentCompanyOwnerDbRecordId: state.admin_home.currentCompanyOwnerDbRecordId
+});
+
 const mapDispatchToProps = dispatch => ({
-  registerCompanyOwner: payload => dispatch(registerCompanyOwner(payload))
+  registerCompanyOwner: payload => dispatch(registerCompanyOwner(payload)),
+  submitOwnersGroupsRshipForm: payload =>
+      dispatch(submitOwnersGroupsRshipForm(payload)),
+  resetCurrentCompanyOwnerRegistration: () => dispatch(resetCurrentCompanyOwnerRegistration()),
 });
 
 export default connect(
-  null,
+    mapStateToProps,
   mapDispatchToProps
 )(RegisterCompanyOwners);
