@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getAllCompanies } from "../../../store/modules/admin_home/actions";
 import { createCompanyBranch } from "../../../store/modules/company_owner_home/actions";
+import Table from "../../../components/table/table_body/Table";
 
 class RegisterCompanyBranches extends Component {
   state = {
@@ -84,6 +85,11 @@ class RegisterCompanyBranches extends Component {
                 </div>
               </div>
             </div>
+
+
+          </div>
+          <div className="row">
+          <Table />
           </div>
         </div>
       </div>
