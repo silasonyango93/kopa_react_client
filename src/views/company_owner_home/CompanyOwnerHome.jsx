@@ -10,11 +10,13 @@ import TopBar from "../../components/topbar/TopBar";
 import CompanyOwnerSideBar from "../../components/sidebar/CompanyOwnerSideBar";
 import RegisterCompanyBranches from "./register_company_branches/RegisterCompanyBranches";
 import {
-  REGISTER_COMPANY_BRANCHES_FORM, REGISTER_EMPLOYMENT_CATEGORIES_FORM,
+  REGISTER_COMPANY_BRANCHES_FORM,
+  REGISTER_EMPLOYMENT_CATEGORIES_FORM,
   REGISTER_SYSTEM_USERS_FORM
 } from "./CompanyOwnerHomeConstants";
 import {
   getACompanysBranches,
+  getACompanysSystemUsers,
   getCompanyOwnersCompanyDetails
 } from "../../store/modules/company_owner_home/actions";
 import RegisterSystemUsers from "./register_system_users/RegisterSystemUsers";
@@ -64,6 +66,10 @@ class CompanyOwnerHome extends Component {
         search_value: this.props.CompanyId
       };
       this.props.getACompanysBranches(paload);
+      const payload = {
+        companyId: this.props.CompanyId
+      };
+      this.props.getACompanysSystemUsers(payload);
       this.setState({
         displayRegisterCompanyBranchesForm: false,
         displayRegisterSystemUsersForm: true,
@@ -126,9 +132,9 @@ class CompanyOwnerHome extends Component {
             </div>
 
             <div
-                className={
-                  this.state.displayRegisterEmploymentCategories ? "show" : "hide"
-                }
+              className={
+                this.state.displayRegisterEmploymentCategories ? "show" : "hide"
+              }
             >
               <RegisterEmploymentCategories />
             </div>
@@ -144,6 +150,7 @@ CompanyOwnerHome.propTypes = {
   terminateCurrentSession: PropTypes.func.isRequired,
   getCompanyOwnersCompanyDetails: PropTypes.func.isRequired,
   companyOwnerId: PropTypes.string.isRequired,
+  getACompanysSystemUsers: PropTypes.func.isRequired,
   getACompanysBranches: PropTypes.string.isRequired
 };
 
@@ -157,7 +164,8 @@ const mapDispatchToProps = dispatch => ({
   terminateCurrentSession: () => dispatch(terminateCurrentSession()),
   getACompanysBranches: payload => dispatch(getACompanysBranches(payload)),
   getCompanyOwnersCompanyDetails: payload =>
-    dispatch(getCompanyOwnersCompanyDetails(payload))
+    dispatch(getCompanyOwnersCompanyDetails(payload)),
+  getACompanysSystemUsers: payload => dispatch(getACompanysSystemUsers(payload))
 });
 
 export default connect(

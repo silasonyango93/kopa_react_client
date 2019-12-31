@@ -3,7 +3,11 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getAllCompanies } from "../../../store/modules/admin_home/actions";
-import {createCompanyBranch, getACompanysBranches} from "../../../store/modules/company_owner_home/actions";
+import {
+  createCompanyBranch,
+  getACompanysBranches,
+  resetCurrentBranchCreatedSuccessfully
+} from "../../../store/modules/company_owner_home/actions";
 import Table from "../../../components/table/table_body/Table";
 
 class RegisterCompanyBranches extends Component {
@@ -11,7 +15,12 @@ class RegisterCompanyBranches extends Component {
     branchName: "",
     branchPhysicalAddress: "",
     tableData: [],
-    tableHeaders: {columnOne: "#", columnTwo: "Branch Name", columnThree: "Physical Address", columnFour: "Registration Date"}
+    tableHeaders: {
+      columnOne: "#",
+      columnTwo: "Branch Name",
+      columnThree: "Physical Address",
+      columnFour: "Registration Date"
+    }
   };
 
   componentDidMount() {
@@ -23,32 +32,33 @@ class RegisterCompanyBranches extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props.isCurrentBranchCreatedSuccessfully !== prevProps.isCurrentBranchCreatedSuccessfully) {
-      if(this.props.isCurrentBranchCreatedSuccessfully) {
+    if (
+      this.props.isCurrentBranchCreatedSuccessfully !==
+      prevProps.isCurrentBranchCreatedSuccessfully
+    ) {
+      if (this.props.isCurrentBranchCreatedSuccessfully) {
         const paload = {
           column_name: "CompanyId",
           search_value: this.props.CompanyId
         };
         this.props.getACompanysBranches(paload);
+        this.props.resetCurrentBranchCreatedSuccessfully();
       }
     }
 
-    if(this.props.myCompanyBranches !== prevProps.myCompanyBranches) {
+    if (this.props.myCompanyBranches !== prevProps.myCompanyBranches) {
       let companyBranches;
 
-      companyBranches = this.props.myCompanyBranches.map(
-          (item, index) => {
-            return {
-              id: index,
-              branchName: item.BranchName,
-              physicalAddress: item.BranchPhysicalAddress,
-              registrationDate: item.CompanyBranchRegistrationDate
-            };
-          }
-      );
+      companyBranches = this.props.myCompanyBranches.map((item, index) => {
+        return {
+          id: index,
+          branchName: item.BranchName,
+          physicalAddress: item.BranchPhysicalAddress,
+          registrationDate: item.CompanyBranchRegistrationDate
+        };
+      });
 
-      this.setState({tableData: companyBranches});
-
+      this.setState({ tableData: companyBranches });
     }
   }
 
@@ -127,7 +137,11 @@ class RegisterCompanyBranches extends Component {
             </div>
 
             <div className="col-md-4">
-              <Table tableTitle="Registered Company Branched" tableHeaderObject={this.state.tableHeaders} tableData={this.state.tableData}/>
+              <Table
+                tableTitle="Registered Company Branches"
+                tableHeaderObject={this.state.tableHeaders}
+                tableData={this.state.tableData}
+              />
             </div>
           </div>
         </div>
@@ -142,17 +156,21 @@ RegisterCompanyBranches.propTypes = {
   isCurrentBranchCreatedSuccessfully: PropTypes.bool.isRequired,
   getACompanysBranches: PropTypes.func.isRequired,
   myCompanyBranches: PropTypes.arrayOf(PropTypes.object).isRequired,
+  resetCurrentBranchCreatedSuccessfully: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   CompanyId: state.company_owner_home.companyOwnersCompanyDetails.CompanyId,
-  isCurrentBranchCreatedSuccessfully: state.company_owner_home.isCurrentBranchCreatedSuccessfully,
+  isCurrentBranchCreatedSuccessfully:
+    state.company_owner_home.isCurrentBranchCreatedSuccessfully,
   myCompanyBranches: state.company_owner_home.myCompanyBranches
 });
 
 const mapDispatchToProps = dispatch => ({
   createCompanyBranch: payload => dispatch(createCompanyBranch(payload)),
-  getACompanysBranches: payload => dispatch(getACompanysBranches(payload))
+  getACompanysBranches: payload => dispatch(getACompanysBranches(payload)),
+  resetCurrentBranchCreatedSuccessfully: payload =>
+    dispatch(resetCurrentBranchCreatedSuccessfully(payload))
 });
 
 export default connect(

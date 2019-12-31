@@ -1,5 +1,7 @@
 export const initialState = {
   companyOwnersCompanyDetails: {},
   myCompanyBranches: [],
-  isCurrentBranchCreatedSuccessfully: false
+  isCurrentBranchCreatedSuccessfully: false,
+  isCurrentSystemUserCreatedSuccessfully: false,
+  myCompanySystemUsers: []
 };

@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import Select from "react-select";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { registerASystemUser } from "../../../store/modules/company_owner_home/actions";
+import {
+  getACompanysSystemUsers,
+  registerASystemUser,
+  resetCurrentSystemUserCreatedSuccessfully
+} from "../../../store/modules/company_owner_home/actions";
+import Table from "../../../components/table/table_body/Table";
 
 class RegisterSystemUsers extends Component {
   state = {
@@ -21,7 +26,14 @@ class RegisterSystemUsers extends Component {
     genderCategories: [
       { label: "Male", value: "1" },
       { label: "Female", value: "2" }
-    ]
+    ],
+    tableData: [],
+    tableHeaders: {
+      columnOne: "Name",
+      columnTwo: "Staff No",
+      columnThree: "Branch Name",
+      columnFour: "Registration Date"
+    }
   };
 
   componentDidUpdate(prevProps) {
@@ -34,6 +46,39 @@ class RegisterSystemUsers extends Component {
         };
       });
       this.setState({ myCompanyBranches: myCompanyBranches });
+    }
+
+    if (
+      this.props.isCurrentSystemUserCreatedSuccessfully !==
+      prevProps.isCurrentSystemUserCreatedSuccessfully
+    ) {
+      if (this.props.isCurrentSystemUserCreatedSuccessfully) {
+        const payload = {
+          companyId: this.props.CompanyId
+        };
+        this.props.getACompanysSystemUsers(payload);
+        this.props.resetCurrentSystemUserCreatedSuccessfully();
+      }
+    }
+
+    if (this.props.myCompanySystemUsers !== prevProps.myCompanySystemUsers) {
+      let companyBranches;
+
+      companyBranches = this.props.myCompanySystemUsers.map(item => {
+        return {
+          name:
+            item.UserFirstName +
+            " " +
+            item.UserMiddleName +
+            " " +
+            item.UserSurname,
+          staffNo: item.StaffNo,
+          branchName: item.BranchName,
+          registrationDate: item.UserRegistrationDate
+        };
+      });
+
+      this.setState({ tableData: companyBranches });
     }
   }
 
@@ -70,7 +115,7 @@ class RegisterSystemUsers extends Component {
       <div>
         <div className="container user-login-card">
           <div className="row">
-            <div className="col-md-4 col-md-offset-4">
+            <div className="col-md-4">
               <div className="login-panel panel panel-default">
                 <div className="panel-heading">
                   <h3 className="panel-title">Company Branches</h3>
@@ -236,6 +281,14 @@ class RegisterSystemUsers extends Component {
                 </div>
               </div>
             </div>
+
+            <div className="col-md-8">
+              <Table
+                tableTitle="Registered Staff Members"
+                tableHeaderObject={this.state.tableHeaders}
+                tableData={this.state.tableData}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -245,15 +298,27 @@ class RegisterSystemUsers extends Component {
 
 RegisterSystemUsers.propTypes = {
   CompanyId: PropTypes.string.isRequired,
-  registerASystemUser: PropTypes.func.isRequired
+  registerASystemUser: PropTypes.func.isRequired,
+  isCurrentSystemUserCreatedSuccessfully: PropTypes.bool.isRequired,
+  myCompanySystemUsers: PropTypes.arrayOf(PropTypes.object).isRequired,
+  getACompanysSystemUsers: PropTypes.func.isRequired,
+  resetCurrentSystemUserCreatedSuccessfully: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  myCompanyBranches: state.company_owner_home.myCompanyBranches
+  myCompanyBranches: state.company_owner_home.myCompanyBranches,
+  isCurrentSystemUserCreatedSuccessfully:
+    state.company_owner_home.isCurrentSystemUserCreatedSuccessfully,
+  CompanyId: state.company_owner_home.companyOwnersCompanyDetails.CompanyId,
+  myCompanySystemUsers: state.company_owner_home.myCompanySystemUsers
 });
 
 const mapDispatchToProps = dispatch => ({
-  registerASystemUser: payload => dispatch(registerASystemUser(payload))
+  registerASystemUser: payload => dispatch(registerASystemUser(payload)),
+  getACompanysSystemUsers: payload =>
+    dispatch(getACompanysSystemUsers(payload)),
+  resetCurrentSystemUserCreatedSuccessfully: () =>
+    dispatch(resetCurrentSystemUserCreatedSuccessfully())
 });
 
 export default connect(
