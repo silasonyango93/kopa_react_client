@@ -3,14 +3,54 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getAllCompanies } from "../../../store/modules/admin_home/actions";
-import { createCompanyBranch } from "../../../store/modules/company_owner_home/actions";
+import {createCompanyBranch, getACompanysBranches} from "../../../store/modules/company_owner_home/actions";
 import Table from "../../../components/table/table_body/Table";
 
 class RegisterCompanyBranches extends Component {
   state = {
     branchName: "",
-    branchPhysicalAddress: ""
+    branchPhysicalAddress: "",
+    tableData: [],
+    tableHeaders: {columnOne: "#", columnTwo: "Branch Name", columnThree: "Physical Address", columnFour: "Registration Date"}
   };
+
+  componentDidMount() {
+    const paload = {
+      column_name: "CompanyId",
+      search_value: this.props.CompanyId
+    };
+    this.props.getACompanysBranches(paload);
+  }
+
+  componentDidUpdate(prevProps) {
+    if(this.props.isCurrentBranchCreatedSuccessfully !== prevProps.isCurrentBranchCreatedSuccessfully) {
+      if(this.props.isCurrentBranchCreatedSuccessfully) {
+        const paload = {
+          column_name: "CompanyId",
+          search_value: this.props.CompanyId
+        };
+        this.props.getACompanysBranches(paload);
+      }
+    }
+
+    if(this.props.myCompanyBranches !== prevProps.myCompanyBranches) {
+      let companyBranches;
+
+      companyBranches = this.props.myCompanyBranches.map(
+          (item, index) => {
+            return {
+              id: index,
+              branchName: item.BranchName,
+              physicalAddress: item.BranchPhysicalAddress,
+              registrationDate: item.CompanyBranchRegistrationDate
+            };
+          }
+      );
+
+      this.setState({tableData: companyBranches});
+
+    }
+  }
 
   handleSubmit = event => {
     event.preventDefault();
@@ -37,7 +77,7 @@ class RegisterCompanyBranches extends Component {
       <div>
         <div className="container user-login-card">
           <div className="row">
-            <div className="col-md-4 col-md-offset-4">
+            <div className="col-md-4">
               <div className="login-panel panel panel-default">
                 <div className="panel-heading">
                   <h3 className="panel-title">Company Branches</h3>
@@ -86,10 +126,9 @@ class RegisterCompanyBranches extends Component {
               </div>
             </div>
 
-
-          </div>
-          <div className="row">
-          <Table />
+            <div className="col-md-4">
+              <Table tableTitle="Registered Company Branched" tableHeaderObject={this.state.tableHeaders} tableData={this.state.tableData}/>
+            </div>
           </div>
         </div>
       </div>
@@ -99,15 +138,21 @@ class RegisterCompanyBranches extends Component {
 
 RegisterCompanyBranches.propTypes = {
   createCompanyBranch: PropTypes.func.isRequired,
-  CompanyId: PropTypes.string.isRequired
+  CompanyId: PropTypes.string.isRequired,
+  isCurrentBranchCreatedSuccessfully: PropTypes.bool.isRequired,
+  getACompanysBranches: PropTypes.func.isRequired,
+  myCompanyBranches: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 const mapStateToProps = state => ({
-  CompanyId: state.company_owner_home.companyOwnersCompanyDetails.CompanyId
+  CompanyId: state.company_owner_home.companyOwnersCompanyDetails.CompanyId,
+  isCurrentBranchCreatedSuccessfully: state.company_owner_home.isCurrentBranchCreatedSuccessfully,
+  myCompanyBranches: state.company_owner_home.myCompanyBranches
 });
 
 const mapDispatchToProps = dispatch => ({
-  createCompanyBranch: payload => dispatch(createCompanyBranch(payload))
+  createCompanyBranch: payload => dispatch(createCompanyBranch(payload)),
+  getACompanysBranches: payload => dispatch(getACompanysBranches(payload))
 });
 
 export default connect(

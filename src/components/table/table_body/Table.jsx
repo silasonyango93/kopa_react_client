@@ -9,10 +9,13 @@ class Table extends React.Component {
 
         this.state = { tableData: this.props.tableData };
 
-
-
     }
 
+    componentDidUpdate(prevProps) {
+        if(this.props.tableData !== prevProps.tableData) {
+            this.setState({tableData: this.props.tableData});
+        }
+    }
 
 
     render() {

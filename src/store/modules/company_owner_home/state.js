@@ -1,4 +1,5 @@
 export const initialState = {
   companyOwnersCompanyDetails: {},
-  myCompanyBranches: []
+  myCompanyBranches: [],
+  isCurrentBranchCreatedSuccessfully: false
 };

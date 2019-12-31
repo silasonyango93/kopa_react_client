@@ -14,6 +14,7 @@ import {
   runInitialSystemConfiguration
 } from "../../store/modules/current_session/actions";
 import { FormGroup, Label, Input } from "reactstrap";
+import {getCompanyOwnersCompanyDetails} from "../../store/modules/company_owner_home/actions";
 class Login extends Component {
   state = {
     attemptedEmail: "",
@@ -41,11 +42,21 @@ class Login extends Component {
       configureSystemEmploymentCategory,
       initialGenderConfiguration
     } = this.props;
+
+    if(this.props.companyOwnersCompanyDetails !== prevProps.companyOwnersCompanyDetails) {
+      if(this.props.companyOwnersCompanyDetails) {
+        this.props.history.push("/company_owner_home");
+      }
+    }
     if (this.props.isSessionActive !== prevProps.isSessionActive) {
       if (this.props.isSessionActive && this.state.isAdmin) {
         this.props.history.push("/admin_home");
       } else if (this.props.isSessionActive && this.state.isCompanyOwner) {
-        this.props.history.push("/company_owner_home");
+        const paload = {
+          companyOwnerId: this.props.companyOwnerId
+        };
+        this.props.getCompanyOwnersCompanyDetails(paload);
+
       }
     }
     if (
@@ -284,13 +295,18 @@ Login.propTypes = {
   configureSystemOwnershipGroup: PropTypes.func.isRequired,
   configureSystemCompany: PropTypes.func.isRequired,
   configureSystemEmploymentCategory: PropTypes.func.isRequired,
-  initialConfigurations: PropTypes.shape().isRequired
+  initialConfigurations: PropTypes.shape().isRequired,
+  getCompanyOwnersCompanyDetails: PropTypes.func.isRequired,
+  companyOwnerId: PropTypes.string.isRequired,
+  companyOwnersCompanyDetails: PropTypes.shape().isRequired,
 };
 
 const mapStateToProps = state => ({
   isSessionActive: state.current_session.isSessionActive,
   isCompanyAlreadyConfigured: state.current_session.isCompanyAlreadyConfigured,
-  initialConfigurations: state.current_session.initialConfigurations
+  initialConfigurations: state.current_session.initialConfigurations,
+  companyOwnerId: state.current_session.session_details.CompanyOwnerId,
+  companyOwnersCompanyDetails: state.company_owner_home.companyOwnersCompanyDetails,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -309,7 +325,9 @@ const mapDispatchToProps = dispatch => ({
   configureSystemEmploymentCategory: payload =>
     dispatch(configureSystemEmploymentCategory(payload)),
   initialGenderConfiguration: payload =>
-    dispatch(initialGenderConfiguration(payload))
+    dispatch(initialGenderConfiguration(payload)),
+  getCompanyOwnersCompanyDetails: payload =>
+      dispatch(getCompanyOwnersCompanyDetails(payload))
 });
 
 export default connect(

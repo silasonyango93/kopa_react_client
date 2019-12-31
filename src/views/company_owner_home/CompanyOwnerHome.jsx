@@ -34,11 +34,6 @@ class CompanyOwnerHome extends Component {
   componentDidMount() {
     if (!this.props.isSessionActive) {
       this.props.history.push("/");
-    } else {
-      const paload = {
-        companyOwnerId: this.props.companyOwnerId
-      };
-      this.props.getCompanyOwnersCompanyDetails(paload);
     }
   }
 

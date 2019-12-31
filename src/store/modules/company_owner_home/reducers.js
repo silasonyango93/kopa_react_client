@@ -1,6 +1,7 @@
 import {
-  FETCHING_COMPANY_OWNERS_COMPANY_DETAILS_SUCCEEDED,
-  FETCHING_THE_COMPANYS_BRANCHES_SUCCEEDED
+    COMPANY_BRANCH_CREATED_SUCCESSFULLY,
+    FETCHING_COMPANY_OWNERS_COMPANY_DETAILS_SUCCEEDED,
+    FETCHING_THE_COMPANYS_BRANCHES_SUCCEEDED
 } from "./actionTypes";
 
 export const ACTION_HANDLERS = {
@@ -11,5 +12,10 @@ export const ACTION_HANDLERS = {
   [FETCHING_THE_COMPANYS_BRANCHES_SUCCEEDED]: (state, action) =>
     Object.assign({}, state, {
       myCompanyBranches: action.payload.myCompanyBranches
+    }),
+
+  [COMPANY_BRANCH_CREATED_SUCCESSFULLY]: (state) =>
+    Object.assign({}, state, {
+        isCurrentBranchCreatedSuccessfully: true
     })
 };
