@@ -13,12 +13,18 @@ import {
   FETCHING_REGISTERED_COMPANIES_EMPTY_RESULT_SET,
   FETCHING_REGISTERED_COMPANIES_FAILED,
   FETCHING_REGISTERED_COMPANIES_SUCCEEDED,
+  FETCHING_REGISTERED_COMPANY_CLIENTS_EMPTY_RESULT_SET,
+  FETCHING_REGISTERED_COMPANY_CLIENTS_FAILED,
+  FETCHING_REGISTERED_COMPANY_CLIENTS_SUCCEEDED,
   OWNERSHIP_GROUP_CREATED,
-  OWNERSHIP_GROUP_CREATION_FAILED, RESET_COMPANY_OWNER_REGISTRATION,
+  OWNERSHIP_GROUP_CREATION_FAILED,
+  RESET_COMPANY_OWNER_REGISTRATION,
+  RESET_REGISTERED_COMPANY_CLIENTS_FLAG,
   START_COMPANY_OWNER_REGISTRATION,
   START_COMPANY_REGISTRATION_FORM_SUBMISSION,
   START_FETCHING_COMPANY_OWNERS,
   START_FETCHING_REGISTERED_COMPANIES,
+  START_FETCHING_REGISTERED_COMPANY_CLIENTS,
   START_OWNERSHIP_GROUP_CREATION,
   START_SUBMITING_OWNERS_GROUPS_RSHIP_FORM,
   SUBMITING_OWNERS_GROUPS_RSHIP_FORM_FAILED,
@@ -211,14 +217,50 @@ export function submitOwnersGroupsRshipForm(payload) {
   };
 }
 
-
-
-
 export function resetCurrentCompanyOwnerRegistration() {
   return async dispatch => {
     dispatch({
       type: RESET_COMPANY_OWNER_REGISTRATION
     });
+  };
+}
 
+export function getAllRegisteredCompanyClients() {
+  return async dispatch => {
+    dispatch({
+      type: START_FETCHING_REGISTERED_COMPANY_CLIENTS
+    });
+    const apiRoute = "/get_all_companies";
+    const returnedPromise = apiGetAll(apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results && result.data.results.length > 0) {
+          dispatch({
+            type: FETCHING_REGISTERED_COMPANY_CLIENTS_SUCCEEDED,
+            payload: {
+              allRegisteredCompanyClients: result.data.results
+            }
+          });
+        } else if (result.data.results && result.data.results.length === 0) {
+          dispatch({
+            type: FETCHING_REGISTERED_COMPANY_CLIENTS_EMPTY_RESULT_SET
+          });
+        }
+      },
+      function(err) {
+        dispatch({
+          type: FETCHING_REGISTERED_COMPANY_CLIENTS_FAILED
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function resetRegisteredCompanyClientsFlag() {
+  return async dispatch => {
+    dispatch({
+      type: RESET_REGISTERED_COMPANY_CLIENTS_FLAG
+    });
   };
 }

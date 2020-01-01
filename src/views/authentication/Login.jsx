@@ -14,7 +14,11 @@ import {
   runInitialSystemConfiguration
 } from "../../store/modules/current_session/actions";
 import { FormGroup, Label, Input } from "reactstrap";
-import {getCompanyOwnersCompanyDetails} from "../../store/modules/company_owner_home/actions";
+import { getCompanyOwnersCompanyDetails } from "../../store/modules/company_owner_home/actions";
+import {
+  getAllCompanies,
+  getAllRegisteredCompanyClients
+} from "../../store/modules/admin_home/actions";
 class Login extends Component {
   state = {
     attemptedEmail: "",
@@ -26,6 +30,7 @@ class Login extends Component {
 
   componentDidMount() {
     this.props.checkIfSystemAlreadyConfigured();
+    this.props.getAllRegisteredCompanyClients();
   }
 
   componentDidUpdate(prevProps) {
@@ -43,8 +48,11 @@ class Login extends Component {
       initialGenderConfiguration
     } = this.props;
 
-    if(this.props.companyOwnersCompanyDetails !== prevProps.companyOwnersCompanyDetails) {
-      if(this.props.companyOwnersCompanyDetails) {
+    if (
+      this.props.companyOwnersCompanyDetails !==
+      prevProps.companyOwnersCompanyDetails
+    ) {
+      if (this.props.companyOwnersCompanyDetails) {
         this.props.history.push("/company_owner_home");
       }
     }
@@ -56,7 +64,6 @@ class Login extends Component {
           companyOwnerId: this.props.companyOwnerId
         };
         this.props.getCompanyOwnersCompanyDetails(paload);
-
       }
     }
     if (
@@ -133,7 +140,7 @@ class Login extends Component {
       if (isFemaleGenderConfigured) {
         const payload = {
           ConfigId: 1,
-          ConfigDescription: 'INITIAL_DATABASE_CONFIGURATION_COMPLETE',
+          ConfigDescription: "INITIAL_DATABASE_CONFIGURATION_COMPLETE",
           ConfigStatus: 1
         };
         this.props.runInitialSystemConfiguration(payload);
@@ -299,6 +306,7 @@ Login.propTypes = {
   getCompanyOwnersCompanyDetails: PropTypes.func.isRequired,
   companyOwnerId: PropTypes.string.isRequired,
   companyOwnersCompanyDetails: PropTypes.shape().isRequired,
+  getAllRegisteredCompanyClients: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -306,7 +314,8 @@ const mapStateToProps = state => ({
   isCompanyAlreadyConfigured: state.current_session.isCompanyAlreadyConfigured,
   initialConfigurations: state.current_session.initialConfigurations,
   companyOwnerId: state.current_session.session_details.CompanyOwnerId,
-  companyOwnersCompanyDetails: state.company_owner_home.companyOwnersCompanyDetails,
+  companyOwnersCompanyDetails:
+    state.company_owner_home.companyOwnersCompanyDetails
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -327,7 +336,9 @@ const mapDispatchToProps = dispatch => ({
   initialGenderConfiguration: payload =>
     dispatch(initialGenderConfiguration(payload)),
   getCompanyOwnersCompanyDetails: payload =>
-      dispatch(getCompanyOwnersCompanyDetails(payload))
+    dispatch(getCompanyOwnersCompanyDetails(payload)),
+  getAllRegisteredCompanyClients: () =>
+    dispatch(getAllRegisteredCompanyClients())
 });
 
 export default connect(

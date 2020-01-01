@@ -2,12 +2,70 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { FormGroup, Input, Label } from "reactstrap";
-import { createOwnershipGroup } from "../../../store/modules/admin_home/actions";
+import {
+  createOwnershipGroup,
+  getAllRegisteredCompanyClients,
+  resetRegisteredCompanyClientsFlag
+} from "../../../store/modules/admin_home/actions";
+import Table from "../../../components/table/table_body/Table";
 
 class RegisterCompanies extends Component {
   state = {
-    companyName: ""
+    companyName: "",
+    tableData: [],
+    tableHeaders: {
+      columnOne: "#",
+      columnTwo: "Company Name",
+      columnThree: "Registration Date"
+    }
   };
+
+  componentDidMount() {
+    let registeredCompanies;
+
+    registeredCompanies = this.props.allRegisteredCompanyClients.map(
+      (item, index) => {
+        return {
+          id: index + 1,
+          CompanyName: item.CompanyName,
+          CompanyRegistrationDate: item.CompanyRegistrationDate
+        };
+      }
+    );
+
+    this.setState({ tableData: registeredCompanies });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.isCurrentCompanySuccessfullyRegistered !==
+      prevProps.isCurrentCompanySuccessfullyRegistered
+    ) {
+      if (this.props.isCurrentCompanySuccessfullyRegistered) {
+        this.props.getAllRegisteredCompanyClients();
+        this.props.resetRegisteredCompanyClientsFlag();
+      }
+    }
+
+    if (
+      this.props.allRegisteredCompanyClients !==
+      prevProps.allRegisteredCompanyClients
+    ) {
+      let registeredCompanies;
+
+      registeredCompanies = this.props.allRegisteredCompanyClients.map(
+        (item, index) => {
+          return {
+            id: index + 1,
+            CompanyName: item.CompanyName,
+            CompanyRegistrationDate: item.CompanyRegistrationDate
+          };
+        }
+      );
+
+      this.setState({ tableData: registeredCompanies });
+    }
+  }
 
   handleSubmit = event => {
     event.preventDefault();
@@ -31,7 +89,7 @@ class RegisterCompanies extends Component {
       <div>
         <div className="container user-login-card">
           <div className="row">
-            <div className="col-md-4 col-md-offset-4">
+            <div className="col-md-4">
               <div className="login-panel panel panel-default">
                 <div className="panel-heading">
                   <h3 className="panel-title">Register Companies</h3>
@@ -67,6 +125,14 @@ class RegisterCompanies extends Component {
                 </div>
               </div>
             </div>
+
+            <div className="col-md-8">
+              <Table
+                tableTitle="Registered Companies"
+                tableHeaderObject={this.state.tableHeaders}
+                tableData={this.state.tableData}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -75,15 +141,27 @@ class RegisterCompanies extends Component {
 }
 
 RegisterCompanies.propTypes = {
-    createOwnershipGroup: PropTypes.func.isRequired
+  createOwnershipGroup: PropTypes.func.isRequired,
+  allRegisteredCompanyClients: PropTypes.arrayOf(PropTypes.object).isRequired,
+  getAllRegisteredCompanyClients: PropTypes.func.isRequired,
+  resetRegisteredCompanyClientsFlag: PropTypes.func.isRequired
 };
 
+const mapStateToProps = state => ({
+  isCurrentCompanySuccessfullyRegistered:
+    state.admin_home.isCurrentCompanySuccessfullyRegistered,
+  allRegisteredCompanyClients: state.admin_home.allRegisteredCompanyClients
+});
+
 const mapDispatchToProps = dispatch => ({
-    createOwnershipGroup: payload =>
-    dispatch(createOwnershipGroup(payload))
+  createOwnershipGroup: payload => dispatch(createOwnershipGroup(payload)),
+  getAllRegisteredCompanyClients: () =>
+    dispatch(getAllRegisteredCompanyClients()),
+  resetRegisteredCompanyClientsFlag: () =>
+    dispatch(resetRegisteredCompanyClientsFlag())
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(RegisterCompanies);

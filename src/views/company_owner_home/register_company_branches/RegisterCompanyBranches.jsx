@@ -51,7 +51,7 @@ class RegisterCompanyBranches extends Component {
 
       companyBranches = this.props.myCompanyBranches.map((item, index) => {
         return {
-          id: index,
+          id: index + 1,
           branchName: item.BranchName,
           physicalAddress: item.BranchPhysicalAddress,
           registrationDate: item.CompanyBranchRegistrationDate

@@ -42,7 +42,7 @@ class RegisterEmploymentCategories extends Component {
       employmentCategories = this.props.myCompanysEmploymentCategories.map(
         (item, index) => {
           return {
-            id: index,
+            id: index + 1,
             CategoryDescription: item.CategoryDescription
           };
         }
@@ -79,7 +79,7 @@ class RegisterEmploymentCategories extends Component {
             <div className="col-md-4">
               <div className="login-panel panel panel-default">
                 <div className="panel-heading">
-                  <h3 className="panel-title">Company Branches</h3>
+                  <h3 className="panel-title">Employment Categories</h3>
                 </div>
                 <div className="panel-body">
                   <form

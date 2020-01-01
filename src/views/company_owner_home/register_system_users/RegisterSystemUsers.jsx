@@ -29,6 +29,7 @@ class RegisterSystemUsers extends Component {
     ],
     tableData: [],
     tableHeaders: {
+      columnZero: "#",
       columnOne: "Name",
       columnTwo: "Staff No",
       columnThree: "Branch Name",
@@ -64,8 +65,9 @@ class RegisterSystemUsers extends Component {
     if (this.props.myCompanySystemUsers !== prevProps.myCompanySystemUsers) {
       let companyBranches;
 
-      companyBranches = this.props.myCompanySystemUsers.map(item => {
+      companyBranches = this.props.myCompanySystemUsers.map((item, index) => {
         return {
+          id: index + 1,
           name:
             item.UserFirstName +
             " " +

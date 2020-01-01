@@ -6,5 +6,7 @@ export const initialState = {
   allRegisteredCompanies: [],
   allCompanyOwners: [],
   isCompanyOwnerSuccessfullyRegistered: false,
-  currentCompanyOwnerDbRecordId: ""
+  currentCompanyOwnerDbRecordId: "",
+  isCurrentCompanySuccessfullyRegistered: false,
+  allRegisteredCompanyClients: []
 };

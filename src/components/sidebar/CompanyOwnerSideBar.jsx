@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 import { Route, withRouter } from "react-router-dom";
 import { FaCogs, FaCog, FaSearch, FaList } from "react-icons/fa";
 import {
-  REGISTER_COMPANY_BRANCHES_FORM, REGISTER_EMPLOYMENT_CATEGORIES_FORM,
+  REGISTER_COMPANY_BRANCHES_FORM,
+  REGISTER_EMPLOYMENT_CATEGORIES_FORM,
   REGISTER_SYSTEM_USERS_FORM
 } from "../../views/company_owner_home/CompanyOwnerHomeConstants";
 
@@ -102,235 +103,16 @@ class CompanyOwnerSideBar extends Component {
 
             <li className="list-class">
               <a
-                  href=""
-                  onClick={e => {
-                    e.preventDefault();
-                    this.props.handleSideBarClicked(REGISTER_EMPLOYMENT_CATEGORIES_FORM);
-                  }}
-              >
-                <i className="fa fa-dashboard fa-fw" /> &nbsp;Employment Categories
-              </a>
-            </li>
-
-            <li
-              className={classNames({
-                active: !this.state.chartsElementsCollapsed
-              })}
-            >
-              <a
                 href=""
                 onClick={e => {
                   e.preventDefault();
-                  this.setState({
-                    chartsElementsCollapsed: !this.state.chartsElementsCollapsed
-                  });
-                  return false;
+                  this.props.handleSideBarClicked(
+                    REGISTER_EMPLOYMENT_CATEGORIES_FORM
+                  );
                 }}
               >
-                <i className="fa fa-bar-chart-o fa-fw" /> &nbsp;Charts
-                <span className="fa arrow" />
+                <i className="fa fa-dashboard fa-fw" /> &nbsp;Other Utilities
               </a>
-              <ul
-                className={classNames({
-                  "nav nav-second-level": true,
-                  collapse: this.state.chartsElementsCollapsed
-                })}
-              >
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/flotcharts");
-                    }}
-                  >
-                    FlotCharts
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/morrisjscharts");
-                    }}
-                  >
-                    Morrisjs Charts
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <a
-                href=""
-                onClick={e => {
-                  e.preventDefault();
-                  this.props.history.push("/table");
-                }}
-              >
-                <i className="fa fa-table fa-fw" /> &nbsp;Tables
-              </a>
-            </li>
-
-            <li>
-              <a
-                href=""
-                onClick={e => {
-                  e.preventDefault();
-                  this.props.history.push("/forms");
-                }}
-              >
-                <i className="fa fa-table fa-fw" /> &nbsp;Forms
-              </a>
-            </li>
-
-            <li
-              className={classNames({
-                active: !this.state.uiElementsCollapsed
-              })}
-            >
-              <a
-                href=""
-                onClick={e => {
-                  e.preventDefault();
-                  this.setState({
-                    uiElementsCollapsed: !this.state.uiElementsCollapsed
-                  });
-                  return false;
-                }}
-              >
-                <i className="fa fa-edit fa-fw" /> UI Elements
-                <span className="fa arrow" />
-              </a>
-
-              <ul
-                className={classNames({
-                  "nav nav-second-level": true,
-                  collapse: this.state.uiElementsCollapsed
-                })}
-              >
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/panelwells");
-                    }}
-                  >
-                    Panels And Wells
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/button");
-                    }}
-                  >
-                    Buttons
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/notification");
-                    }}
-                  >
-                    Notification
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/typography");
-                    }}
-                  >
-                    Typography
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/icons");
-                    }}
-                  >
-                    Icons
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/grid");
-                    }}
-                  >
-                    Grid
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li
-              className={classNames({
-                active: !this.state.samplePagesCollapsed
-              })}
-            >
-              <a
-                href=""
-                onClick={e => {
-                  e.preventDefault();
-                  this.setState({
-                    samplePagesCollapsed: !this.state.samplePagesCollapsed
-                  });
-                  return false;
-                }}
-              >
-                <i className="fa fa-files-o fa-fw" />
-                &nbsp;Sample Pages
-                <span className="fa arrow" />
-              </a>
-              <ul
-                className={classNames({
-                  "nav nav-second-level": true,
-                  collapse: this.state.samplePagesCollapsed
-                })}
-              >
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/blank");
-                    }}
-                  >
-                    Blank
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href=""
-                    onClick={e => {
-                      e.preventDefault();
-                      this.props.history.push("/login");
-                    }}
-                  >
-                    Login
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <a href="http://www.strapui.com/">Premium React Themes</a>
             </li>
           </ul>
         </div>
