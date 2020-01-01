@@ -3,5 +3,7 @@ export const initialState = {
   myCompanyBranches: [],
   isCurrentBranchCreatedSuccessfully: false,
   isCurrentSystemUserCreatedSuccessfully: false,
-  myCompanySystemUsers: []
+  myCompanySystemUsers: [],
+  isEmploymentCategorySuccessfullyRegistered: false,
+  myCompanysEmploymentCategories: []
 };

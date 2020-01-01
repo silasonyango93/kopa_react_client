@@ -10,14 +10,19 @@ import {
   FETCHING_THE_COMPANYS_BRANCHES_EMPTY_RESULT_SET,
   FETCHING_THE_COMPANYS_BRANCHES_FAILED,
   FETCHING_THE_COMPANYS_BRANCHES_SUCCEEDED,
+  FETCHING_THE_COMPANYS_EMPLOYMENT_CATEGORIES_EMPTY_RESULT_SET,
+  FETCHING_THE_COMPANYS_EMPLOYMENT_CATEGORIES_FAILED,
+  FETCHING_THE_COMPANYS_EMPLOYMENT_CATEGORIES_SUCCEEDED,
   FETCHING_THE_COMPANYS_SYSTEM_USERS_EMPTY_RESULT_SET,
   FETCHING_THE_COMPANYS_SYSTEM_USERS_FAILED,
   FETCHING_THE_COMPANYS_SYSTEM_USERS_SUCCEEDED,
   RESET_CURRENT_BRANCH_CREATED_SUCCESSFULLY,
   RESET_CURRENT_SYSTEM_USER_CREATED_SUCCESSFULLY,
+  RESET_EMPLOYMENT_CATEGORY_CREATION_FLAG,
   START_CREATING_A_COMPANY_BRANCH,
   START_FETCHING_A_COMPANY_OWNERS_COMPANY_DETAILS,
   START_FETCHING_A_COMPANYS_BRANCHES,
+  START_FETCHING_A_COMPANYS_EMPLOYMENT_CATEGORIES,
   START_FETCHING_A_COMPANYS_SYSTEM_USERS,
   START_REGISTERING_A_SYSTEM_USER,
   START_REGISTERING_EMPLOYMENT_CATEGORIES,
@@ -220,6 +225,46 @@ export function resetCurrentSystemUserCreatedSuccessfully() {
   return async dispatch => {
     dispatch({
       type: RESET_CURRENT_SYSTEM_USER_CREATED_SUCCESSFULLY
+    });
+  };
+}
+
+export function getACompanysEmploymentCategories(payload) {
+  return async dispatch => {
+    dispatch({
+      type: START_FETCHING_A_COMPANYS_EMPLOYMENT_CATEGORIES
+    });
+    const apiRoute = "/get_specific_employment_categories";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results && result.data.results.length > 0) {
+          dispatch({
+            type: FETCHING_THE_COMPANYS_EMPLOYMENT_CATEGORIES_SUCCEEDED,
+            payload: {
+              myCompanysEmploymentCategories: result.data.results
+            }
+          });
+        } else if (result.data.results && result.data.results.length === 0) {
+          dispatch({
+            type: FETCHING_THE_COMPANYS_EMPLOYMENT_CATEGORIES_EMPTY_RESULT_SET
+          });
+        }
+      },
+      function(err) {
+        dispatch({
+          type: FETCHING_THE_COMPANYS_EMPLOYMENT_CATEGORIES_FAILED
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function resetCurrentEmploymentCategoryCreationFlag() {
+  return async dispatch => {
+    dispatch({
+      type: RESET_EMPLOYMENT_CATEGORY_CREATION_FLAG
     });
   };
 }

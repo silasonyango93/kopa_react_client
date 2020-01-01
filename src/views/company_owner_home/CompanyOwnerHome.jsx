@@ -16,6 +16,7 @@ import {
 } from "./CompanyOwnerHomeConstants";
 import {
   getACompanysBranches,
+  getACompanysEmploymentCategories,
   getACompanysSystemUsers,
   getCompanyOwnersCompanyDetails
 } from "../../store/modules/company_owner_home/actions";
@@ -81,6 +82,13 @@ class CompanyOwnerHome extends Component {
         search_value: this.props.CompanyId
       };
       this.props.getACompanysBranches(paload);
+
+      const payload = {
+        column_name: "CompanyId",
+        search_value: this.props.CompanyId
+      };
+      this.props.getACompanysEmploymentCategories(payload);
+
       this.setState({
         displayRegisterCompanyBranchesForm: false,
         displayRegisterSystemUsersForm: false,
@@ -151,7 +159,8 @@ CompanyOwnerHome.propTypes = {
   getCompanyOwnersCompanyDetails: PropTypes.func.isRequired,
   companyOwnerId: PropTypes.string.isRequired,
   getACompanysSystemUsers: PropTypes.func.isRequired,
-  getACompanysBranches: PropTypes.string.isRequired
+  getACompanysBranches: PropTypes.func.isRequired,
+  getACompanysEmploymentCategories: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -165,7 +174,10 @@ const mapDispatchToProps = dispatch => ({
   getACompanysBranches: payload => dispatch(getACompanysBranches(payload)),
   getCompanyOwnersCompanyDetails: payload =>
     dispatch(getCompanyOwnersCompanyDetails(payload)),
-  getACompanysSystemUsers: payload => dispatch(getACompanysSystemUsers(payload))
+  getACompanysSystemUsers: payload =>
+    dispatch(getACompanysSystemUsers(payload)),
+  getACompanysEmploymentCategories: payload =>
+    dispatch(getACompanysEmploymentCategories(payload))
 });
 
 export default connect(

@@ -1,12 +1,56 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import {registerAnEmploymentCategory} from "../../../store/modules/company_owner_home/actions";
+import {
+  getACompanysEmploymentCategories,
+  registerAnEmploymentCategory,
+  resetCurrentEmploymentCategoryCreationFlag
+} from "../../../store/modules/company_owner_home/actions";
+import Table from "../../../components/table/table_body/Table";
 
 class RegisterEmploymentCategories extends Component {
   state = {
-    employmentCategory: ""
+    employmentCategory: "",
+    tableData: [],
+    tableHeaders: {
+      columnOne: "#",
+      columnTwo: "Employment Description"
+    }
   };
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.isEmploymentCategorySuccessfullyRegistered !==
+      prevProps.isEmploymentCategorySuccessfullyRegistered
+    ) {
+      if (this.props.isEmploymentCategorySuccessfullyRegistered) {
+        const payload = {
+          column_name: "CompanyId",
+          search_value: this.props.CompanyId
+        };
+        this.props.getACompanysEmploymentCategories(payload);
+        this.props.resetCurrentEmploymentCategoryCreationFlag();
+      }
+    }
+
+    if (
+      this.props.myCompanysEmploymentCategories !==
+      prevProps.myCompanysEmploymentCategories
+    ) {
+      let employmentCategories;
+
+      employmentCategories = this.props.myCompanysEmploymentCategories.map(
+        (item, index) => {
+          return {
+            id: index,
+            CategoryDescription: item.CategoryDescription
+          };
+        }
+      );
+
+      this.setState({ tableData: employmentCategories });
+    }
+  }
 
   handleSubmit = event => {
     event.preventDefault();
@@ -32,7 +76,7 @@ class RegisterEmploymentCategories extends Component {
       <div>
         <div className="container user-login-card">
           <div className="row">
-            <div className="col-md-4 col-md-offset-4">
+            <div className="col-md-4">
               <div className="login-panel panel panel-default">
                 <div className="panel-heading">
                   <h3 className="panel-title">Company Branches</h3>
@@ -68,6 +112,14 @@ class RegisterEmploymentCategories extends Component {
                 </div>
               </div>
             </div>
+
+            <div className="col-md-4">
+              <Table
+                tableTitle="Registered Employment Categories"
+                tableHeaderObject={this.state.tableHeaders}
+                tableData={this.state.tableData}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -77,15 +129,29 @@ class RegisterEmploymentCategories extends Component {
 
 RegisterEmploymentCategories.propTypes = {
   registerAnEmploymentCategory: PropTypes.func.isRequired,
-  CompanyId: PropTypes.string.isRequired
+  CompanyId: PropTypes.string.isRequired,
+  isEmploymentCategorySuccessfullyRegistered: PropTypes.bool.isRequired,
+  getACompanysEmploymentCategories: PropTypes.func.isRequired,
+  myCompanysEmploymentCategories: PropTypes.arrayOf(PropTypes.object)
+    .isRequired,
+  resetCurrentEmploymentCategoryCreationFlag: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  CompanyId: state.company_owner_home.companyOwnersCompanyDetails.CompanyId
+  CompanyId: state.company_owner_home.companyOwnersCompanyDetails.CompanyId,
+  isEmploymentCategorySuccessfullyRegistered:
+    state.company_owner_home.isEmploymentCategorySuccessfullyRegistered,
+  myCompanysEmploymentCategories:
+    state.company_owner_home.myCompanysEmploymentCategories
 });
 
 const mapDispatchToProps = dispatch => ({
-  registerAnEmploymentCategory: payload => dispatch(registerAnEmploymentCategory(payload))
+  registerAnEmploymentCategory: payload =>
+    dispatch(registerAnEmploymentCategory(payload)),
+  getACompanysEmploymentCategories: payload =>
+    dispatch(getACompanysEmploymentCategories(payload)),
+  resetCurrentEmploymentCategoryCreationFlag: () =>
+    dispatch(resetCurrentEmploymentCategoryCreationFlag())
 });
 
 export default connect(

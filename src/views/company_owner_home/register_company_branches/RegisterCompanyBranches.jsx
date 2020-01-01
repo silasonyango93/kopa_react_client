@@ -136,7 +136,7 @@ class RegisterCompanyBranches extends Component {
               </div>
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-8">
               <Table
                 tableTitle="Registered Company Branches"
                 tableHeaderObject={this.state.tableHeaders}
