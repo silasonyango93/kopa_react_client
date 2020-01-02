@@ -161,7 +161,7 @@ export function getAllCompanyOwners() {
     dispatch({
       type: START_FETCHING_COMPANY_OWNERS
     });
-    const apiRoute = "/get_all_company_owners";
+    const apiRoute = "/get_all_company_owners_and_their_details";
     const returnedPromise = apiGetAll(apiRoute);
     returnedPromise.then(
       function(result) {

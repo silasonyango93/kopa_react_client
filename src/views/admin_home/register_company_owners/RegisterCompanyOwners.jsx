@@ -4,10 +4,12 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { FormGroup, Input, Label } from "reactstrap";
 import {
+  getAllCompanyOwners,
   registerCompanyOwner,
   resetCurrentCompanyOwnerRegistration,
   submitOwnersGroupsRshipForm
 } from "../../../store/modules/admin_home/actions";
+import Table from "../../../components/table/table_body/Table";
 
 class RegisterCompanyOwners extends Component {
   state = {
@@ -24,7 +26,17 @@ class RegisterCompanyOwners extends Component {
     genderCategories: [
       { label: "Male", value: "1" },
       { label: "Female", value: "2" }
-    ]
+    ],
+    tableData: [],
+    tableHeaders: {
+      columnOne: "#",
+      columnTwo: "Name",
+      columnThree: "Company Name",
+      columnFour: "National ID",
+      columnFive: "Phone Number",
+      columnSix: "Email",
+      columnSeven: "Registration Date",
+    }
   };
 
 
@@ -53,8 +65,36 @@ class RegisterCompanyOwners extends Component {
         };
 
         this.props.submitOwnersGroupsRshipForm(payload);
+        this.props.getAllCompanyOwners();
         this.props.resetCurrentCompanyOwnerRegistration();
       }
+
+    }
+
+    if(this.props.allCompanyOwners !== prevProps.allCompanyOwners) {
+
+      let companyOwners;
+
+      companyOwners = this.props.allCompanyOwners.map(
+          (item, index) => {
+            return {
+              id: index + 1,
+              name:
+                  item.OwnerFirstName +
+                  " " +
+                  item.OwnerMiddleName +
+                  " " +
+                  item.OwnerSurname,
+              CompanyName: item.CompanyName,
+              OwnerNationalId: item.OwnerNationalId,
+              OwnerPhoneNumber: item.OwnerPhoneNumber,
+              OwnerEmail: item.OwnerEmail,
+              OwnerRegisteredDate: item.OwnerRegisteredDate
+            };
+          }
+      );
+
+      this.setState({ tableData: companyOwners });
 
     }
   }
@@ -88,7 +128,7 @@ class RegisterCompanyOwners extends Component {
       <div>
         <div className="container user-login-card">
           <div className="row">
-            <div className="col-md-4 col-md-offset-4">
+            <div className="col-md-4">
               <div className="login-panel panel panel-default">
                 <div className="panel-heading">
                   <h3 className="panel-title">Register Company Owners</h3>
@@ -233,6 +273,17 @@ class RegisterCompanyOwners extends Component {
                 </div>
               </div>
             </div>
+
+          </div>
+
+          <div className="row">
+          <div className="col-md-12">
+            <Table
+                tableTitle="Registered Company Owners"
+                tableHeaderObject={this.state.tableHeaders}
+                tableData={this.state.tableData}
+            />
+          </div>
           </div>
         </div>
       </div>
@@ -247,12 +298,15 @@ RegisterCompanyOwners.propTypes = {
   currentCompanyOwnerDbRecordId: PropTypes.string.isRequired,
   submitOwnersGroupsRshipForm: PropTypes.func.isRequired,
   resetCurrentCompanyOwnerRegistration: PropTypes.func.isRequired,
+  getAllCompanyOwners: PropTypes.func.isRequired,
+  allCompanyOwners: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 const mapStateToProps = state => ({
   allRegisteredCompanies: state.admin_home.allRegisteredCompanies,
   isCompanyOwnerSuccessfullyRegistered: state.admin_home.isCompanyOwnerSuccessfullyRegistered,
-  currentCompanyOwnerDbRecordId: state.admin_home.currentCompanyOwnerDbRecordId
+  currentCompanyOwnerDbRecordId: state.admin_home.currentCompanyOwnerDbRecordId,
+  allCompanyOwners: state.admin_home.allCompanyOwners
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -260,6 +314,7 @@ const mapDispatchToProps = dispatch => ({
   submitOwnersGroupsRshipForm: payload =>
       dispatch(submitOwnersGroupsRshipForm(payload)),
   resetCurrentCompanyOwnerRegistration: () => dispatch(resetCurrentCompanyOwnerRegistration()),
+  getAllCompanyOwners: () => dispatch(getAllCompanyOwners())
 });
 
 export default connect(
