@@ -56,6 +56,11 @@ class Login extends Component {
         this.props.history.push("/company_owner_home");
       }
     }
+
+
+    /* ---------------------------------------------------------------------------------------------------------------------- */
+
+    /*PAGE NAVIGATION LOGIC*/
     if (this.props.isSessionActive !== prevProps.isSessionActive) {
       if (this.props.isSessionActive && this.state.isAdmin) {
         this.props.history.push("/admin_home");
@@ -64,8 +69,13 @@ class Login extends Component {
           companyOwnerId: this.props.companyOwnerId
         };
         this.props.getCompanyOwnersCompanyDetails(paload);
+      } else if(this.props.isSessionActive && this.state.isStaff) {
+        this.props.history.push("/user_home");
       }
     }
+
+    /* ---------------------------------------------------------------------------------------------------------------------- */
+
     if (
       this.props.isCompanyAlreadyConfigured !==
       prevProps.isCompanyAlreadyConfigured
@@ -159,6 +169,8 @@ class Login extends Component {
       this.props.authenticateSystemAdmin(payload);
     } else if (this.state.isCompanyOwner) {
       this.props.authenticateCompanyOwner(payload);
+    } else if (this.state.isStaff) {
+      this.props.authenticateSystemUser(payload);
     }
   };
 

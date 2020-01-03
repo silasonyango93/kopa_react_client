@@ -38,7 +38,7 @@ import {
   apiPost
 } from "../../../services/api_connector/ApiConnector";
 import {
-  COMPANY_OWNER,
+  COMPANY_OWNER, REGULAR_SYSTEM_USER,
   SYSTEM_ADMIN
 } from "../../../config/constants/Constants";
 
@@ -55,7 +55,7 @@ export function authenticateSystemUser(payload) {
     dispatch({
       type: BEGIN_USER_AUTHENTIFICATION
     });
-    const apiRoute = "/system_admin_login";
+    const apiRoute = "/System_user_login";
     const returnedPromise = apiPost(payload, apiRoute);
     returnedPromise.then(
       function(result) {
@@ -64,7 +64,7 @@ export function authenticateSystemUser(payload) {
             type: STORE_USER,
             payload: {
               session_details: result.data,
-              RoleType: SYSTEM_ADMIN,
+              RoleType: REGULAR_SYSTEM_USER,
               isSessionActive: true
             }
           });
@@ -346,3 +346,6 @@ export function initialGenderConfiguration(payload) {
     );
   };
 }
+
+
+
