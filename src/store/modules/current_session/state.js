@@ -11,5 +11,6 @@ export const initialState = {
     isMaleGenderConfigured: true,
     isFemaleGenderConfigured: true,
     isInitialGenderConfigured: true
-  }
+  },
+  currentSystemUserCompanyDetails: {}
 };

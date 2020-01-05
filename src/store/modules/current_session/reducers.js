@@ -6,7 +6,9 @@ import {
     INITIAL_SYSTEM_COMPANY_CONFIGURATION_SUCCESSFUL,
     INITIAL_EMPLOYMENT_CATEGORIES_CONFIGURATION_SUCCESSFUL,
     MALE_GENDER_CONFIGURATION_SUCCESSFUL,
-    FEMALE_GENDER_CONFIGURATION_SUCCESSFUL, INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL
+    FEMALE_GENDER_CONFIGURATION_SUCCESSFUL,
+    INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL,
+    FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED
 } from "./actionTypes";
 
 export const ACTION_HANDLERS = {
@@ -92,5 +94,11 @@ export const ACTION_HANDLERS = {
     [INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL]: state =>
         Object.assign({}, state, {
             isCompanyAlreadyConfigured: true
-        })
+        }),
+
+    [FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED]: (state, action) =>
+        Object.assign({}, state, {
+            currentSystemUserCompanyDetails: action.payload.currentSystemUserCompanyDetails
+}),
+
 };

@@ -8,7 +8,7 @@ import {
   checkIfSystemAlreadyConfigured,
   configureSystemCompany,
   configureSystemEmploymentCategory,
-  configureSystemOwnershipGroup,
+  configureSystemOwnershipGroup, getASystemUsersCompanyDetails,
   initialEmploymentCategoriesConfiguration,
   initialGenderConfiguration,
   runInitialSystemConfiguration
@@ -57,6 +57,15 @@ class Login extends Component {
       }
     }
 
+    if (
+        this.props.currentSystemUserCompanyDetails !==
+        prevProps.currentSystemUserCompanyDetails
+    ) {
+      if (this.props.currentSystemUserCompanyDetails) {
+        this.props.history.push("/user_home");
+      }
+    }
+
 
     /* ---------------------------------------------------------------------------------------------------------------------- */
 
@@ -70,7 +79,10 @@ class Login extends Component {
         };
         this.props.getCompanyOwnersCompanyDetails(paload);
       } else if(this.props.isSessionActive && this.state.isStaff) {
-        this.props.history.push("/user_home");
+        const paload = {
+          SystemUserId: this.props.systemUserId
+        };
+        this.props.getASystemUsersCompanyDetails(paload);
       }
     }
 
@@ -318,7 +330,9 @@ Login.propTypes = {
   getCompanyOwnersCompanyDetails: PropTypes.func.isRequired,
   companyOwnerId: PropTypes.string.isRequired,
   companyOwnersCompanyDetails: PropTypes.shape().isRequired,
-  getAllRegisteredCompanyClients: PropTypes.func.isRequired
+  getAllRegisteredCompanyClients: PropTypes.func.isRequired,
+  systemUserId: PropTypes.string.isRequired,
+  getASystemUsersCompanyDetails: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -326,8 +340,10 @@ const mapStateToProps = state => ({
   isCompanyAlreadyConfigured: state.current_session.isCompanyAlreadyConfigured,
   initialConfigurations: state.current_session.initialConfigurations,
   companyOwnerId: state.current_session.session_details.CompanyOwnerId,
+  systemUserId: state.current_session.session_details.SystemUserId,
   companyOwnersCompanyDetails:
-    state.company_owner_home.companyOwnersCompanyDetails
+    state.company_owner_home.companyOwnersCompanyDetails,
+  currentSystemUserCompanyDetails: state.current_session.currentSystemUserCompanyDetails,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -350,7 +366,9 @@ const mapDispatchToProps = dispatch => ({
   getCompanyOwnersCompanyDetails: payload =>
     dispatch(getCompanyOwnersCompanyDetails(payload)),
   getAllRegisteredCompanyClients: () =>
-    dispatch(getAllRegisteredCompanyClients())
+    dispatch(getAllRegisteredCompanyClients()),
+  getASystemUsersCompanyDetails: payload =>
+      dispatch(getASystemUsersCompanyDetails(payload))
 });
 
 export default connect(

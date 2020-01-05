@@ -31,7 +31,11 @@ import {
   INITIAL_GENDER_CONFIGURATION_FAILED,
   ERROR_OCCURED_DURING_GENDER_CONFIGURATION,
   MALE_GENDER_CONFIGURATION_SUCCESSFUL,
-  FEMALE_GENDER_CONFIGURATION_SUCCESSFUL
+  FEMALE_GENDER_CONFIGURATION_SUCCESSFUL,
+  START_FETCHING_A_SYSTEM_USER_COMPANY_DETAILS,
+  FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED,
+  FETCHING_SYSTEM_USER_COMPANY_DETAILS_EMPTY_RESULT_SET,
+  FETCHING_SYSTEM_USER_COMPANY_DETAILS_FAILED
 } from "./actionTypes";
 import {
   apiGetAll,
@@ -41,6 +45,7 @@ import {
   COMPANY_OWNER, REGULAR_SYSTEM_USER,
   SYSTEM_ADMIN
 } from "../../../config/constants/Constants";
+
 
 export function terminateCurrentSession() {
   return async dispatch => {
@@ -343,6 +348,40 @@ export function initialGenderConfiguration(payload) {
         });
         console.log(err);
       }
+    );
+  };
+}
+
+
+
+export function getASystemUsersCompanyDetails(payload) {
+  return async dispatch => {
+    dispatch({
+      type: START_FETCHING_A_SYSTEM_USER_COMPANY_DETAILS
+    });
+    const apiRoute = "/get_system_user_company_details";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+        function(result) {
+          if (result.data.results && result.data.results.length > 0) {
+            dispatch({
+              type: FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED,
+              payload: {
+                currentSystemUserCompanyDetails: result.data.results[0]
+              }
+            });
+          } else if (result.data.results && result.data.results.length === 0) {
+            dispatch({
+              type: FETCHING_SYSTEM_USER_COMPANY_DETAILS_EMPTY_RESULT_SET
+            });
+          }
+        },
+        function(err) {
+          dispatch({
+            type: FETCHING_SYSTEM_USER_COMPANY_DETAILS_FAILED
+          });
+          console.log(err);
+        }
     );
   };
 }
