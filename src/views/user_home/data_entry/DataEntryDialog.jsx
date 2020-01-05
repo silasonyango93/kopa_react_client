@@ -33,7 +33,7 @@ class DataEntryDialog extends Component {
             <div>
                 <Modal visible={this.state.visible} width="600" height="630" effect="fadeInUp" onClickAway={() => this.closeModal()}>
                     <div className="success-modal-header">
-                        <p className="modal-title">Data Entry</p>
+                        <p className="modal-title">Client Registration</p>
                     </div>
 
                     <div className={this.state.displayPersonalDetails ? 'show' : 'hide'}>
