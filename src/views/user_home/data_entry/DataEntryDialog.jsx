@@ -6,9 +6,10 @@ import {connect} from "react-redux";
 import './DataEntryDialog.scss';
 import PersonalDetails from "./personal_details/PersonalDetails";
 import EmploymentDetails from "./employment_details/EmploymentDetails";
+import LoanDetails from "./loan_details/LoanDetails";
 
 class DataEntryDialog extends Component {
-    state = {visible: true, displayPersonalDetails: true, displayEmploymentDetails: false};
+    state = {visible: true, displayPersonalDetails: true, displayEmploymentDetails: false, displayLoanDetails: false};
 
     componentDidUpdate(prevProps) {
         if(this.props.displayPersonalDetails !== prevProps.displayPersonalDetails) {
@@ -17,6 +18,10 @@ class DataEntryDialog extends Component {
 
         if(this.props.displayEmploymentDetails !== prevProps.displayEmploymentDetails) {
             this.setState({displayEmploymentDetails: this.props.displayEmploymentDetails});
+        }
+
+        if(this.props.displayLoanDetails !== prevProps.displayLoanDetails) {
+            this.setState({displayLoanDetails: this.props.displayLoanDetails});
         }
     }
 
@@ -42,6 +47,9 @@ class DataEntryDialog extends Component {
                     <div className={this.state.displayEmploymentDetails ? 'show' : 'hide'}>
                         <EmploymentDetails />
                     </div>
+                    <div className={this.state.displayLoanDetails ? 'show' : 'hide'}>
+                        <LoanDetails />
+                    </div>
 
                 </Modal>
             </div>
@@ -50,12 +58,15 @@ class DataEntryDialog extends Component {
 }
 
 DataEntryDialog.propTypes = {
-    displayPersonalDetails: PropTypes.bool.isRequired
+    displayPersonalDetails: PropTypes.bool.isRequired,
+    displayEmploymentDetails: PropTypes.bool.isRequired,
+    displayLoanDetails: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
     displayPersonalDetails: state.user_home.displayPersonalDetails,
-    displayEmploymentDetails: state.user_home.displayEmploymentDetails
+    displayEmploymentDetails: state.user_home.displayEmploymentDetails,
+    displayLoanDetails: state.user_home.displayLoanDetails
 });
 
 export default connect(
