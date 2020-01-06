@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
 import {Columns} from "react-bulma-components/dist";
 import Select from "react-select";
-import ReactDatetime from "react-datetime";
+import {getACompanysEmploymentCategories} from "../../../../store/modules/company_owner_home/actions";
+
 
 class EmploymentDetails extends Component {
     state = {
@@ -21,7 +24,31 @@ class EmploymentDetails extends Component {
             { label: "Employed", value: "1" },
             { label: "Unemployed", value: "0" }
         ],
+        myCompanysEmploymentCategories: []
     };
+
+    componentDidMount() {
+        const payload = {
+            column_name: "CompanyId",
+            search_value: this.props.currentSystemUserCompanyDetails.CompanyId
+        };
+        this.props.getACompanysEmploymentCategories(payload);
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.myCompanysEmploymentCategories !== prevProps.myCompanysEmploymentCategories) {
+            if(this.props.myCompanysEmploymentCategories.length) {
+               let employmentCtegories = this.props.myCompanysEmploymentCategories.map((item) => {
+                    return {
+                        label: item.CategoryDescription,
+                        value: item.EmploymentCategoryId
+                    };
+                });
+                this.setState({myCompanysEmploymentCategories: employmentCtegories});
+            }
+        }
+    }
+
     render() {
         return (
             <div>
@@ -90,7 +117,7 @@ class EmploymentDetails extends Component {
                                                             selectedEmploymentCategoryObject: value
                                                         })
                                                     }
-                                                    options={this.state.genderCategories}
+                                                    options={this.state.myCompanysEmploymentCategories}
                                                 />
                                                 <p
                                                     className={
@@ -177,4 +204,26 @@ class EmploymentDetails extends Component {
     }
 }
 
-export default EmploymentDetails;
+
+EmploymentDetails.propTypes = {
+    currentSystemUserCompanyDetails: PropTypes.shape().isRequired,
+    getACompanysEmploymentCategories: PropTypes.func.isRequired,
+    myCompanysEmploymentCategories: PropTypes.arrayOf(PropTypes.object)
+        .isRequired,
+};
+
+const mapStateToProps = state => ({
+    currentSystemUserCompanyDetails: state.current_session.currentSystemUserCompanyDetails,
+    myCompanysEmploymentCategories:
+    state.company_owner_home.myCompanysEmploymentCategories
+});
+
+const mapDispatchToProps = dispatch => ({
+    getACompanysEmploymentCategories: payload =>
+        dispatch(getACompanysEmploymentCategories(payload))
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(EmploymentDetails);
