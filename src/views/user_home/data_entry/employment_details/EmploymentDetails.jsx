@@ -93,6 +93,8 @@ class EmploymentDetails extends Component {
       });
     } else {
       const payload = {
+        ColumnName: "ClientId",
+        ColumnValue: this.props.currentClientDbRecordId,
         EmploymentStatus: selectedEmploymentStatusObject.value,
         EmploymentCategoryId: selectedEmploymentCategoryObject.value,
         Occupation: occupation,
@@ -268,14 +270,17 @@ EmploymentDetails.propTypes = {
   getACompanysEmploymentCategories: PropTypes.func.isRequired,
   myCompanysEmploymentCategories: PropTypes.arrayOf(PropTypes.object)
     .isRequired,
-  updateClientEmploymentDetails: PropTypes.func.isRequired
+  updateClientEmploymentDetails: PropTypes.func.isRequired,
+  currentClientDbRecordId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   currentSystemUserCompanyDetails:
     state.current_session.currentSystemUserCompanyDetails,
   myCompanysEmploymentCategories:
-    state.company_owner_home.myCompanysEmploymentCategories
+    state.company_owner_home.myCompanysEmploymentCategories,
+  currentClientDbRecordId:
+  state.user_home.currentClientDbRecordId
 });
 
 const mapDispatchToProps = dispatch => ({

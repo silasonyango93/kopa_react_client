@@ -9,11 +9,6 @@ import {
   ERROR_WHILE_SUBMITING_CLIENT_DETAILS,
   START_UPDATING_CLIENT_EMPLOYMENT_DETAILS
 } from "./actionTypes";
-import {
-  START_REGISTERING_A_SYSTEM_USER,
-  SYSTEM_USER_REGISTRATION_FAILED,
-  SYSTEM_USER_REGISTRATION_SUCCESSFUL
-} from "../company_owner_home/actionTypes";
 
 export function submitClientDetails(payload) {
   return async dispatch => {
@@ -26,7 +21,10 @@ export function submitClientDetails(payload) {
       function(result) {
         if (result.data.results.success) {
           dispatch({
-            type: CLIENT_DETAILS_SUBMITTED_SUCCESSFULLY
+            type: CLIENT_DETAILS_SUBMITTED_SUCCESSFULLY,
+            payload: {
+              recordId: result.data.results.recordId
+            }
           });
         } else {
           dispatch({

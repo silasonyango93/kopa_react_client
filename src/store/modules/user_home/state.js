@@ -2,4 +2,5 @@ export const initialState = {
     displayPersonalDetails: true,
     displayEmploymentDetails: false,
     displayLoanDetails: false,
+    currentClientDbRecordId: ''
 };
