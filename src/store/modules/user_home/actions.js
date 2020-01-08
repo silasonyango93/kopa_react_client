@@ -1,14 +1,28 @@
 import { apiPost } from "../../../services/api_connector/ApiConnector";
 import {
+  BEGIN_ADDING_LOAN_DETAILS,
   BEGIN_CLIENT_DETAILS_SUBMISSION,
   CLIENT_DETAILS_SUBMISSION_FAILED,
   CLIENT_DETAILS_SUBMITTED_SUCCESSFULLY,
   CLIENT_EMPLOYMENT_DETAILS_UPDATE_FAILED,
   CLIENT_EMPLOYMENT_DETAILS_UPDATE_SUCCESSFUL,
   ERROR_WHEN_UPDATING_CLIENT_EMPLOYMENT_DETAILS,
+  ERROR_WHILE_ADDING_LOAN_DETAILS,
   ERROR_WHILE_SUBMITING_CLIENT_DETAILS,
+  FETCHING_THE_COMPANYS_PENDING_LOANS_EMPTY_RESULT_SET,
+  FETCHING_THE_COMPANYS_PENDING_LOANS_FAILED,
+  FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED,
+  LOAN_DETAILS_ADDED_SUCCESSFULLY,
+  LOAN_DETAILS_ADDITION_FAILED,
+  START_FETCHING_A_COMPANYS_PENDING_LOANS,
   START_UPDATING_CLIENT_EMPLOYMENT_DETAILS
 } from "./actionTypes";
+import {
+  FETCHING_THE_COMPANYS_BRANCHES_EMPTY_RESULT_SET,
+  FETCHING_THE_COMPANYS_BRANCHES_FAILED,
+  FETCHING_THE_COMPANYS_BRANCHES_SUCCEEDED,
+  START_FETCHING_A_COMPANYS_BRANCHES
+} from "../company_owner_home/actionTypes";
 
 export function submitClientDetails(payload) {
   return async dispatch => {
@@ -53,7 +67,10 @@ export function updateClientEmploymentDetails(payload) {
       function(result) {
         if (result.data.results.success) {
           dispatch({
-            type: CLIENT_EMPLOYMENT_DETAILS_UPDATE_SUCCESSFUL
+            type: CLIENT_EMPLOYMENT_DETAILS_UPDATE_SUCCESSFUL,
+            payload: {
+              currentEmploymentDetails: payload
+            }
           });
         } else {
           dispatch({
@@ -64,6 +81,67 @@ export function updateClientEmploymentDetails(payload) {
       function(err) {
         dispatch({
           type: ERROR_WHEN_UPDATING_CLIENT_EMPLOYMENT_DETAILS
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function addLoanDetails(payload) {
+  return async dispatch => {
+    dispatch({
+      type: BEGIN_ADDING_LOAN_DETAILS
+    });
+    const apiRoute = "/add_loan_application";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results.success) {
+          dispatch({
+            type: LOAN_DETAILS_ADDED_SUCCESSFULLY
+          });
+        } else {
+          dispatch({
+            type: LOAN_DETAILS_ADDITION_FAILED
+          });
+        }
+      },
+      function(err) {
+        dispatch({
+          type: ERROR_WHILE_ADDING_LOAN_DETAILS
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function getACompanysPendingLoans(payload) {
+  return async dispatch => {
+    dispatch({
+      type: START_FETCHING_A_COMPANYS_PENDING_LOANS
+    });
+    const apiRoute = "/get_a_company_pending_loans";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results && result.data.results.length > 0) {
+          dispatch({
+            type: FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED,
+            payload: {
+              currentCompanyPendingLoans: result.data.results
+            }
+          });
+        } else if (result.data.results && result.data.results.length === 0) {
+          dispatch({
+            type: FETCHING_THE_COMPANYS_PENDING_LOANS_EMPTY_RESULT_SET
+          });
+        }
+      },
+      function(err) {
+        dispatch({
+          type: FETCHING_THE_COMPANYS_PENDING_LOANS_FAILED
         });
         console.log(err);
       }

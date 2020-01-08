@@ -1,17 +1,27 @@
 import React, { Component } from "react";
 import { Columns } from "react-bulma-components/dist";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import ReactDatetime from "react-datetime";
+import {
+  addLoanDetails,
+  submitClientDetails
+} from "../../../../store/modules/user_home/actions";
 
 class LoanDetails extends Component {
   state = {
     loanAmount: "",
     interestRate: "",
     remainingLoanAmount: "",
+    expectedSettlementDate: "",
     loanAmountHasError: false,
     loanAmountErrorMessage: "",
     interestRateHasError: false,
     interestRateErrorMessage: "",
     remainingLoanAmountHasError: false,
-    remainingLoanAmountErrorMessage: ""
+    remainingLoanAmountErrorMessage: "",
+    dateHasError: false,
+    dateErrorMessage: ""
   };
 
   handleChange = event => {
@@ -20,6 +30,38 @@ class LoanDetails extends Component {
     this.setState({
       ...newState
     });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+
+    let dateOfBirth =
+      this.state.expectedSettlementDate._d.getFullYear() +
+      "-" +
+      (this.state.expectedSettlementDate._d.getMonth() + 1) +
+      "-" +
+      this.state.expectedSettlementDate._d.getDate();
+
+    const payload = {
+      ClientId: this.props.currentClientDbRecordId,
+      CompanyId: this.props.currentSystemUserCompanyDetails.CompanyId,
+      CompanyBranchId: this.props.currentSystemUserCompanyDetails
+        .CompanyBranchId,
+      SystemUserId: this.props.session_details.SystemUserId,
+      LoanAmount: this.state.loanAmount,
+      InterestRate: this.state.interestRate,
+      ExpectedSettlementDate: dateOfBirth,
+      LoanRating: "1",
+      IsFullyPaid: "0",
+      RemainingLoanAmount: this.state.remainingLoanAmount,
+      EmploymentStatus: this.props.currentEmploymentDetails.EmploymentStatus,
+      EmploymentCategoryId: this.props.currentEmploymentDetails
+        .EmploymentCategoryId,
+      Occupation: this.props.currentEmploymentDetails.Occupation,
+      EmploymentStation: this.props.currentEmploymentDetails.EmploymentStation
+    };
+
+    this.props.addLoanDetails(payload);
   };
 
   render() {
@@ -124,7 +166,35 @@ class LoanDetails extends Component {
                     </div>
                   </Columns.Column>
 
-                  <Columns.Column size="one-half" />
+                  <Columns.Column size="one-half">
+                    <div className="form-group">
+                      <ReactDatetime
+                        name="expectedSettlementDate"
+                        required={true}
+                        value={this.state.expectedSettlementDate}
+                        onChange={value =>
+                          this.setState({
+                            ...this.state,
+                            expectedSettlementDate: value
+                          })
+                        }
+                        inputProps={{
+                          className: "form-control",
+                          placeholder: "Expected Settlement Date"
+                        }}
+                        timeFormat={false}
+                      />
+                      <p
+                        className={
+                          this.state.dateHasError
+                            ? "personal__submision-error"
+                            : "personal__hide"
+                        }
+                      >
+                        {this.state.dateErrorMessage}
+                      </p>
+                    </div>
+                  </Columns.Column>
                 </Columns>
 
                 <button
@@ -142,4 +212,27 @@ class LoanDetails extends Component {
   }
 }
 
-export default LoanDetails;
+LoanDetails.propTypes = {
+  currentEmploymentDetails: PropTypes.shape().isRequired,
+  currentSystemUserCompanyDetails: PropTypes.shape().isRequired,
+  session_details: PropTypes.shape().isRequired,
+  currentClientDbRecordId: PropTypes.string.isRequired,
+  addLoanDetails: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  currentEmploymentDetails: state.user_home.currentEmploymentDetails,
+  currentSystemUserCompanyDetails:
+    state.current_session.currentSystemUserCompanyDetails,
+  session_details: state.current_session.session_details,
+  currentClientDbRecordId: state.user_home.currentClientDbRecordId
+});
+
+const mapDispatchToProps = dispatch => ({
+  addLoanDetails: payload => dispatch(addLoanDetails(payload))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoanDetails);
