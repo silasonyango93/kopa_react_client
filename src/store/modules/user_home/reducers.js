@@ -1,6 +1,7 @@
 import {
   CLIENT_DETAILS_SUBMITTED_SUCCESSFULLY,
-  CLIENT_EMPLOYMENT_DETAILS_UPDATE_SUCCESSFUL
+  CLIENT_EMPLOYMENT_DETAILS_UPDATE_SUCCESSFUL,
+  FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED
 } from "./actionTypes";
 
 export const ACTION_HANDLERS = {
@@ -17,5 +18,9 @@ export const ACTION_HANDLERS = {
       displayEmploymentDetails: false,
       displayLoanDetails: true,
       currentEmploymentDetails: action.payload.currentEmploymentDetails
+    }),
+  [FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED]: (state, action) =>
+    Object.assign({}, state, {
+      currentCompanyPendingLoans: action.payload.currentCompanyPendingLoans
     })
 };

@@ -11,6 +11,7 @@ import {
   addLoanDetails,
   getACompanysPendingLoans
 } from "../../../store/modules/user_home/actions";
+import Table from "../../../components/table/table_body/Table";
 
 class DataEntryDialog extends Component {
   state = {
@@ -18,7 +19,21 @@ class DataEntryDialog extends Component {
     displayPersonalDetails: false,
     displayEmploymentDetails: false,
     displayLoanDetails: false,
-    tableData: []
+    tableData: [],
+    tableHeaders: {
+      index: "#",
+      name: "Name",
+      ClientPhoneNumber: "Phone Number",
+      ClientEmail: "Email",
+
+      EmploymentStatus: "Employment Status",
+      CategoryDescription: "Employment Desc",
+      BranchName: "Branch Name",
+      LoanAmount: "Loan Amount",
+      InterestRate: "Interest Rate(%)",
+      RemainingLoanAmount: "Remaining Loan Amount",
+      LoanRating: "Star Rating"
+    }
   };
 
   componentDidMount() {
@@ -55,21 +70,37 @@ class DataEntryDialog extends Component {
       this.setState({ displayLoanDetails: this.props.displayLoanDetails });
     }
 
-
-    if(this.props.currentCompanyPendingLoans !== prevProps.currentCompanyPendingLoans) {
+    if (
+      this.props.currentCompanyPendingLoans !==
+      prevProps.currentCompanyPendingLoans
+    ) {
       let pendingLoans;
 
-      pendingLoans = this.props.currentCompanyPendingLoans.map((item, index) => {
-        return {
-          id: index + 1,
-          branchName: item.BranchName,
-          physicalAddress: item.BranchPhysicalAddress,
-          registrationDate: item.CompanyBranchRegistrationDate
-        };
-      });
+      pendingLoans = this.props.currentCompanyPendingLoans.map(
+        (item, index) => {
+          return {
+            id: index + 1,
+            name:
+              item.ClientFirstName +
+              " " +
+              item.ClientMiddleName +
+              " " +
+              item.ClientSurname,
+            ClientPhoneNumber: item.ClientPhoneNumber,
+            ClientEmail: item.ClientEmail,
+            EmploymentStatus:
+              item.EmploymentStatus === 1 ? "Employed" : "Unemployed",
+            CategoryDescription: item.CategoryDescription,
+            BranchName: item.BranchName,
+            LoanAmount: item.LoanAmount,
+            InterestRate: item.InterestRate,
+            RemainingLoanAmount: item.RemainingLoanAmount,
+            LoanRating: item.LoanRating
+          };
+        }
+      );
 
       this.setState({ tableData: pendingLoans });
-
     }
   }
 
@@ -84,6 +115,13 @@ class DataEntryDialog extends Component {
   render() {
     return (
       <div>
+        <div className="col-md-12">
+          <Table
+            tableTitle="Exising Company Customers"
+            tableHeaderObject={this.state.tableHeaders}
+            tableData={this.state.tableData}
+          />
+        </div>
         <Modal
           visible={this.state.visible}
           width="600"
