@@ -115,11 +115,12 @@ class DataEntryDialog extends Component {
   render() {
     return (
       <div>
-        <div className="col-md-12">
+        <div className="col-md-12 dialog__table-div">
           <Table
             tableTitle="Exising Company Customers"
             tableHeaderObject={this.state.tableHeaders}
             tableData={this.state.tableData}
+            addIconClicked={()=> {this.openModal();}}
           />
         </div>
         <Modal

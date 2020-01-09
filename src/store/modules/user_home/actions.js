@@ -122,7 +122,7 @@ export function getACompanysPendingLoans(payload) {
     dispatch({
       type: START_FETCHING_A_COMPANYS_PENDING_LOANS
     });
-    const apiRoute = "/get_a_company_pending_loans";
+    const apiRoute = "/get_a_companies_clients_with_pending_loans";
     const returnedPromise = apiPost(payload, apiRoute);
     returnedPromise.then(
       function(result) {
