@@ -15,14 +15,9 @@ import {
   LOAN_DETAILS_ADDED_SUCCESSFULLY,
   LOAN_DETAILS_ADDITION_FAILED,
   START_FETCHING_A_COMPANYS_PENDING_LOANS,
-  START_UPDATING_CLIENT_EMPLOYMENT_DETAILS
+  START_UPDATING_CLIENT_EMPLOYMENT_DETAILS,
+  TOGGLE_MODAL_DISPLAY
 } from "./actionTypes";
-import {
-  FETCHING_THE_COMPANYS_BRANCHES_EMPTY_RESULT_SET,
-  FETCHING_THE_COMPANYS_BRANCHES_FAILED,
-  FETCHING_THE_COMPANYS_BRANCHES_SUCCEEDED,
-  START_FETCHING_A_COMPANYS_BRANCHES
-} from "../company_owner_home/actionTypes";
 
 export function submitClientDetails(payload) {
   return async dispatch => {
@@ -146,5 +141,16 @@ export function getACompanysPendingLoans(payload) {
         console.log(err);
       }
     );
+  };
+}
+
+export function toggleModalDisplay(displayModal) {
+  return async dispatch => {
+    dispatch({
+      type: TOGGLE_MODAL_DISPLAY,
+      payload: {
+        visible: displayModal
+      }
+    });
   };
 }

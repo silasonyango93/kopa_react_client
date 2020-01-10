@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import ReactDatetime from "react-datetime";
 import {
   addLoanDetails,
-  submitClientDetails
+  submitClientDetails,
+  toggleModalDisplay
 } from "../../../../store/modules/user_home/actions";
 
 class LoanDetails extends Component {
@@ -62,6 +63,7 @@ class LoanDetails extends Component {
     };
 
     this.props.addLoanDetails(payload);
+    this.props.toggleModalDisplay(false);
   };
 
   render() {
@@ -217,7 +219,8 @@ LoanDetails.propTypes = {
   currentSystemUserCompanyDetails: PropTypes.shape().isRequired,
   session_details: PropTypes.shape().isRequired,
   currentClientDbRecordId: PropTypes.string.isRequired,
-  addLoanDetails: PropTypes.func.isRequired
+  addLoanDetails: PropTypes.func.isRequired,
+  toggleModalDisplay: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -229,7 +232,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addLoanDetails: payload => dispatch(addLoanDetails(payload))
+  addLoanDetails: payload => dispatch(addLoanDetails(payload)),
+  toggleModalDisplay: payload => dispatch(toggleModalDisplay(payload))
 });
 
 export default connect(

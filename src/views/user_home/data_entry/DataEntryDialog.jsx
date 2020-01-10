@@ -9,13 +9,13 @@ import EmploymentDetails from "./employment_details/EmploymentDetails";
 import LoanDetails from "./loan_details/LoanDetails";
 import {
   addLoanDetails,
-  getACompanysPendingLoans
+  getACompanysPendingLoans,
+  toggleModalDisplay
 } from "../../../store/modules/user_home/actions";
 import Table from "../../../components/table/table_body/Table";
 
 class DataEntryDialog extends Component {
   state = {
-    visible: true,
     displayPersonalDetails: false,
     displayEmploymentDetails: false,
     displayLoanDetails: false,
@@ -120,15 +120,19 @@ class DataEntryDialog extends Component {
             tableTitle="Exising Company Customers"
             tableHeaderObject={this.state.tableHeaders}
             tableData={this.state.tableData}
-            addIconClicked={()=> {this.openModal();}}
+            addIconClicked={() => {
+              this.props.toggleModalDisplay(true);
+            }}
           />
         </div>
         <Modal
-          visible={this.state.visible}
-          width="600"
-          height="630"
+          visible={this.props.visible}
+          width={this.props.dialogWidth}
+          height={this.props.dialogHeight}
           effect="fadeInUp"
-          onClickAway={() => this.closeModal()}
+          onClickAway={() => {
+            this.props.toggleModalDisplay(false);
+          }}
         >
           <div className="success-modal-header">
             <p className="modal-title">Client Registration</p>
@@ -155,7 +159,11 @@ DataEntryDialog.propTypes = {
   displayPersonalDetails: PropTypes.bool.isRequired,
   displayEmploymentDetails: PropTypes.bool.isRequired,
   displayLoanDetails: PropTypes.bool.isRequired,
-  getACompanysPendingLoans: PropTypes.bool.isRequired
+  getACompanysPendingLoans: PropTypes.func.isRequired,
+  dialogHeight: PropTypes.string.isRequired,
+  dialogWidth: PropTypes.string.isRequired,
+  visible: PropTypes.bool.isRequired,
+  toggleModalDisplay: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -164,12 +172,16 @@ const mapStateToProps = state => ({
   displayLoanDetails: state.user_home.displayLoanDetails,
   currentCompanyPendingLoans: state.user_home.currentCompanyPendingLoans,
   currentSystemUserCompanyDetails:
-    state.current_session.currentSystemUserCompanyDetails
+    state.current_session.currentSystemUserCompanyDetails,
+  dialogHeight: state.user_home.dialogHeight,
+  dialogWidth: state.user_home.dialogWidth,
+  visible: state.user_home.visible
 });
 
 const mapDispatchToProps = dispatch => ({
   getACompanysPendingLoans: payload =>
-    dispatch(getACompanysPendingLoans(payload))
+    dispatch(getACompanysPendingLoans(payload)),
+  toggleModalDisplay: displayModal => dispatch(toggleModalDisplay(displayModal))
 });
 
 export default connect(

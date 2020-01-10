@@ -4,5 +4,8 @@ export const initialState = {
   displayLoanDetails: false,
   currentClientDbRecordId: "",
   currentEmploymentDetails: {},
-  currentCompanyPendingLoans: []
+  currentCompanyPendingLoans: [],
+  dialogHeight: "630",
+  dialogWidth: "600",
+  visible: true
 };
