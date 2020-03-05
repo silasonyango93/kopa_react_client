@@ -26,7 +26,8 @@ class EmploymentDetails extends Component {
       { label: "Employed", value: "1" },
       { label: "Unemployed", value: "0" }
     ],
-    myCompanysEmploymentCategories: []
+    myCompanysEmploymentCategories: [],
+    disableOtherFields: false
   };
 
   componentDidMount() {
@@ -52,6 +53,12 @@ class EmploymentDetails extends Component {
           }
         );
         this.setState({ myCompanysEmploymentCategories: employmentCtegories });
+      }
+    }
+
+    if(this.state.selectedEmploymentStatusObject !== prevState.selectedEmploymentStatusObject) {
+      if(this.state.selectedEmploymentStatusObject.value === "0") {
+        this.setState({disableOtherFields: true });
       }
     }
   }
@@ -168,6 +175,7 @@ class EmploymentDetails extends Component {
                           classNamePrefix="react-select"
                           placeholder="Employment Category"
                           name="SelectedGenderId"
+                          isDisabled={this.state.disableOtherFields}
                           closeMenuOnSelect={true}
                           value={this.state.selectedEmploymentCategoryObject}
                           onChange={value =>
@@ -207,6 +215,7 @@ class EmploymentDetails extends Component {
                         type="text"
                         onChange={this.handleChange}
                         autoFocus
+                        disabled={this.state.disableOtherFields}
                         required={true}
                       />
                       <p
@@ -235,6 +244,7 @@ class EmploymentDetails extends Component {
                         type="text"
                         onChange={this.handleChange}
                         autoFocus
+                        disabled={this.state.disableOtherFields}
                         required={true}
                       />
                       <p
