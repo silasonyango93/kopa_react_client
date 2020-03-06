@@ -35,22 +35,31 @@ import {
   START_FETCHING_A_SYSTEM_USER_COMPANY_DETAILS,
   FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED,
   FETCHING_SYSTEM_USER_COMPANY_DETAILS_EMPTY_RESULT_SET,
-  FETCHING_SYSTEM_USER_COMPANY_DETAILS_FAILED
+  FETCHING_SYSTEM_USER_COMPANY_DETAILS_FAILED,
+  RESET_WRONG_CREDENTIALS
 } from "./actionTypes";
 import {
   apiGetAll,
   apiPost
 } from "../../../services/api_connector/ApiConnector";
 import {
-  COMPANY_OWNER, REGULAR_SYSTEM_USER,
+  COMPANY_OWNER,
+  REGULAR_SYSTEM_USER,
   SYSTEM_ADMIN
 } from "../../../config/constants/Constants";
-
 
 export function terminateCurrentSession() {
   return async dispatch => {
     dispatch({
       type: TERMINATE_CURRENT_SESSION
+    });
+  };
+}
+
+export function resetWrongCredentials() {
+  return async dispatch => {
+    dispatch({
+      type: RESET_WRONG_CREDENTIALS
     });
   };
 }
@@ -352,8 +361,6 @@ export function initialGenderConfiguration(payload) {
   };
 }
 
-
-
 export function getASystemUsersCompanyDetails(payload) {
   return async dispatch => {
     dispatch({
@@ -362,29 +369,26 @@ export function getASystemUsersCompanyDetails(payload) {
     const apiRoute = "/get_system_user_company_details";
     const returnedPromise = apiPost(payload, apiRoute);
     returnedPromise.then(
-        function(result) {
-          if (result.data.results && result.data.results.length > 0) {
-            dispatch({
-              type: FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED,
-              payload: {
-                currentSystemUserCompanyDetails: result.data.results[0]
-              }
-            });
-          } else if (result.data.results && result.data.results.length === 0) {
-            dispatch({
-              type: FETCHING_SYSTEM_USER_COMPANY_DETAILS_EMPTY_RESULT_SET
-            });
-          }
-        },
-        function(err) {
+      function(result) {
+        if (result.data.results && result.data.results.length > 0) {
           dispatch({
-            type: FETCHING_SYSTEM_USER_COMPANY_DETAILS_FAILED
+            type: FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED,
+            payload: {
+              currentSystemUserCompanyDetails: result.data.results[0]
+            }
           });
-          console.log(err);
+        } else if (result.data.results && result.data.results.length === 0) {
+          dispatch({
+            type: FETCHING_SYSTEM_USER_COMPANY_DETAILS_EMPTY_RESULT_SET
+          });
         }
+      },
+      function(err) {
+        dispatch({
+          type: FETCHING_SYSTEM_USER_COMPANY_DETAILS_FAILED
+        });
+        console.log(err);
+      }
     );
   };
 }
-
-
-

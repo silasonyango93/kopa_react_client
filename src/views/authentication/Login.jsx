@@ -8,9 +8,11 @@ import {
   checkIfSystemAlreadyConfigured,
   configureSystemCompany,
   configureSystemEmploymentCategory,
-  configureSystemOwnershipGroup, getASystemUsersCompanyDetails,
+  configureSystemOwnershipGroup,
+  getASystemUsersCompanyDetails,
   initialEmploymentCategoriesConfiguration,
   initialGenderConfiguration,
+  resetWrongCredentials,
   runInitialSystemConfiguration
 } from "../../store/modules/current_session/actions";
 import { FormGroup, Label, Input } from "reactstrap";
@@ -19,13 +21,16 @@ import {
   getAllCompanies,
   getAllRegisteredCompanyClients
 } from "../../store/modules/admin_home/actions";
+import "./Login.scss";
 class Login extends Component {
   state = {
     attemptedEmail: "",
     attemptedPassword: "",
     isAdmin: false,
     isCompanyOwner: false,
-    isStaff: true
+    isStaff: true,
+    loginHasError: false,
+    loginErrorMessage: ""
   };
 
   componentDidMount() {
@@ -58,14 +63,24 @@ class Login extends Component {
     }
 
     if (
-        this.props.currentSystemUserCompanyDetails !==
-        prevProps.currentSystemUserCompanyDetails
+      this.props.currentSystemUserCompanyDetails !==
+      prevProps.currentSystemUserCompanyDetails
     ) {
       if (this.props.currentSystemUserCompanyDetails) {
         this.props.history.push("/user_home");
       }
     }
 
+    if (
+      this.props.hasWrongLoginCredentials !== prevProps.hasWrongLoginCredentials
+    ) {
+      if (this.props.hasWrongLoginCredentials) {
+        this.setState({
+          loginHasError: true,
+          loginErrorMessage: "Wrong username or password"
+        });
+      }
+    }
 
     /* ---------------------------------------------------------------------------------------------------------------------- */
 
@@ -78,7 +93,7 @@ class Login extends Component {
           companyOwnerId: this.props.companyOwnerId
         };
         this.props.getCompanyOwnersCompanyDetails(paload);
-      } else if(this.props.isSessionActive && this.state.isStaff) {
+      } else if (this.props.isSessionActive && this.state.isStaff) {
         const paload = {
           SystemUserId: this.props.systemUserId
         };
@@ -195,6 +210,8 @@ class Login extends Component {
   };
 
   handleAdminRadioClicked = () => {
+    this.props.resetWrongCredentials();
+    this.setState({ loginHasError: false, loginErrorMessage: "" });
     if (this.state.isCompanyOwner) {
       this.setState({ isCompanyOwner: false });
     } else if (this.state.isStaff) {
@@ -204,6 +221,8 @@ class Login extends Component {
   };
 
   handleCompanyOwnerRadioClicked = () => {
+    this.props.resetWrongCredentials();
+    this.setState({ loginHasError: false, loginErrorMessage: "" });
     if (this.state.isAdmin) {
       this.setState({ isAdmin: false });
     } else if (this.state.isStaff) {
@@ -213,12 +232,19 @@ class Login extends Component {
   };
 
   handleStaffRadioClicked = () => {
+    this.props.resetWrongCredentials();
+    this.setState({ loginHasError: false, loginErrorMessage: "" });
     if (this.state.isAdmin) {
       this.setState({ isAdmin: false });
     } else if (this.state.isCompanyOwner) {
       this.setState({ isCompanyOwner: false });
     }
     this.setState({ isStaff: true });
+  };
+
+  handleAnyTextFieldTouched = () => {
+    this.props.resetWrongCredentials();
+    this.setState({ loginHasError: false, loginErrorMessage: "" });
   };
 
   render() {
@@ -241,6 +267,9 @@ class Login extends Component {
                     <fieldset>
                       <div className="form-group">
                         <input
+                          onClick={() => {
+                            this.handleAnyTextFieldTouched();
+                          }}
                           name="attemptedEmail"
                           className="form-control"
                           placeholder="Email"
@@ -254,6 +283,9 @@ class Login extends Component {
 
                       <div className="form-group">
                         <input
+                          onClick={() => {
+                            this.handleAnyTextFieldTouched();
+                          }}
                           name="attemptedPassword"
                           className="form-control"
                           placeholder="Password"
@@ -270,6 +302,15 @@ class Login extends Component {
                       >
                         Sign In
                       </button>
+                      <p
+                        className={
+                          this.state.loginHasError
+                            ? "login__error-text"
+                            : "login__hide"
+                        }
+                      >
+                        {this.state.loginErrorMessage}
+                      </p>
                     </fieldset>
                   </form>
                 </div>
@@ -332,7 +373,9 @@ Login.propTypes = {
   companyOwnersCompanyDetails: PropTypes.shape().isRequired,
   getAllRegisteredCompanyClients: PropTypes.func.isRequired,
   systemUserId: PropTypes.string.isRequired,
-  getASystemUsersCompanyDetails: PropTypes.func.isRequired
+  getASystemUsersCompanyDetails: PropTypes.func.isRequired,
+  hasWrongLoginCredentials: PropTypes.bool.isRequired,
+  resetWrongCredentials: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -343,7 +386,9 @@ const mapStateToProps = state => ({
   systemUserId: state.current_session.session_details.SystemUserId,
   companyOwnersCompanyDetails:
     state.company_owner_home.companyOwnersCompanyDetails,
-  currentSystemUserCompanyDetails: state.current_session.currentSystemUserCompanyDetails,
+  currentSystemUserCompanyDetails:
+    state.current_session.currentSystemUserCompanyDetails,
+  hasWrongLoginCredentials: state.current_session.hasWrongLoginCredentials
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -368,7 +413,8 @@ const mapDispatchToProps = dispatch => ({
   getAllRegisteredCompanyClients: () =>
     dispatch(getAllRegisteredCompanyClients()),
   getASystemUsersCompanyDetails: payload =>
-      dispatch(getASystemUsersCompanyDetails(payload))
+    dispatch(getASystemUsersCompanyDetails(payload)),
+  resetWrongCredentials: () => dispatch(resetWrongCredentials())
 });
 
 export default connect(

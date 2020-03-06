@@ -1,14 +1,16 @@
 import {
-    TERMINATE_CURRENT_SESSION,
-    STORE_USER,
-    SYSTEM_NOT_CONFIGURED,
-    INITIAL_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION_SUCCESSFUL,
-    INITIAL_SYSTEM_COMPANY_CONFIGURATION_SUCCESSFUL,
-    INITIAL_EMPLOYMENT_CATEGORIES_CONFIGURATION_SUCCESSFUL,
-    MALE_GENDER_CONFIGURATION_SUCCESSFUL,
-    FEMALE_GENDER_CONFIGURATION_SUCCESSFUL,
-    INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL,
-    FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED
+  TERMINATE_CURRENT_SESSION,
+  STORE_USER,
+  SYSTEM_NOT_CONFIGURED,
+  INITIAL_SYSTEM_OWNERSHIP_GROUP_CONFIGURATION_SUCCESSFUL,
+  INITIAL_SYSTEM_COMPANY_CONFIGURATION_SUCCESSFUL,
+  INITIAL_EMPLOYMENT_CATEGORIES_CONFIGURATION_SUCCESSFUL,
+  MALE_GENDER_CONFIGURATION_SUCCESSFUL,
+  FEMALE_GENDER_CONFIGURATION_SUCCESSFUL,
+  INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL,
+  FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED,
+  WRONG_LOGIN_CREDENTIALS,
+  RESET_WRONG_CREDENTIALS
 } from "./actionTypes";
 
 export const ACTION_HANDLERS = {
@@ -23,6 +25,14 @@ export const ACTION_HANDLERS = {
     Object.assign({}, state, {
       isSessionActive: false,
       isLoginSuccessful: false
+    }),
+  [WRONG_LOGIN_CREDENTIALS]: state =>
+    Object.assign({}, state, {
+      hasWrongLoginCredentials: true
+    }),
+  [RESET_WRONG_CREDENTIALS]: state =>
+    Object.assign({}, state, {
+      hasWrongLoginCredentials: false
     }),
   [SYSTEM_NOT_CONFIGURED]: (state, action) =>
     Object.assign({}, state, {
@@ -91,14 +101,14 @@ export const ACTION_HANDLERS = {
         isInitialGenderConfigured: true
       }
     }),
-    [INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL]: state =>
-        Object.assign({}, state, {
-            isCompanyAlreadyConfigured: true
-        }),
+  [INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL]: state =>
+    Object.assign({}, state, {
+      isCompanyAlreadyConfigured: true
+    }),
 
-    [FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED]: (state, action) =>
-        Object.assign({}, state, {
-            currentSystemUserCompanyDetails: action.payload.currentSystemUserCompanyDetails
-}),
-
+  [FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED]: (state, action) =>
+    Object.assign({}, state, {
+      currentSystemUserCompanyDetails:
+        action.payload.currentSystemUserCompanyDetails
+    })
 };
