@@ -13,5 +13,6 @@ export const initialState = {
     isInitialGenderConfigured: true
   },
   currentSystemUserCompanyDetails: {},
-  hasWrongLoginCredentials: false
+  hasWrongLoginCredentials: false,
+  dbSessionLogId: ""
 };

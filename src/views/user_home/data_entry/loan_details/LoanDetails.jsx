@@ -48,7 +48,7 @@ class LoanDetails extends Component {
       CompanyId: this.props.currentSystemUserCompanyDetails.CompanyId,
       CompanyBranchId: this.props.currentSystemUserCompanyDetails
         .CompanyBranchId,
-      SystemUserId: this.props.session_details.SystemUserId,
+      SessionLogId: this.props.dbSessionLogId,
       LoanAmount: this.state.loanAmount,
       InterestRate: this.state.interestRate,
       ExpectedSettlementDate: dateOfBirth,
@@ -220,7 +220,8 @@ LoanDetails.propTypes = {
   session_details: PropTypes.shape().isRequired,
   currentClientDbRecordId: PropTypes.string.isRequired,
   addLoanDetails: PropTypes.func.isRequired,
-  toggleModalDisplay: PropTypes.func.isRequired
+  toggleModalDisplay: PropTypes.func.isRequired,
+  dbSessionLogId: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -228,7 +229,8 @@ const mapStateToProps = state => ({
   currentSystemUserCompanyDetails:
     state.current_session.currentSystemUserCompanyDetails,
   session_details: state.current_session.session_details,
-  currentClientDbRecordId: state.user_home.currentClientDbRecordId
+  currentClientDbRecordId: state.user_home.currentClientDbRecordId,
+  dbSessionLogId: state.current_session.dbSessionLogId
 });
 
 const mapDispatchToProps = dispatch => ({

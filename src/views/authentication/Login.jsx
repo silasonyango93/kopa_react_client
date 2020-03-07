@@ -9,6 +9,7 @@ import {
   configureSystemCompany,
   configureSystemEmploymentCategory,
   configureSystemOwnershipGroup,
+  createASessionLog,
   getASystemUsersCompanyDetails,
   initialEmploymentCategoriesConfiguration,
   initialGenderConfiguration,
@@ -67,7 +68,11 @@ class Login extends Component {
       prevProps.currentSystemUserCompanyDetails
     ) {
       if (this.props.currentSystemUserCompanyDetails) {
-        this.props.history.push("/user_home");
+        const payload = {
+          SystemUserId: this.props.systemUserId
+        };
+
+        this.props.createASessionLog(payload);
       }
     }
 
@@ -79,6 +84,12 @@ class Login extends Component {
           loginHasError: true,
           loginErrorMessage: "Wrong username or password"
         });
+      }
+    }
+
+    if (this.props.dbSessionLogId !== prevProps.dbSessionLogId) {
+      if (this.props.dbSessionLogId) {
+        this.props.history.push("/user_home");
       }
     }
 
@@ -375,7 +386,9 @@ Login.propTypes = {
   systemUserId: PropTypes.string.isRequired,
   getASystemUsersCompanyDetails: PropTypes.func.isRequired,
   hasWrongLoginCredentials: PropTypes.bool.isRequired,
-  resetWrongCredentials: PropTypes.func.isRequired
+  resetWrongCredentials: PropTypes.func.isRequired,
+  createASessionLog: PropTypes.func.isRequired,
+  dbSessionLogId: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -388,7 +401,8 @@ const mapStateToProps = state => ({
     state.company_owner_home.companyOwnersCompanyDetails,
   currentSystemUserCompanyDetails:
     state.current_session.currentSystemUserCompanyDetails,
-  hasWrongLoginCredentials: state.current_session.hasWrongLoginCredentials
+  hasWrongLoginCredentials: state.current_session.hasWrongLoginCredentials,
+  dbSessionLogId: state.current_session.dbSessionLogId
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -414,7 +428,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(getAllRegisteredCompanyClients()),
   getASystemUsersCompanyDetails: payload =>
     dispatch(getASystemUsersCompanyDetails(payload)),
-  resetWrongCredentials: () => dispatch(resetWrongCredentials())
+  resetWrongCredentials: () => dispatch(resetWrongCredentials()),
+  createASessionLog: payload => dispatch(createASessionLog(payload))
 });
 
 export default connect(

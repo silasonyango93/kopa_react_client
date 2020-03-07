@@ -36,7 +36,11 @@ import {
   FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED,
   FETCHING_SYSTEM_USER_COMPANY_DETAILS_EMPTY_RESULT_SET,
   FETCHING_SYSTEM_USER_COMPANY_DETAILS_FAILED,
-  RESET_WRONG_CREDENTIALS
+  RESET_WRONG_CREDENTIALS,
+  BEGIN_CREATING_A_SESSION_LOG,
+  SESSION_LOG_CREATED_SUCCESSFULLY,
+  SESSION_LOG_CREATION_FAILED,
+  ERROR_WHILE_CREATING_SESSION_LOG
 } from "./actionTypes";
 import {
   apiGetAll,
@@ -53,6 +57,12 @@ export function terminateCurrentSession() {
     dispatch({
       type: TERMINATE_CURRENT_SESSION
     });
+  };
+}
+
+export function terminateASystemUserSession(payload) {
+  return async dispatch => {
+    closeASessionLog(payload);
   };
 }
 
@@ -391,4 +401,41 @@ export function getASystemUsersCompanyDetails(payload) {
       }
     );
   };
+}
+
+export function createASessionLog(payload) {
+  return async dispatch => {
+    dispatch({
+      type: BEGIN_CREATING_A_SESSION_LOG
+    });
+    const apiRoute = "/add_session_logs";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results.success) {
+          dispatch({
+            type: SESSION_LOG_CREATED_SUCCESSFULLY,
+            payload: {
+              dbSessionLogId: result.data.results.recordId
+            }
+          });
+        } else {
+          dispatch({
+            type: SESSION_LOG_CREATION_FAILED
+          });
+        }
+      },
+      function(err) {
+        dispatch({
+          type: ERROR_WHILE_CREATING_SESSION_LOG
+        });
+        console.log(err);
+      }
+    );
+  };
+}
+
+export function closeASessionLog(payload) {
+  const apiRoute = "/update_individual_session_logs";
+  apiPost(payload, apiRoute);
 }

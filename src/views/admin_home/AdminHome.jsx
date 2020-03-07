@@ -34,13 +34,13 @@ class AdminHome extends Component {
 
   componentDidMount() {
     if (!this.props.isSessionActive) {
-      this.props.history.push("/");
+      window.location.assign("/");
     }
   }
 
   componentDidUpdate() {
     if (!this.props.isSessionActive) {
-      this.props.history.push("/");
+      window.location.assign("/");
     }
   }
 
@@ -76,7 +76,7 @@ class AdminHome extends Component {
 
   onIdle = e => {
     this.props.terminateCurrentSession();
-    this.props.history.push("/");
+    window.location.assign("/");
   };
 
   render() {

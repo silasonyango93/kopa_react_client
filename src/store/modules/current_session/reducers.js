@@ -10,7 +10,8 @@ import {
   INITIAL_SYSTEM_CONFIGURATION_SUCCESSFUL,
   FETCHING_SYSTEM_USER_COMPANY_DETAILS_SUCCEEDED,
   WRONG_LOGIN_CREDENTIALS,
-  RESET_WRONG_CREDENTIALS
+  RESET_WRONG_CREDENTIALS,
+  SESSION_LOG_CREATED_SUCCESSFULLY
 } from "./actionTypes";
 
 export const ACTION_HANDLERS = {
@@ -110,5 +111,10 @@ export const ACTION_HANDLERS = {
     Object.assign({}, state, {
       currentSystemUserCompanyDetails:
         action.payload.currentSystemUserCompanyDetails
+    }),
+
+  [SESSION_LOG_CREATED_SUCCESSFULLY]: (state, action) =>
+    Object.assign({}, state, {
+      dbSessionLogId: action.payload.dbSessionLogId
     })
 };
