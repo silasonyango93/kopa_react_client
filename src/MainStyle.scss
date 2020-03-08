@@ -1,0 +1,19 @@
+.main-style {
+  &__application-body {
+    display: block !important;
+
+    @media screen and (max-width: 767px) {
+      display: none !important;
+    }
+  }
+
+  &__error-page {
+    display: none !important;
+
+    @media screen and (max-width: 767px) {
+      display: block !important;
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
