@@ -63,6 +63,24 @@ class EmploymentDetails extends Component {
     }
   }
 
+  resetFormValues = () =>{
+    this.setState({
+      selectedEmploymentStatusObject: "",
+      selectedEmploymentCategoryObject: "",
+      occupation: "",
+      employmentStation: "",
+      employmentStatusHasError: false,
+      employmentStatusErrorMessage: "",
+      employmentCategoryHasError: false,
+      employmentCategoryErrorMessage: "",
+      occupationHasError: false,
+      occupationErrorMessage: "",
+      employmentStationHasError: false,
+      employmentStationErrorMessage: "",
+      disableOtherFields: false
+    });
+  };
+
   handleChange = event => {
     let newState = this.state;
     newState[event.target.name] = event.target.value;
@@ -109,6 +127,7 @@ class EmploymentDetails extends Component {
       };
 
       this.props.updateClientEmploymentDetails(payload);
+      this.resetFormValues();
     }
   };
 

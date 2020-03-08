@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import ReactDatetime from "react-datetime";
 import {
-  addLoanDetails,
+  addLoanDetails, resetClientDbId,
   submitClientDetails,
   toggleModalDisplay
 } from "../../../../store/modules/user_home/actions";
@@ -23,6 +23,24 @@ class LoanDetails extends Component {
     remainingLoanAmountErrorMessage: "",
     dateHasError: false,
     dateErrorMessage: ""
+  };
+
+
+  resetFormValues = () =>{
+    this.setState({
+      loanAmount: "",
+      interestRate: "",
+      remainingLoanAmount: "",
+      expectedSettlementDate: "",
+      loanAmountHasError: false,
+      loanAmountErrorMessage: "",
+      interestRateHasError: false,
+      interestRateErrorMessage: "",
+      remainingLoanAmountHasError: false,
+      remainingLoanAmountErrorMessage: "",
+      dateHasError: false,
+      dateErrorMessage: ""
+    });
   };
 
   handleChange = event => {
@@ -63,6 +81,8 @@ class LoanDetails extends Component {
     };
 
     this.props.addLoanDetails(payload);
+    this.resetFormValues();
+    this.props.resetClientDbId();
     this.props.toggleModalDisplay(false);
   };
 
@@ -221,7 +241,8 @@ LoanDetails.propTypes = {
   currentClientDbRecordId: PropTypes.string.isRequired,
   addLoanDetails: PropTypes.func.isRequired,
   toggleModalDisplay: PropTypes.func.isRequired,
-  dbSessionLogId: PropTypes.string.isRequired
+  dbSessionLogId: PropTypes.string.isRequired,
+  resetClientDbId: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -235,7 +256,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addLoanDetails: payload => dispatch(addLoanDetails(payload)),
-  toggleModalDisplay: payload => dispatch(toggleModalDisplay(payload))
+  toggleModalDisplay: payload => dispatch(toggleModalDisplay(payload)),
+  resetClientDbId: () => dispatch(resetClientDbId())
 });
 
 export default connect(

@@ -50,7 +50,9 @@
   }
 
   &__button {
-    width: 391px;
+    width: auto;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
     height: 56px;
     border-radius: 28px;
     background-color: #008bff;

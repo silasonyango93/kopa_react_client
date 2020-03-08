@@ -13,7 +13,7 @@ import {
   FETCHING_THE_COMPANYS_PENDING_LOANS_FAILED,
   FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED,
   LOAN_DETAILS_ADDED_SUCCESSFULLY,
-  LOAN_DETAILS_ADDITION_FAILED,
+  LOAN_DETAILS_ADDITION_FAILED, RESET_CLIENT_DB_ID,
   START_FETCHING_A_COMPANYS_PENDING_LOANS,
   START_UPDATING_CLIENT_EMPLOYMENT_DETAILS,
   TOGGLE_MODAL_DISPLAY
@@ -152,5 +152,23 @@ export function toggleModalDisplay(displayModal) {
         visible: displayModal
       }
     });
+  };
+}
+
+
+export function resetClientDbId() {
+  return async dispatch => {
+    dispatch({
+      type: RESET_CLIENT_DB_ID
+    });
+  };
+}
+
+
+
+export function registerCustomerAdmission(payload) {
+  return async dispatch => {
+    const apiRoute = "/add_customer_registration";
+    apiPost(payload, apiRoute);
   };
 }

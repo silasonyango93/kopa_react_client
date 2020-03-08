@@ -8,7 +8,7 @@ import { Columns } from "react-bulma-components/dist";
 import Select from "react-select";
 import "./PersonalDetails.scss";
 import ip from "../../../../config/EndPoint";
-import { submitClientDetails } from "../../../../store/modules/user_home/actions";
+import {registerCustomerAdmission, submitClientDetails} from "../../../../store/modules/user_home/actions";
 
 class PersonalDetails extends Component {
   state = {
@@ -50,34 +50,87 @@ class PersonalDetails extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.profilePicDbName !== prevState.profilePicDbName) {
-      let dateOfBirth =
-        this.state.dateOfBirth._d.getFullYear() +
-        "-" +
-        (this.state.dateOfBirth._d.getMonth() + 1) +
-        "-" +
-        this.state.dateOfBirth._d.getDate();
+      if(this.state.profilePicDbName) {
+        let dateOfBirth =
+            this.state.dateOfBirth._d.getFullYear() +
+            "-" +
+            (this.state.dateOfBirth._d.getMonth() + 1) +
+            "-" +
+            this.state.dateOfBirth._d.getDate();
 
-      const payload = {
-        ClientUniqueId: this.generateUUID(),
-        ClientFirstName: this.state.firstName,
-        ClientMiddleName: this.state.middleName,
-        ClientSurname: this.state.surname,
-        ClientNationalId: this.state.nationalId,
-        ClientProfilePicName: this.state.profilePicDbName,
-        GenderId: this.state.SelectedGenderId.value,
-        ClientDOB: dateOfBirth,
-        ClientPhoneNumber: this.state.phoneNumber,
-        ClientPhysicalAddress: this.state.physicalAddress,
-        ClientEmail: this.state.email,
-        EmploymentStatus: "0",
-        EmploymentCategoryId: "1",
-        Occupation: "NA",
-        EmploymentStation: "NA"
-      };
+        const payload = {
+          ClientUniqueId: this.generateUUID(),
+          ClientFirstName: this.state.firstName,
+          ClientMiddleName: this.state.middleName,
+          ClientSurname: this.state.surname,
+          ClientNationalId: this.state.nationalId,
+          ClientProfilePicName: this.state.profilePicDbName,
+          GenderId: this.state.SelectedGenderId.value,
+          ClientDOB: dateOfBirth,
+          ClientPhoneNumber: this.state.phoneNumber,
+          ClientPhysicalAddress: this.state.physicalAddress,
+          ClientEmail: this.state.email,
+          EmploymentStatus: "0",
+          EmploymentCategoryId: "1",
+          Occupation: "NA",
+          EmploymentStation: "NA"
+        };
 
-      this.props.submitClientDetails(payload);
+        this.props.submitClientDetails(payload);
+
+      }
+    }
+
+
+    if(this.props.currentClientDbRecordId !== prevProps.currentClientDbRecordId) {
+
+      if(this.props.currentClientDbRecordId) {
+        const payload = {
+          SessionLogId: this.props.dbSessionLogId,
+          ClientId: this.props.currentClientDbRecordId
+        };
+
+        this.props.registerCustomerAdmission(payload);
+        this.resetFormValues();
+      }
+
     }
   }
+
+  resetFormValues = () =>{
+    this.setState({
+      firstName: "",
+      middleName: "",
+      surname: "",
+      nationalId: "",
+      SelectedGenderId: "",
+      dateOfBirth: "",
+      phoneNumber: "",
+      physicalAddress: "",
+      email: "",
+      image: null,
+      profilePicDbName: "",
+      firstNameHasError: false,
+      firstNameErrorMessage: "",
+      middleNameHasError: false,
+      middleNameErrorMessage: "",
+      surnameHasError: false,
+      surnameErrorMessage: "",
+      nationalIdHasError: false,
+      nationalIdErrorMessage: "",
+      SelectedGenderIdHasError: false,
+      SelectedGenderIdErrorMessage: "",
+      dateOfBirthHasError: false,
+      dateOfBirthErrorMessage: "",
+      phoneNumberHasError: false,
+      phoneNumberErrorMessage: "",
+      emailHasError: false,
+      emailErrorMessage: "",
+      formSubmissionError: false,
+      physicalAddressHasError: false,
+      physicalAddressErrorMessage: ""
+    });
+  };
 
   generateUUID = () => {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -121,7 +174,7 @@ class PersonalDetails extends Component {
       ClientMiddleName: this.state.middleName,
       ClientSurname: this.state.surname,
       ClientNationalId: this.state.nationalId,
-      ClientProfilePicName: "17653bdba8ea57471a66d3213808ba36",
+      ClientProfilePicName: "2694b80c7b5150878d7160b08b5a8538",
       GenderId: this.state.SelectedGenderId.value,
       ClientDOB: dateOfBirth,
       ClientPhoneNumber: this.state.phoneNumber,
@@ -503,14 +556,23 @@ class PersonalDetails extends Component {
 }
 
 PersonalDetails.propTypes = {
-  submitClientDetails: PropTypes.func.isRequired
+  submitClientDetails: PropTypes.func.isRequired,
+  currentClientDbRecordId: PropTypes.string.isRequired,
+  dbSessionLogId: PropTypes.string.isRequired,
+  registerCustomerAdmission: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = state => ({
+  currentClientDbRecordId: state.user_home.currentClientDbRecordId,
+  dbSessionLogId: state.current_session.dbSessionLogId
+});
+
 const mapDispatchToProps = dispatch => ({
-  submitClientDetails: payload => dispatch(submitClientDetails(payload))
+  submitClientDetails: payload => dispatch(submitClientDetails(payload)),
+  registerCustomerAdmission: payload => dispatch(registerCustomerAdmission(payload))
 });
 
 export default connect(
-  null,
+    mapStateToProps,
   mapDispatchToProps
 )(PersonalDetails);
