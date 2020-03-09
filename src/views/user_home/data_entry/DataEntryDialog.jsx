@@ -135,7 +135,7 @@ class DataEntryDialog extends Component {
           }}
         >
           <div className="success-modal-header">
-            <p className="modal-title">Client Registration</p>
+            <p className="modal-title">Customer Registration</p>
           </div>
 
           <div className={this.state.displayPersonalDetails ? "show" : "hide"}>
