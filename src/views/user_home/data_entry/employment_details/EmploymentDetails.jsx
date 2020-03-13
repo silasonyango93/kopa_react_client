@@ -56,14 +56,19 @@ class EmploymentDetails extends Component {
       }
     }
 
-    if(this.state.selectedEmploymentStatusObject !== prevState.selectedEmploymentStatusObject) {
-      if(this.state.selectedEmploymentStatusObject.value === "0") {
-        this.setState({disableOtherFields: true });
+    if (
+      this.state.selectedEmploymentStatusObject !==
+      prevState.selectedEmploymentStatusObject
+    ) {
+      if (this.state.selectedEmploymentStatusObject.value === "0") {
+        this.setState({ disableOtherFields: true });
+      } else if (this.state.selectedEmploymentStatusObject.value === "1") {
+        this.setState({ disableOtherFields: false });
       }
     }
   }
 
-  resetFormValues = () =>{
+  resetFormValues = () => {
     this.setState({
       selectedEmploymentStatusObject: "",
       selectedEmploymentCategoryObject: "",
@@ -106,7 +111,10 @@ class EmploymentDetails extends Component {
         employmentStatusHasError: true,
         employmentStatusErrorMessage: "Kindly select employment status"
       });
-    } else if (!selectedEmploymentCategoryObject) {
+    } else if (
+      !selectedEmploymentCategoryObject &&
+      selectedEmploymentStatusObject.value !== "0"
+    ) {
       this.setState({
         employmentCategoryHasError: true,
         employmentCategoryErrorMessage: "Kindly select employment category"
@@ -121,9 +129,11 @@ class EmploymentDetails extends Component {
         ColumnName: "ClientId",
         ColumnValue: this.props.currentClientDbRecordId,
         EmploymentStatus: selectedEmploymentStatusObject.value,
-        EmploymentCategoryId: selectedEmploymentCategoryObject.value,
-        Occupation: occupation,
-        EmploymentStation: employmentStation
+        EmploymentCategoryId: selectedEmploymentCategoryObject.value
+          ? selectedEmploymentCategoryObject.value
+          : "1",
+        Occupation: occupation ? occupation : "N/A",
+        EmploymentStation: employmentStation ? employmentStation : "N/A"
       };
 
       this.props.updateClientEmploymentDetails(payload);
@@ -300,7 +310,7 @@ EmploymentDetails.propTypes = {
   myCompanysEmploymentCategories: PropTypes.arrayOf(PropTypes.object)
     .isRequired,
   updateClientEmploymentDetails: PropTypes.func.isRequired,
-  currentClientDbRecordId: PropTypes.string.isRequired,
+  currentClientDbRecordId: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -308,8 +318,7 @@ const mapStateToProps = state => ({
     state.current_session.currentSystemUserCompanyDetails,
   myCompanysEmploymentCategories:
     state.company_owner_home.myCompanysEmploymentCategories,
-  currentClientDbRecordId:
-  state.user_home.currentClientDbRecordId
+  currentClientDbRecordId: state.user_home.currentClientDbRecordId
 });
 
 const mapDispatchToProps = dispatch => ({

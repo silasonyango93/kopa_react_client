@@ -7,5 +7,6 @@ export const initialState = {
   currentCompanyPendingLoans: [],
   dialogHeight: "630",
   dialogWidth: "600",
-  visible: true
+  visible: true,
+  customerSuccessFullyRegistered: false
 };

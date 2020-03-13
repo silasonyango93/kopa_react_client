@@ -13,7 +13,9 @@ import {
   FETCHING_THE_COMPANYS_PENDING_LOANS_FAILED,
   FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED,
   LOAN_DETAILS_ADDED_SUCCESSFULLY,
-  LOAN_DETAILS_ADDITION_FAILED, RESET_CLIENT_DB_ID,
+  LOAN_DETAILS_ADDITION_FAILED,
+  RESET_CLIENT_DB_ID,
+  RESET_CUSTOMER_ADDED_SUCCESSFULLY,
   START_FETCHING_A_COMPANYS_PENDING_LOANS,
   START_UPDATING_CLIENT_EMPLOYMENT_DETAILS,
   TOGGLE_MODAL_DISPLAY
@@ -112,6 +114,14 @@ export function addLoanDetails(payload) {
   };
 }
 
+export function resetCustomerAddedSuccessfully() {
+  return async dispatch => {
+    dispatch({
+      type: RESET_CUSTOMER_ADDED_SUCCESSFULLY
+    });
+  };
+}
+
 export function getACompanysPendingLoans(payload) {
   return async dispatch => {
     dispatch({
@@ -155,7 +165,6 @@ export function toggleModalDisplay(displayModal) {
   };
 }
 
-
 export function resetClientDbId() {
   return async dispatch => {
     dispatch({
@@ -163,8 +172,6 @@ export function resetClientDbId() {
     });
   };
 }
-
-
 
 export function registerCustomerAdmission(payload) {
   return async dispatch => {

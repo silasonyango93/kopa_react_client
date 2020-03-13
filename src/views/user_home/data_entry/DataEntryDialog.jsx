@@ -10,6 +10,7 @@ import LoanDetails from "./loan_details/LoanDetails";
 import {
   addLoanDetails,
   getACompanysPendingLoans,
+  resetCustomerAddedSuccessfully,
   toggleModalDisplay
 } from "../../../store/modules/user_home/actions";
 import Table from "../../../components/table/table_body/Table";
@@ -102,6 +103,20 @@ class DataEntryDialog extends Component {
 
       this.setState({ tableData: pendingLoans });
     }
+
+    if (
+      this.props.customerSuccessFullyRegistered !==
+      prevProps.customerSuccessFullyRegistered
+    ) {
+      if (this.props.customerSuccessFullyRegistered) {
+        const payload = {
+          companyId: this.props.currentSystemUserCompanyDetails.CompanyId,
+          isFullyPaidStatus: "0"
+        };
+        this.props.getACompanysPendingLoans(payload);
+        this.props.resetCustomerAddedSuccessfully();
+      }
+    }
   }
 
   closeModal = () => {
@@ -163,7 +178,9 @@ DataEntryDialog.propTypes = {
   dialogHeight: PropTypes.string.isRequired,
   dialogWidth: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
-  toggleModalDisplay: PropTypes.func.isRequired
+  toggleModalDisplay: PropTypes.func.isRequired,
+  customerSuccessFullyRegistered: PropTypes.bool.isRequired,
+  resetCustomerAddedSuccessfully: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -175,13 +192,17 @@ const mapStateToProps = state => ({
     state.current_session.currentSystemUserCompanyDetails,
   dialogHeight: state.user_home.dialogHeight,
   dialogWidth: state.user_home.dialogWidth,
-  visible: state.user_home.visible
+  visible: state.user_home.visible,
+  customerSuccessFullyRegistered: state.user_home.customerSuccessFullyRegistered
 });
 
 const mapDispatchToProps = dispatch => ({
   getACompanysPendingLoans: payload =>
     dispatch(getACompanysPendingLoans(payload)),
-  toggleModalDisplay: displayModal => dispatch(toggleModalDisplay(displayModal))
+  toggleModalDisplay: displayModal =>
+    dispatch(toggleModalDisplay(displayModal)),
+  resetCustomerAddedSuccessfully: displayModal =>
+    dispatch(resetCustomerAddedSuccessfully())
 });
 
 export default connect(

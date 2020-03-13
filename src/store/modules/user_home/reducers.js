@@ -1,9 +1,11 @@
 import {
-    CLIENT_DETAILS_SUBMITTED_SUCCESSFULLY,
-    CLIENT_EMPLOYMENT_DETAILS_UPDATE_SUCCESSFUL,
-    FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED,
-    LOAN_DETAILS_ADDED_SUCCESSFULLY, RESET_CLIENT_DB_ID,
-    TOGGLE_MODAL_DISPLAY
+  CLIENT_DETAILS_SUBMITTED_SUCCESSFULLY,
+  CLIENT_EMPLOYMENT_DETAILS_UPDATE_SUCCESSFUL,
+  FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED,
+  LOAN_DETAILS_ADDED_SUCCESSFULLY,
+  RESET_CLIENT_DB_ID,
+  RESET_CUSTOMER_ADDED_SUCCESSFULLY,
+  TOGGLE_MODAL_DISPLAY
 } from "./actionTypes";
 
 export const ACTION_HANDLERS = {
@@ -28,11 +30,12 @@ export const ACTION_HANDLERS = {
     }),
   [LOAN_DETAILS_ADDED_SUCCESSFULLY]: (state, action) =>
     Object.assign({}, state, {
-        displayPersonalDetails: true,
-        displayEmploymentDetails: false,
-        displayLoanDetails: false,
-        dialogHeight: "630",
-        dialogWidth: "600",
+      displayPersonalDetails: true,
+      displayEmploymentDetails: false,
+      displayLoanDetails: false,
+      dialogHeight: "630",
+      dialogWidth: "600",
+      customerSuccessFullyRegistered: true
     }),
 
   [TOGGLE_MODAL_DISPLAY]: (state, action) =>
@@ -40,8 +43,12 @@ export const ACTION_HANDLERS = {
       visible: action.payload.visible
     }),
 
-    [RESET_CLIENT_DB_ID]: (state, action) =>
-        Object.assign({}, state, {
-            currentClientDbRecordId: ''
-        })
+  [RESET_CLIENT_DB_ID]: (state, action) =>
+    Object.assign({}, state, {
+      currentClientDbRecordId: ""
+    }),
+  [RESET_CUSTOMER_ADDED_SUCCESSFULLY]: (state, action) =>
+    Object.assign({}, state, {
+      customerSuccessFullyRegistered: false
+    })
 };

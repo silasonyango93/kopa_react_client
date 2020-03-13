@@ -1,0 +1,16 @@
+.topbar {
+  &__close-icon-div {
+    width: 5rem;
+    height: 100%;
+    float: right;
+    margin-right: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__power-icon {
+    font-size: 2rem;
+    cursor: pointer;
+  }
+}
