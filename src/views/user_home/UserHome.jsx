@@ -3,7 +3,7 @@ import { Columns, Container } from "react-bulma-components";
 import IdleTimer from "react-idle-timer";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Modal } from 'semantic-ui-react';
+import Modal from "react-awesome-modal";
 import "./UserHome.scss";
 import { DEBOUNCE, IDLE_TIMEOUT } from "../../config/constants/Constants";
 import { terminateASystemUserSession } from "../../store/modules/current_session/actions";
@@ -15,6 +15,10 @@ import {
 import { DATA_ENTRY_FORM } from "./UserHomeConstants";
 import UserSideBar from "../../components/sidebar/UserSideBar";
 import DataEntryDialog from "./data_entry/DataEntryDialog";
+import PersonalDetails from "./data_entry/personal_details/PersonalDetails";
+import EmploymentDetails from "./data_entry/employment_details/EmploymentDetails";
+import LoanDetails from "./data_entry/loan_details/LoanDetails";
+import RecyclerCard from "../../components/recyclerview/recycler-card/RecyclerCard";
 
 class UserHome extends Component {
   constructor(props) {
@@ -98,15 +102,15 @@ class UserHome extends Component {
         </Columns>
 
         <Modal
-            open={this.props.open}
-            id="inm__adopted-parent-modal"
-            closeOnDimmerClick
-            closeOnDocumentClick
+            visible={this.props.isUpdatedSearchResultsAvailable}
+            width="581"
+            height="360"
+            effect="fadeInUp"
+            onClickAway={() => {
+              this.props.toggleModalDisplay(false);
+            }}
         >
-
-          <Modal.Content>
-
-          </Modal.Content>
+          <RecyclerCard />
         </Modal>
 
 
@@ -125,7 +129,8 @@ UserHome.propTypes = {
 
 const mapStateToProps = state => ({
   isSessionActive: state.current_session.isSessionActive,
-  dbSessionLogId: state.current_session.dbSessionLogId
+  dbSessionLogId: state.current_session.dbSessionLogId,
+  isUpdatedSearchResultsAvailable: state.user_home.isUpdatedSearchResultsAvailable
 });
 
 const mapDispatchToProps = dispatch => ({

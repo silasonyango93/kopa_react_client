@@ -32,3 +32,15 @@ export function apiGetAll(apiRoute) {
       });
   });
 }
+
+export const promiselessApiPost = (payload, apiRoute) =>
+    axios.post(
+        ip + apiRoute,
+        querystring.stringify({
+          ...payload
+        })
+    );
+
+export const promiselessApiGetAll = apiRoute => axios.post(ip + apiRoute);
+
+export const promiselessApiGet = apiRoute => axios.get(ip + apiRoute);

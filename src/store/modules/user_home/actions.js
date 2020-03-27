@@ -1,4 +1,4 @@
-import { apiPost } from "../../../services/api_connector/ApiConnector";
+import {apiPost, promiselessApiGet} from "../../../services/api_connector/ApiConnector";
 import {
   BEGIN_ADDING_LOAN_DETAILS,
   BEGIN_CLIENT_DETAILS_SUBMISSION,
@@ -208,3 +208,4 @@ export function submitGenericSearch(payload) {
     );
   };
 }
+

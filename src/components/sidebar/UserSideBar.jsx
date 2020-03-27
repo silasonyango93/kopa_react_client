@@ -119,9 +119,6 @@ UserSideBar.propTypes = {
     submitGenericSearch: PropTypes.func.isRequired
 };
 
-// const mapStateToProps = state => ({
-//
-// });
 
 const mapDispatchToProps = dispatch => ({
     submitGenericSearch: payload => dispatch(submitGenericSearch(payload))
