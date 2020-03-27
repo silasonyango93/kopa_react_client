@@ -8,5 +8,7 @@ export const initialState = {
   dialogHeight: "630",
   dialogWidth: "600",
   visible: true,
-  customerSuccessFullyRegistered: false
+  customerSuccessFullyRegistered: false,
+  genericSearchResults: [],
+  isUpdatedSearchResultsAvailable: false
 };

@@ -11,7 +11,7 @@ import {
   ERROR_WHILE_SUBMITING_CLIENT_DETAILS,
   FETCHING_THE_COMPANYS_PENDING_LOANS_EMPTY_RESULT_SET,
   FETCHING_THE_COMPANYS_PENDING_LOANS_FAILED,
-  FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED,
+  FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED, GENERIC_SEARCH_EMPTY_RESULT_SET, GENERIC_SEARCH_SUCCESSFUL,
   LOAN_DETAILS_ADDED_SUCCESSFULLY,
   LOAN_DETAILS_ADDITION_FAILED,
   RESET_CLIENT_DB_ID,
@@ -177,5 +177,34 @@ export function registerCustomerAdmission(payload) {
   return async dispatch => {
     const apiRoute = "/add_customer_registration";
     apiPost(payload, apiRoute);
+  };
+}
+
+
+export function submitGenericSearch(payload) {
+  return async dispatch => {
+
+    const apiRoute = "/client_any_search";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+        function(result) {
+          if (result.data.results && result.data.results.length > 0) {
+            dispatch({
+              type: GENERIC_SEARCH_SUCCESSFUL,
+              payload: {
+                genericSearchResults: result.data.results
+              }
+            });
+            console.log(result.data.results);
+          } else if (result.data.results && result.data.results.length === 0) {
+            dispatch({
+              type: GENERIC_SEARCH_EMPTY_RESULT_SET
+            });
+          }
+        },
+        function(err) {
+          console.log(err);
+        }
+    );
   };
 }

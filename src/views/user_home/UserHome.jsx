@@ -3,6 +3,7 @@ import { Columns, Container } from "react-bulma-components";
 import IdleTimer from "react-idle-timer";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Modal } from 'semantic-ui-react';
 import "./UserHome.scss";
 import { DEBOUNCE, IDLE_TIMEOUT } from "../../config/constants/Constants";
 import { terminateASystemUserSession } from "../../store/modules/current_session/actions";
@@ -95,6 +96,20 @@ class UserHome extends Component {
             </div>
           </Container>
         </Columns>
+
+        <Modal
+            open={this.props.open}
+            id="inm__adopted-parent-modal"
+            closeOnDimmerClick
+            closeOnDocumentClick
+        >
+
+          <Modal.Content>
+
+          </Modal.Content>
+        </Modal>
+
+
       </div>
     );
   }

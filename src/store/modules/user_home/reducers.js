@@ -1,11 +1,11 @@
 import {
-  CLIENT_DETAILS_SUBMITTED_SUCCESSFULLY,
-  CLIENT_EMPLOYMENT_DETAILS_UPDATE_SUCCESSFUL,
-  FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED,
-  LOAN_DETAILS_ADDED_SUCCESSFULLY,
-  RESET_CLIENT_DB_ID,
-  RESET_CUSTOMER_ADDED_SUCCESSFULLY,
-  TOGGLE_MODAL_DISPLAY
+    CLIENT_DETAILS_SUBMITTED_SUCCESSFULLY,
+    CLIENT_EMPLOYMENT_DETAILS_UPDATE_SUCCESSFUL,
+    FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED, GENERIC_SEARCH_EMPTY_RESULT_SET, GENERIC_SEARCH_SUCCESSFUL,
+    LOAN_DETAILS_ADDED_SUCCESSFULLY,
+    RESET_CLIENT_DB_ID,
+    RESET_CUSTOMER_ADDED_SUCCESSFULLY,
+    TOGGLE_MODAL_DISPLAY
 } from "./actionTypes";
 
 export const ACTION_HANDLERS = {
@@ -50,5 +50,18 @@ export const ACTION_HANDLERS = {
   [RESET_CUSTOMER_ADDED_SUCCESSFULLY]: (state, action) =>
     Object.assign({}, state, {
       customerSuccessFullyRegistered: false
-    })
+    }),
+
+    [GENERIC_SEARCH_SUCCESSFUL]: (state, action) =>
+        Object.assign({}, state, {
+            genericSearchResults: action.payload.genericSearchResults,
+            isUpdatedSearchResultsAvailable: true
+        }),
+
+    [GENERIC_SEARCH_EMPTY_RESULT_SET]: (state, action) =>
+        Object.assign({}, state, {
+    genericSearchResults: [],
+    isUpdatedSearchResultsAvailable: true
+}),
+
 };
