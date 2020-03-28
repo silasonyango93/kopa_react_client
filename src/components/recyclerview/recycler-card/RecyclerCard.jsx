@@ -4,7 +4,10 @@ import { connect } from "react-redux";
 import "./RecyclerCard.scss";
 import Modal from "react-awesome-modal";
 import ClientDetailsView from "../../client-details-view/ClientDetailsView";
-import { getAClientsLoans } from "../../../store/modules/user_home/actions";
+import {
+  getAClientsLoans,
+  resetUpdatedClientLoan
+} from "../../../store/modules/user_home/actions";
 
 class RecyclerCard extends Component {
   state = {
@@ -20,6 +23,7 @@ class RecyclerCard extends Component {
   };
 
   handleModalCloseIconClicked = () => {
+    this.props.resetUpdatedClientLoan();
     this.setState({ displayCardModal: false });
   };
 
@@ -76,11 +80,13 @@ RecyclerCard.propTypes = {
   clientName: PropTypes.string.isRequired,
   clientPhoneNumber: PropTypes.string.isRequired,
   imageId: PropTypes.string.isRequired,
-  getAClientsLoans: PropTypes.func.isRequired
+  getAClientsLoans: PropTypes.func.isRequired,
+  resetUpdatedClientLoan: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = dispatch => ({
-  getAClientsLoans: payload => dispatch(getAClientsLoans(payload))
+  getAClientsLoans: payload => dispatch(getAClientsLoans(payload)),
+  resetUpdatedClientLoan: payload => dispatch(resetUpdatedClientLoan())
 });
 
 export default connect(

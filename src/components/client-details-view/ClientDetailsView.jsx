@@ -76,6 +76,8 @@ class ClientDetailsView extends Component {
 
           this.setState({ tableData: clientLoans });
         }
+      } else if (!this.props.isUpdatedClientsLoansAvailable) {
+        this.setState({ tableData: [] });
       }
     }
   }

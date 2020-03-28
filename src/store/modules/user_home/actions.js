@@ -23,6 +23,8 @@ import {
   LOAN_DETAILS_ADDITION_FAILED,
   RESET_CLIENT_DB_ID,
   RESET_CUSTOMER_ADDED_SUCCESSFULLY,
+  RESET_UPDATED_CLIENT_LOAN,
+  RESET_UPDATED_SEARCH_RESULTS_AVAILABLE,
   START_FETCHING_A_COMPANYS_PENDING_LOANS,
   START_UPDATING_CLIENT_EMPLOYMENT_DETAILS,
   TOGGLE_MODAL_DISPLAY
@@ -236,5 +238,21 @@ export function getAClientsLoans(payload) {
         console.log(err);
       }
     );
+  };
+}
+
+export function resetUpdatedClientLoan() {
+  return async dispatch => {
+    dispatch({
+      type: RESET_UPDATED_CLIENT_LOAN
+    });
+  };
+}
+
+export function resetUpdatedSearchResultsAvailable() {
+  return async dispatch => {
+    dispatch({
+      type: RESET_UPDATED_SEARCH_RESULTS_AVAILABLE
+    });
   };
 }

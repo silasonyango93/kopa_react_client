@@ -8,6 +8,8 @@ import {
   LOAN_DETAILS_ADDED_SUCCESSFULLY,
   RESET_CLIENT_DB_ID,
   RESET_CUSTOMER_ADDED_SUCCESSFULLY,
+  RESET_UPDATED_CLIENT_LOAN,
+  RESET_UPDATED_SEARCH_RESULTS_AVAILABLE,
   TOGGLE_MODAL_DISPLAY
 } from "./actionTypes";
 
@@ -77,5 +79,16 @@ export const ACTION_HANDLERS = {
     Object.assign({}, state, {
       clientsLoans: [],
       isUpdatedClientsLoansAvailable: true
+    }),
+
+  [RESET_UPDATED_CLIENT_LOAN]: (state, action) =>
+    Object.assign({}, state, {
+      isUpdatedClientsLoansAvailable: false,
+      clientsLoans: []
+    }),
+
+  [RESET_UPDATED_SEARCH_RESULTS_AVAILABLE]: (state, action) =>
+    Object.assign({}, state, {
+      isUpdatedSearchResultsAvailable: false
     })
 };
