@@ -1,4 +1,7 @@
-import {apiPost, promiselessApiGet} from "../../../services/api_connector/ApiConnector";
+import {
+  apiPost,
+  promiselessApiGet
+} from "../../../services/api_connector/ApiConnector";
 import {
   BEGIN_ADDING_LOAN_DETAILS,
   BEGIN_CLIENT_DETAILS_SUBMISSION,
@@ -11,7 +14,11 @@ import {
   ERROR_WHILE_SUBMITING_CLIENT_DETAILS,
   FETCHING_THE_COMPANYS_PENDING_LOANS_EMPTY_RESULT_SET,
   FETCHING_THE_COMPANYS_PENDING_LOANS_FAILED,
-  FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED, GENERIC_SEARCH_EMPTY_RESULT_SET, GENERIC_SEARCH_SUCCESSFUL,
+  FETCHING_THE_COMPANYS_PENDING_LOANS_SUCCEEDED,
+  GENERIC_SEARCH_EMPTY_RESULT_SET,
+  GENERIC_SEARCH_SUCCESSFUL,
+  GETTING_A_CLIENTS_LOANS_EMPTY_RESULT_SET,
+  GETTING_A_CLIENTS_LOANS_SUCCESSFUL,
   LOAN_DETAILS_ADDED_SUCCESSFULLY,
   LOAN_DETAILS_ADDITION_FAILED,
   RESET_CLIENT_DB_ID,
@@ -180,32 +187,54 @@ export function registerCustomerAdmission(payload) {
   };
 }
 
-
 export function submitGenericSearch(payload) {
   return async dispatch => {
-
     const apiRoute = "/client_any_search";
     const returnedPromise = apiPost(payload, apiRoute);
     returnedPromise.then(
-        function(result) {
-          if (result.data.results && result.data.results.length > 0) {
-            dispatch({
-              type: GENERIC_SEARCH_SUCCESSFUL,
-              payload: {
-                genericSearchResults: result.data.results
-              }
-            });
-            console.log(result.data.results);
-          } else if (result.data.results && result.data.results.length === 0) {
-            dispatch({
-              type: GENERIC_SEARCH_EMPTY_RESULT_SET
-            });
-          }
-        },
-        function(err) {
-          console.log(err);
+      function(result) {
+        if (result.data.results && result.data.results.length > 0) {
+          dispatch({
+            type: GENERIC_SEARCH_SUCCESSFUL,
+            payload: {
+              genericSearchResults: result.data.results
+            }
+          });
+        } else if (result.data.results && result.data.results.length === 0) {
+          dispatch({
+            type: GENERIC_SEARCH_EMPTY_RESULT_SET
+          });
         }
+      },
+      function(err) {
+        console.log(err);
+      }
     );
   };
 }
 
+export function getAClientsLoans(payload) {
+  return async dispatch => {
+    const apiRoute = "/get_a_clients_loans";
+    const returnedPromise = apiPost(payload, apiRoute);
+    returnedPromise.then(
+      function(result) {
+        if (result.data.results && result.data.results.length > 0) {
+          dispatch({
+            type: GETTING_A_CLIENTS_LOANS_SUCCESSFUL,
+            payload: {
+              clientsLoans: result.data.results
+            }
+          });
+        } else if (result.data.results && result.data.results.length === 0) {
+          dispatch({
+            type: GETTING_A_CLIENTS_LOANS_EMPTY_RESULT_SET
+          });
+        }
+      },
+      function(err) {
+        console.log(err);
+      }
+    );
+  };
+}

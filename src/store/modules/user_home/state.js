@@ -10,5 +10,7 @@ export const initialState = {
   visible: true,
   customerSuccessFullyRegistered: false,
   genericSearchResults: [],
-  isUpdatedSearchResultsAvailable: false
+  isUpdatedSearchResultsAvailable: false,
+  clientsLoans: [],
+  isUpdatedClientsLoansAvailable: false
 };
