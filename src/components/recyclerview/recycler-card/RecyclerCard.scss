@@ -5,15 +5,16 @@
     height: 101px;
     border-radius: 6px;
     background-color: #ffffff;
+    cursor: pointer;
   }
 
   &__bottom-stroke {
-    width: 475px;
+    width: 415px;
     height: 1px;
     border: solid 1px #f3f3f3;
     text-align: center;
-    margin-left: 74px;
-    margin-right: 30px;
+    margin-left: 129px;
+    margin-right: 35px;
   }
 
   &__image-div {
@@ -21,4 +22,48 @@
     height: 98px;
     float: left;
   }
+
+  &__text-div {
+    float: left;
+    margin-left: 60px;
+  }
+
+  &__name-text {
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #000000;
+    margin-bottom: 8px;
+    margin-top: 32px;
+  }
+
+  &__close-icon {
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 26px;
+    float: right;
+    cursor: pointer;
+  }
+
+  &__start-text {
+    font-family: Lato;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #000000;
+  }
+
+  &__modal-content-div {
+    width: 750px;
+    height: 470px;
+  }
+
+
 }

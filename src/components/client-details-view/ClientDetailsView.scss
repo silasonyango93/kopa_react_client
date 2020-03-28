@@ -1,0 +1,141 @@
+.details {
+  &__main-body {
+    width: 750px;
+    height: 550px;
+    border-radius: 4px;
+    background-color: #f8f8f8 !important;
+    margin: auto;
+  }
+
+  &__profile-card {
+    width: 288px;
+    height: 495px;
+    border-radius: 12px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
+    background-color: #ffffff;
+    float: left;
+    margin: 2rem;
+  }
+
+  &__profpic-div {
+    width: 100%;
+    height: 45%;
+  }
+
+  &__profile-title {
+    font-family: Lato;
+    font-size: 14px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #041333;
+  }
+
+  &__details-div {
+    margin: 1rem;
+  }
+
+  &__first-row {
+    width: 100%;
+    margin-top: 3.5rem;
+  }
+
+  &__name-column {
+    float: left;
+  }
+
+  &__number-column {
+    float: right;
+  }
+
+  &__name-stroke {
+    width: 100%;
+    height: 1px;
+    border: solid 1px #f3f3f3;
+    margin-top: 0.5rem;
+  }
+
+  &__email-div {
+    padding-top: 3rem;
+  }
+
+  &__belly {
+    width: 5rem;
+    height: 2rem;
+    border-radius: 6px;
+    box-shadow: 0 0 10px 0 rgba(255, 130, 0, 0.35);
+    background: linear-gradient(to left, #fdb040, #ee2124);
+    margin: auto;
+  }
+
+  &__belly-div {
+    width: 100%;
+    margin-top: 2rem;
+  }
+
+  &__more-details-div {
+    float: right;
+    height: 100%;
+  }
+
+  &__employment-details-card {
+    width: 350px;
+    height: 200px;
+    border-radius: 12px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
+    background-color: #ffffff;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  &__employment-title {
+    font-family: Lato;
+    font-size: 14px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #041333;
+    margin-left: 2rem;
+    padding-top: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__employment-first-row {
+    width: 100%;
+    padding-top: 1.5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  &__career-title {
+    float: left;
+  }
+
+  &__career-pill {
+    float: right;
+    width: 10rem;
+    height: 2rem;
+    border-radius: 6px;
+    box-shadow: 0 0 10px 0 rgba(255, 130, 0, 0.35);
+    background: linear-gradient(to left, #74FDE5, #4AEE72);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__top-row {
+    padding-bottom: 1.5rem;
+  }
+
+  &__table-card {
+    width: 350px;
+    height: 254px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
+    margin-right: 2rem;
+    overflow: scroll;
+  }
+}

@@ -110,7 +110,11 @@ class UserHome extends Component {
               this.props.toggleModalDisplay(false);
             }}
         >
-          <RecyclerCard />
+          <div className="recycler-modal">
+            <RecyclerCard />
+            <RecyclerCard />
+          </div>
+
         </Modal>
 
 
@@ -124,13 +128,15 @@ UserHome.propTypes = {
   getAllCompanies: PropTypes.func.isRequired,
   getAllCompanyOwners: PropTypes.func.isRequired,
   terminateASystemUserSession: PropTypes.func.isRequired,
-  dbSessionLogId: PropTypes.string.isRequired
+  dbSessionLogId: PropTypes.string.isRequired,
+  genericSearchResults: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 const mapStateToProps = state => ({
   isSessionActive: state.current_session.isSessionActive,
   dbSessionLogId: state.current_session.dbSessionLogId,
-  isUpdatedSearchResultsAvailable: state.user_home.isUpdatedSearchResultsAvailable
+  isUpdatedSearchResultsAvailable: state.user_home.isUpdatedSearchResultsAvailable,
+  genericSearchResults: state.user_home.genericSearchResults
 });
 
 const mapDispatchToProps = dispatch => ({
