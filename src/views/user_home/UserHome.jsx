@@ -24,7 +24,8 @@ class UserHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayDataEntryForm: true
+      displayDataEntryForm: true,
+      recyclerViewJsx: ''
     };
     this.idleTimer = null;
   }
@@ -35,11 +36,37 @@ class UserHome extends Component {
     } else {
       window.addEventListener("beforeunload", this.handleTabClosed);
     }
+
+    if(this.props.genericSearchResults && this.props.genericSearchResults.length) {
+      let recyclerViewArray = [];
+
+      for (let i = 0; i < this.props.genericSearchResults.length; i++) {
+
+        let clientName = this.props.genericSearchResults[i].ClientFirstName + ' '+this.props.genericSearchResults[i].ClientMiddleName + ' '+this.props.genericSearchResults[i].ClientSurname;
+        recyclerViewArray.push(<RecyclerCard clientDetails={this.props.genericSearchResults[i]} clientName={clientName} clientPhoneNumber={this.props.genericSearchResults[i].ClientPhoneNumber} imageId={this.props.genericSearchResults[i].ClientProfilePicName}/>);
+      }
+
+      this.setState({recyclerViewJsx: recyclerViewArray});
+    }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     if (!this.props.isSessionActive) {
       window.location.assign("/");
+    }
+
+    if(this.props.genericSearchResults !== prevProps.genericSearchResults) {
+      if(this.props.genericSearchResults && this.props.genericSearchResults.length) {
+        let recyclerViewArray = [];
+
+        for (let i = 0; i < this.props.genericSearchResults.length; i++) {
+
+          let clientName = this.props.genericSearchResults[i].ClientFirstName + ' '+this.props.genericSearchResults[i].ClientMiddleName + ' '+this.props.genericSearchResults[i].ClientSurname;
+          recyclerViewArray.push(<RecyclerCard clientDetails={this.props.genericSearchResults[i]} clientName={clientName} clientPhoneNumber={this.props.genericSearchResults[i].ClientPhoneNumber} imageId={this.props.genericSearchResults[i].ClientProfilePicName}/>);
+        }
+
+        this.setState({recyclerViewJsx: recyclerViewArray});
+      }
     }
   }
 
@@ -111,8 +138,7 @@ class UserHome extends Component {
             }}
         >
           <div className="recycler-modal">
-            <RecyclerCard />
-            <RecyclerCard />
+            {this.state.recyclerViewJsx}
           </div>
 
         </Modal>

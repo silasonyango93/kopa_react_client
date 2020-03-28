@@ -7,5 +7,6 @@
 }
 
 .recycler-modal {
-  overflow: scroll;
+  overflow: scroll !important;
+  height: 100%;
 }
